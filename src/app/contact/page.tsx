@@ -1,0 +1,353 @@
+'use client'
+import { useState } from 'react'
+import Link from 'next/link'
+import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
+import { useTranslation } from '@/i18n/useTranslation'
+
+type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+export default function Contact() {
+  const { t } = useTranslation()
+
+  // Inquiry types with specific labels
+  const inquiryTypes = [
+    { id: 'business', label: t.contact.businessEnquiry, icon: Briefcase, description: 'Product inquiries, pricing, distribution' },
+    { id: 'partnership', label: t.contact.partnership, icon: Handshake, description: 'Joint ventures, licensing, strategic alliances' },
+    { id: 'supplier', label: t.contact.supplier, icon: Truck, description: 'Raw materials, packaging, services' },
+    { id: 'general', label: t.contact.generalContact, icon: Users, description: 'General inquiries, media, other' },
+  ]
+
+  const countries = [
+    'Laos', 'Thailand', 'Vietnam', 'Cambodia', 'Myanmar', 'Malaysia', 'Singapore', 
+    'Indonesia', 'Philippines', 'UAE', 'Saudi Arabia', 'Egypt', 'Other'
+  ]
+
+  const [form, setForm] = useState({ 
+    name: '', 
+    company: '',
+    email: '', 
+    phone: '',
+    country: '',
+    inquiryType: 'business',
+    message: '' 
+  })
+  const [consent, setConsent] = useState(false)
+  const [status, setStatus] = useState<FormStatus>('idle')
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    if (!form.name.trim()) newErrors.name = t.common.required
+    if (!form.email.trim()) newErrors.email = t.common.required
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = 'Invalid email'
+    if (!form.country) newErrors.country = t.common.required
+    if (!form.message.trim()) newErrors.message = t.common.required
+    if (!consent) newErrors.consent = t.common.required
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validateForm()) return
+    
+    setStatus('submitting')
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    setStatus('success')
+    setForm({ name: '', company: '', email: '', phone: '', country: '', inquiryType: 'business', message: '' })
+    setConsent(false)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setForm(prev => ({ ...prev, [name]: value }))
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }))
+    }
+  }
+
+  const handleInquiryTypeChange = (typeId: string) => {
+    setForm(prev => ({ ...prev, inquiryType: typeId }))
+  }
+
+  const selectedInquiry = inquiryTypes.find(t => t.id === form.inquiryType)
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-blue-300 font-medium mb-2">CONTACT</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.contactTitle}</h1>
+          <p className="text-xl text-slate-200 max-w-2xl">
+            {t.hero.contactSubtitle}
+          </p>
+        </div>
+      </section>
+
+      {/* Contact Overview */}
+      <section className="py-12 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: Briefcase, title: t.contact.businessEnquiry, desc: 'Product information, pricing, distribution partnerships' },
+              { icon: Handshake, title: t.contact.partnership, desc: 'Joint ventures, licensing, technology transfer' },
+              { icon: Globe, title: 'Global Operations', desc: 'Serving Southeast Asia, Middle East, and Africa' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-start gap-3 p-4">
+                <item.icon className="w-6 h-6 text-[#1E6F5C] flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-semibold text-slate-900">{item.title}</h3>
+                  <p className="text-sm text-slate-600">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-5 gap-12">
+            {/* Contact Info Sidebar */}
+            <div className="lg:col-span-2">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">{t.contact.contactInfo}</h2>
+              
+              {/* Office Info */}
+              <div className="space-y-6 mb-8">
+                <div className="flex items-start gap-4">
+                  <MapPin className="w-6 h-6 text-[#1E6F5C] mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-slate-900">Headquarters</h3>
+                    <p className="text-slate-600">Raysun Biopharma Manufacturing Facility<br />Vientiane Capital, Lao PDR</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Mail className="w-6 h-6 text-[#1E6F5C] mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-slate-900">Email</h3>
+                    <p className="text-slate-600">contact@raysunbiopharma.com<br />business@raysunbiopharma.com</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Phone className="w-6 h-6 text-[#1E6F5C] mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-slate-900">Phone</h3>
+                    <p className="text-slate-600">Available upon request</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Clock className="w-6 h-6 text-[#1E6F5C] mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-slate-900">Business Hours</h3>
+                    <p className="text-slate-600">Monday - Friday: 8:00 AM - 5:00 PM (ICT)<br />Saturday: 8:00 AM - 12:00 PM</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Related Links */}
+              <div className="bg-slate-50 rounded-xl p-6">
+                <h3 className="font-semibold text-slate-900 mb-4">{t.contact.quickLinks}</h3>
+                <div className="space-y-2">
+                  {[
+                    { label: t.pages.products, href: '/products' },
+                    { label: t.pages.verify, href: '/verify' },
+                    { label: t.pages.resources, href: '/resources' },
+                    { label: t.pages.careers, href: '/careers' },
+                  ].map((link, idx) => (
+                    <Link key={idx} href={link.href} className="flex items-center gap-2 text-[#1E6F5C] hover:underline">
+                      <ArrowRight className="w-4 h-4" /> {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Form */}
+            <div className="lg:col-span-3">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">{t.contact.sendMessage}</h2>
+              
+              {/* Inquiry Type Selector */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-700 mb-2">{t.contact.inquiryType}</label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {inquiryTypes.map((type) => (
+                    <button
+                      key={type.id}
+                      type="button"
+                      onClick={() => handleInquiryTypeChange(type.id)}
+                      className={`p-3 rounded-lg border text-left transition-all ${
+                        form.inquiryType === type.id 
+                          ? 'border-[#1E6F5C] bg-[#1E6F5C]/5' 
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      <type.icon className={`w-5 h-5 mb-1 ${form.inquiryType === type.id ? 'text-[#1E6F5C]' : 'text-slate-400'}`} />
+                      <p className={`text-sm font-medium ${form.inquiryType === type.id ? 'text-[#1E6F5C]' : 'text-slate-700'}`}>{type.label}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Success Message */}
+              {status === 'success' && (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-6">
+                  <div className="flex items-center gap-3 text-green-800">
+                    <CheckCircle className="w-6 h-6" />
+                    <div>
+                      <p className="font-semibold">{t.contact.messageSent}</p>
+                      <p className="text-sm">{t.common.success}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setStatus('idle')}
+                    className="mt-4 text-sm text-green-700 hover:underline"
+                  >
+                    {t.common.submit} another message
+                  </button>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {status === 'error' && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                  <div className="flex items-center gap-3 text-red-800">
+                    <AlertCircle className="w-6 h-6" />
+                    <div>
+                      <p className="font-semibold">{t.common.error}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Form */}
+              {status !== 'success' && (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.name} *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2.5 rounded-lg border ${errors.name ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors`}
+                      />
+                      {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.company}</label>
+                      <input
+                        type="text"
+                        name="company"
+                        value={form.company}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-[#1E6F5C] focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.email} *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2.5 rounded-lg border ${errors.email ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors`}
+                      />
+                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.phone}</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-[#1E6F5C] focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.country} *</label>
+                    <select
+                      name="country"
+                      value={form.country}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-2.5 rounded-lg border ${errors.country ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors bg-white`}
+                    >
+                      <option value="">Select country</option>
+                      {countries.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                    {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">{t.contact.message} *</label>
+                    <textarea
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      rows={5}
+                      placeholder={`Tell us about your ${selectedInquiry?.label.toLowerCase()}...`}
+                      className={`w-full px-4 py-2.5 rounded-lg border ${errors.message ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors resize-none`}
+                    />
+                    {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                  </div>
+
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-1 w-4 h-4 rounded border-slate-300 text-[#1E6F5C] focus:ring-[#1E6F5C]"
+                    />
+                    <label htmlFor="consent" className="text-sm text-slate-600">
+                      {t.contact.consent}
+                    </label>
+                  </div>
+                  {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
+                  
+                  <button 
+                    type="submit" 
+                    disabled={status === 'submitting'}
+                    className="w-full bg-[#1E6F5C] text-white py-3 rounded-lg font-medium hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                  >
+                    {status === 'submitting' ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {t.contact.sending}
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" /> {t.common.send}
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="py-12 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl h-64 flex items-center justify-center">
+            <div className="text-center text-slate-400">
+              <MapPin className="w-12 h-12 mx-auto mb-2" />
+              <p>Map - Vientiane, Laos</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}

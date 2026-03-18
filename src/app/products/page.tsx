@@ -1,0 +1,286 @@
+'use client'
+
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import Link from 'next/link'
+import { SearchX, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { getProductsContent, getAllProducts, getCurrentSource } from '@/lib/content'
+import { useTranslation } from '@/i18n/useTranslation'
+import { getContentTranslation } from '@/i18n/content'
+import ProductsHero from '@/components/products/ProductsHero'
+import ProductsSearchBar from '@/components/products/ProductsSearchBar'
+
+function generateSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+}
+
+export default function Products() {
+  const productsPage = getProductsContent()
+  const allProducts = getAllProducts()
+  const { t, locale } = useTranslation()
+  const contentTrans = getContentTranslation(locale || 'en')
+  
+  const { hero, tabs, categories } = productsPage
+  
+  // Helper to get translated category name
+  const getCategoryName = (catId: string, fallbackName: string) => {
+    return contentTrans?.products?.categories?.[catId] || fallbackName
+  }
+  const products = allProducts
+  const perPage = productsPage.perPage
+
+  const [activeTab, setActiveTab] = useState('all')
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Filter products
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return products.filter((p) => {
+      if (activeTab === 'brand' && p.type !== 'brand') return false
+      if (activeTab === 'generic' && p.type !== 'generic') return false
+      if (activeCategory !== 'all' && p.category !== activeCategory) return false
+      if (q) {
+        return (
+          p.name.toLowerCase().includes(q) ||
+          p.dosageForm.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          (p.tags && p.tags.some((t) => t.toLowerCase().includes(q)))
+        )
+      }
+      return true
+    })
+  }, [products, activeTab, activeCategory, search])
+
+  // Category counts
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: filtered.length }
+    for (const p of filtered) {
+      counts[p.category] = (counts[p.category] || 0) + 1
+    }
+    return counts
+  }, [filtered])
+
+  // Pagination
+  const totalPages = Math.ceil(filtered.length / perPage)
+  const paged = useMemo(() => {
+    const start = (page - 1) * perPage
+    return filtered.slice(start, start + perPage)
+  }, [filtered, page, perPage])
+
+  // Reset page on filter change
+  useEffect(() => {
+    setPage(1)
+  }, [activeTab, activeCategory, search])
+
+  // Scroll to top on page change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [page])
+
+  const isSearching = search.trim().length > 0
+
+  // Generate slug helper for links
+  const getProductSlug = (p: typeof products[0]) => p.slug || generateSlug(p.name)
+
+  return (
+    <>
+      <ProductsHero
+        title={hero.title}
+        subtitle={hero.subtitle}
+        slides={(hero.slides || []).map((s: any) => ({
+          id: s.id || 'slide-1',
+          title: s.title || '',
+          subtitle: s.subtitle || '',
+          gradient: s.gradient || 'from-blue-900 via-blue-800 to-slate-900',
+          accentColor: s.accentColor || 'blue'
+        }))}
+        searchBar={
+          <ProductsSearchBar
+            placeholder={contentTrans?.products?.searchPlaceholder || hero.searchPlaceholder}
+            value={search}
+            onChange={setSearch}
+          />
+        }
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" ref={scrollRef}>
+        
+        {/* Tab Bar - Now at TOP, full width */}
+        <div className="bg-white rounded-xl border border-slate-200 p-2 mb-4 shadow-sm">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? 'bg-[#1E6F5C] text-white'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Layout - Sidebar + Content */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar - Quick Navigate */}
+          <aside className="w-full lg:w-60 shrink-0">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm lg:sticky lg:top-24">
+              <h3 className="font-semibold text-slate-900 mb-4">{t.products.quickNavigate}</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveCategory('all')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
+                    activeCategory === 'all'
+                      ? 'bg-[#1E6F5C] text-white'
+                      : 'text-slate-600 hover:bg-slate-100'
+                  }`}
+                >
+                  {t.products.allProducts}
+                  <span className="float-right text-xs opacity-70">{categoryCounts.all}</span>
+                </button>
+                {categories.map((cat) => {
+                  const count = categoryCounts[cat.id] ?? 0
+                  if (count === 0 && activeCategory !== cat.id) return null
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
+                        activeCategory === cat.id
+                          ? 'bg-[#1E6F5C] text-white'
+                          : 'text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      {getCategoryName(cat.id, cat.name)}
+                      <span className="float-right text-xs opacity-70">{count}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1 min-w-0">
+            {/* Results count */}
+            <div className="mb-4">
+              <p className="text-sm text-slate-500">
+                {t.common.showing} <span className="font-semibold text-slate-700">{paged.length}</span> {t.common.of} <span className="font-semibold text-slate-700">{filtered.length}</span> {t.common.results}
+                {isSearching && (
+                  <span className="ml-2">
+                    for "<span className="text-[#1E6F5C]">{search}</span>"
+                  </span>
+                )}
+              </p>
+            </div>
+
+            {/* Product Grid */}
+            {paged.length === 0 ? (
+              <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+                <SearchX className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">{t.common.noResults}</h3>
+                <p className="text-slate-600 mb-4">Try adjusting your search or filters</p>
+                <button
+                  onClick={() => { setSearch(''); setActiveTab('all'); setActiveCategory('all') }}
+                  className="text-[#1E6F5C] font-medium hover:underline"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {paged.map((product) => {
+                  const slug = getProductSlug(product)
+                  const hue = (parseInt(product.id.replace(/\D/g, ''), 10) * 37) % 360
+                  return (
+                    <Link
+                      key={product.id}
+                      href={`/products/${slug}`}
+                      className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-[#1E6F5C]/30 transition-all"
+                    >
+                      <div
+                        className="h-24 rounded-lg mb-4 flex items-center justify-center"
+                        style={{ background: `hsl(${hue}, 60%, 95%)` }}
+                      >
+                        <span className="text-2xl">💊</span>
+                      </div>
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] line-clamp-2 text-sm">
+                          {product.name}
+                        </h3>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-2">{product.dosageForm}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                          {product.type === 'brand' ? t.products.brands : t.products.generics}
+                        </span>
+                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1E6F5C] transition-colors" />
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum: number
+                    if (totalPages <= 5) {
+                      pageNum = i + 1
+                    } else if (page <= 3) {
+                      pageNum = i + 1
+                    } else if (page >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i
+                    } else {
+                      pageNum = page - 2 + i
+                    }
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setPage(pageNum)}
+                        className={`w-10 h-10 rounded-lg text-sm font-medium ${
+                          page === pageNum
+                            ? 'bg-[#1E6F5C] text-white'
+                            : 'text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    )
+                  })}
+                </div>
+                <button
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
+    </>
+  )
+}

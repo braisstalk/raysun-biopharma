@@ -1,0 +1,3 @@
+{
+  "/api/mock-strapi/[...path]/route": "app/api/mock-strapi/[...path]/route.js"
+}

@@ -1,0 +1,211 @@
+'use client'
+
+import Link from 'next/link'
+import { ArrowRight, CheckCircle, Target, Eye, Users, Award, MapPin, Building2, Globe, Heart, Shield } from 'lucide-react'
+import { useTranslation } from '@/i18n/useTranslation'
+
+// Company highlights - neutral expressions
+const highlights = [
+  { value: '10+', label: 'Years of Operation', icon: Award },
+  { value: '12,000', label: 'sqm Manufacturing Facility', icon: Building2 },
+  { value: '6+', label: 'Countries Served', icon: Globe },
+  { value: '100+', label: 'Team Members', icon: Users },
+]
+
+// Milestones - professional timeline
+const milestones = [
+  { year: '2014', title: 'Company Founded', desc: 'Raysun Biopharma established in Vientiane, Laos' },
+  { year: '2016', title: 'Factory Completed', desc: '12,000 sqm state-of-the-art manufacturing facility completed' },
+  { year: '2017', title: 'GMP Certification', desc: 'Achieved WHO GMP certification for all production lines' },
+  { year: '2019', title: 'Product Expansion', desc: 'Expanded softgel and tablet production capabilities' },
+  { year: '2021', title: 'ISO Certification', desc: 'Quality Management System certified to ISO 9001:2015' },
+  { year: '2023', title: 'Regional Expansion', desc: 'Expanded distribution to Thailand, Cambodia, and Myanmar' },
+  { year: '2025', title: 'Global Presence', desc: 'Serving patients across multiple countries worldwide' },
+]
+
+// Values as cards
+const values = [
+  { icon: Shield, title: 'Quality First', desc: 'Every product meets international quality standards and regulatory requirements' },
+  { icon: Heart, title: 'Patient Centric', desc: 'Committed to making essential medicines accessible to communities we serve' },
+  { icon: Target, title: 'Continuous Innovation', desc: 'Advancing manufacturing capabilities and product development' },
+  { icon: CheckCircle, title: 'Regulatory Excellence', desc: 'Built around international quality expectations and compliance frameworks' },
+]
+
+export default function About() {
+  const { t } = useTranslation()
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-blue-300 font-medium mb-2">{t.pages.about.toUpperCase()}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.aboutTitle}</h1>
+          <p className="text-xl text-slate-200 max-w-3xl mb-6">
+            {t.hero.aboutSubtitle}
+          </p>
+        </div>
+      </section>
+
+      {/* Company Highlights */}
+      <section className="py-16 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {highlights.map((h, idx) => (
+              <div key={idx} className="text-center">
+                <h.icon className="w-8 h-8 text-[#1E6F5C] mx-auto mb-2" />
+                <div className="text-3xl font-bold text-slate-900">{h.value}</div>
+                <div className="text-sm text-slate-600">{h.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mission & Vision */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <div className="bg-gradient-to-br from-[#1E6F5C] to-[#289c76] text-white rounded-2xl p-8">
+              <Target className="w-10 h-10 mb-4 opacity-90" />
+              <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
+              <p className="text-blue-100 text-lg">
+                To manufacture and deliver high-quality, affordable pharmaceutical products that improve the health and well-being of communities across Southeast Asia and beyond.
+              </p>
+            </div>
+            <div className="bg-slate-900 text-white rounded-2xl p-8">
+              <Eye className="w-10 h-10 mb-4" />
+              <h2 className="text-2xl font-bold mb-4">Our Vision</h2>
+              <p className="text-slate-300 text-lg">
+                To become the most trusted pharmaceutical manufacturing partner in the ASEAN region, recognized for quality, compliance, and reliable supply.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">OUR VALUES</p>
+            <h2 className="text-3xl font-bold text-slate-900">What Drives Us</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((v, idx) => (
+              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <v.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                <h3 className="font-semibold text-slate-900 mb-2">{v.title}</h3>
+                <p className="text-sm text-slate-600">{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Milestones */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">OUR JOURNEY</p>
+            <h2 className="text-3xl font-bold text-slate-900">Milestones</h2>
+          </div>
+          <div className="space-y-0">
+            {milestones.map((m, idx) => (
+              <div key={idx} className="flex gap-6 items-start relative">
+                <div className="flex-shrink-0 w-32">
+                  <span className="inline-block bg-[#1E6F5C] text-white text-sm font-bold px-4 py-2 rounded-full">
+                    {m.year}
+                  </span>
+                </div>
+                <div className="flex-shrink-0 w-4 h-4 rounded-full bg-[#1E6F5C] mt-2.5 relative z-10">
+                </div>
+                {idx < milestones.length - 1 && (
+                  <div className="absolute left-16 top-5 w-0.5 h-full bg-slate-200" />
+                )}
+                <div className="pt-1 pb-8">
+                  <h3 className="font-semibold text-slate-900">{m.title}</h3>
+                  <p className="text-sm text-slate-600">{m.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">LEADERSHIP</p>
+            <h2 className="text-3xl font-bold text-slate-900">Governance</h2>
+          </div>
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-slate-600 mb-6">
+              Our leadership team brings extensive experience in pharmaceutical manufacturing, quality assurance, and regulatory affairs. Comprehensive leadership information is available upon official release.
+            </p>
+            <div className="inline-flex items-center gap-2 bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm">
+              <Users className="w-4 h-4" />
+              Leadership information available upon official release
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Global Presence */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-[#1E6F5C] font-medium mb-2">GLOBAL PRESENCE</p>
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">Serving Healthcare Needs Worldwide</h2>
+              <p className="text-slate-600 mb-6">
+                Our products reach patients across Southeast Asia, the Middle East, and Africa. We maintain strategic partnerships with distributors in each region to ensure reliable access to quality medicines.
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {['Laos', 'Thailand', 'Cambodia', 'Vietnam', 'Myanmar', 'Middle East', 'Africa'].map((region, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#1E6F5C]" />
+                    <span className="text-sm text-slate-700">{region}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
+              <div className="text-center text-slate-400">
+                <Globe className="w-16 h-16 mx-auto mb-3" />
+                <p className="text-lg font-medium">Global Distribution Network</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-[#1E6F5C] to-[#289c76]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center text-white mb-8">
+            <h2 className="text-3xl font-bold mb-4">Explore Our Capabilities</h2>
+            <p className="text-blue-100 max-w-2xl mx-auto">
+              Learn more about our manufacturing excellence, quality commitment, and R&D innovation.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/manufacturing" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
+              {t.nav.manufacturing} <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/quality-compliance" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
+              {t.nav.qualityCompliance} <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/rd-innovation" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
+              {t.nav.rdInnovation} <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/contact" className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 flex items-center gap-2">
+              {t.common.contact}
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}

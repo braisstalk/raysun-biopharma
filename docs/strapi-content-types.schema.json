@@ -1,0 +1,94 @@
+{
+  "version": "1.0.0",
+  "contentTypes": [
+    {
+      "name": "SiteSettings",
+      "apiId": "site-settings",
+      "kind": "singleType",
+      "attributes": {
+        "siteName": { "type": "string", "required": true },
+        "siteDescription": { "type": "text" },
+        "logo": { "type": "media", "multiple": false },
+        "contactEmail": { "type": "email" },
+        "contactPhone": { "type": "string" },
+        "contactAddress": { "type": "text" },
+        "socialLinkedin": { "type": "string" },
+        "socialFacebook": { "type": "string" },
+        "socialYoutube": { "type": "string" },
+        "socialTwitter": { "type": "string" }
+      }
+    },
+    {
+      "name": "HomePage",
+      "apiId": "home-page",
+      "kind": "singleType",
+      "attributes": {
+        "heroTitle": { "type": "string", "required": true },
+        "heroSubtitle": { "type": "text" },
+        "heroPrimaryCtaLabel": { "type": "string" },
+        "heroPrimaryCtaHref": { "type": "string" },
+        "heroSecondaryCtaLabel": { "type": "string" },
+        "heroSecondaryCtaHref": { "type": "string" },
+        "stats": { "type": "json" },
+        "aboutTitle": { "type": "string" },
+        "aboutDescription": { "type": "text" },
+        "aboutCtaLabel": { "type": "string" },
+        "aboutCtaHref": { "type": "string" },
+        "videoTitle": { "type": "string" },
+        "videoDescription": { "type": "text" },
+        "videoUrl": { "type": "string" },
+        "videoCtaLabel": { "type": "string" },
+        "videoCtaHref": { "type": "string" },
+        "features": { "type": "json" },
+        "ctaSectionTitle": { "type": "string" },
+        "ctaSectionDescription": { "type": "text" },
+        "ctaSectionCtaLabel": { "type": "string" },
+        "ctaSectionCtaHref": { "type": "string" },
+        "aiAssistantTitle": { "type": "string" },
+        "aiAssistantDescription": { "type": "text" },
+        "aiAssistantCtaLabel": { "type": "string" },
+        "aiAssistantCtaHref": { "type": "string" }
+      }
+    },
+    {
+      "name": "ProductCategory",
+      "apiId": "product-category",
+      "kind": "collectionType",
+      "attributes": {
+        "name": { "type": "string", "required": true },
+        "slug": { "type": "uid", "targetField": "name" },
+        "description": { "type": "text" },
+        "icon": { "type": "string" },
+        "order": { "type": "integer" }
+      }
+    },
+    {
+      "name": "Product",
+      "apiId": "product",
+      "kind": "collectionType",
+      "attributes": {
+        "name": { "type": "string", "required": true },
+        "slug": { "type": "uid", "targetField": "name" },
+        "genericName": { "type": "string" },
+        "category": { "type": "relation", "relation": "manyToOne", "target": "product-category" },
+        "dosageForm": { "type": "string" },
+        "strength": { "type": "string" },
+        "description": { "type": "richtext" },
+        "indications": { "type": "json" },
+        "features": { "type": "json" },
+        "tags": { "type": "json" },
+        "type": { "type": "enumeration", "enum": ["brand", "generic"] },
+        "packSize": { "type": "string" },
+        "storage": { "type": "string" },
+        "shelfLife": { "type": "string" },
+        "route": { "type": "string" },
+        "regulatoryNote": { "type": "text" },
+        "availabilityNote": { "type": "string" },
+        "packaging": { "type": "string" },
+        "image": { "type": "media", "multiple": false },
+        "documents": { "type": "json" },
+        "relatedProducts": { "type": "relation", "relation": "manyToMany", "target": "product" }
+      }
+    }
+  ]
+}

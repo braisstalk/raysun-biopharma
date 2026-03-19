@@ -13,13 +13,16 @@ export default function Home() {
   const [content, setContent] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const { t, locale } = useTranslation()
+  
+  // Get translations for current locale
   const contentTrans = getContentTranslation(locale || 'en')
 
+  // Reload content when locale changes
   useEffect(() => {
     const homeData = getHomeContent()
     setContent(homeData)
     setLoading(false)
-  }, [])
+  }, [locale]) // Re-run when locale changes
 
   if (loading || !content) {
     return (
@@ -34,7 +37,7 @@ export default function Home() {
 
   const { hero, stats, about, videoSection, capabilities, products } = content
 
-  // Merge content with translations
+  // Merge content with translations - use contentTrans which updates when locale changes
   const heroConfig = {
     ...hero,
     title: contentTrans.home.hero.title,
@@ -340,4 +343,3 @@ export default function Home() {
     </>
   )
 }
-// Force redeploy Thu Mar 19 19:02:44 CST 2026

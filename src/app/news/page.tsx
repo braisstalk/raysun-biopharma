@@ -26,10 +26,10 @@ export default function News() {
       {/* Hero - mobile optimized */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">NEWS & MEDIA</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">{hero.title}</h1>
+          <p className="text-blue-300 font-medium mb-2">{t.news.newsMedia.toUpperCase()}</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">{t.hero.newsTitle}</h1>
           <p className="text-base md:text-lg text-slate-300 max-w-2xl">
-            {hero.subtitle}
+            {t.hero.newsSubtitle}
           </p>
         </div>
       </section>
@@ -59,7 +59,7 @@ export default function News() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search news..."
+                placeholder={t.news.searchNews}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -74,7 +74,7 @@ export default function News() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-slate-500">No news found matching your criteria.</p>
+              <p className="text-slate-500">{t.news.noNewsFound}</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +91,7 @@ export default function News() {
                     <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2">{item.title}</h3>
                     <p className="text-sm text-slate-600 mb-4 line-clamp-3">{item.excerpt}</p>
                     <Link href={`/news/${item.slug}`} className="inline-flex items-center gap-1 text-blue-600 text-sm font-medium hover:gap-2 transition-all">
-                      Read More <ArrowRight className="w-4 h-4" />
+                      {t.news.readMore} <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </article>

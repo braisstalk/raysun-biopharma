@@ -8,7 +8,7 @@ import { es } from './es'
 import { pt } from './pt'
 import { Locale } from '../config'
 
-export const translations: Record<Locale, Translations> = {
+export const translations: Record<Locale, any> = {
   en,
   lo,
   th,

@@ -120,13 +120,44 @@ const ar: ContentTranslations = {
   resources: { download: 'تحميل', requestAccess: 'طلب الوصول', title: 'الموارد' },
 }
 
+const en: ContentTranslations = {
+  home: {
+    hero: {
+      title: 'Your Trusted Pharmaceutical Manufacturing Partner',
+      subtitle: 'Delivering high-quality, affordable medicines to communities worldwide from our GMP-certified facility in Laos.',
+      primaryCta: 'Explore Products',
+      secondaryCta: 'Contact Us',
+    },
+    about: { title: 'About Us', description: 'Committed to delivering high-quality medicines to patients worldwide' },
+    capabilities: { title: 'Our Capabilities' },
+    products: { title: 'Our Products', viewAll: 'View All' },
+    global: { title: 'Global Presence' },
+    cta: { title: 'Ready to Start?', subtitle: 'Contact us today to discuss partnership opportunities' },
+    manufacturing: { description: 'Our modern manufacturing facility produces a wide range of pharmaceutical products' },
+  },
+  products: {
+    categories: {
+      antibiotics: 'Antibiotics',
+      analgesics: 'Analgesics',
+      'anti-inflammatory': 'Anti-inflammatory',
+      cardiovascular: 'Cardiovascular',
+      diabetes: 'Diabetes',
+      gastrointestinal: 'Gastrointestinal',
+      respiratory: 'Respiratory',
+      vitamins: 'Vitamins & Supplements',
+    },
+    searchPlaceholder: 'Search product name...',
+  },
+  news: { readMore: 'Read More', latestNews: 'Latest News' },
+  resources: { download: 'Download', requestAccess: 'Request Access', title: 'Resources' },
+}
+
 const lo: ContentTranslations = th
 const es: ContentTranslations = vi
 const pt: ContentTranslations = vi
 
 export const contentTranslations: Record<Locale, ContentTranslations> = {
-  en: {} as any,
-  th, vi, ar, lo, es, pt,
+  en, th, vi, ar, lo, es, pt,
 }
 
 export function getContentTranslation(locale: Locale): ContentTranslations {

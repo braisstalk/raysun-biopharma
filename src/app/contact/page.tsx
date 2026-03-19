@@ -70,14 +70,14 @@ export default function Contact() {
     setForm(prev => ({ ...prev, inquiryType: typeId }))
   }
 
-  const selectedInquiry = inquiryTypes.find(t => t.id === form.inquiryType)
+  const selectedInquiry = inquiryTypes.find(i => i.id === form.inquiryType)
 
   return (
     <>
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">CONTACT</p>
+          <p className="text-blue-300 font-medium mb-2">{t.contact.contact.toUpperCase()}</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.contactTitle}</h1>
           <p className="text-xl text-slate-200 max-w-2xl">
             {t.hero.contactSubtitle}
@@ -92,7 +92,7 @@ export default function Contact() {
             {[
               { icon: Briefcase, title: t.contact.businessEnquiry, desc: 'Product information, pricing, distribution partnerships' },
               { icon: Handshake, title: t.contact.partnership, desc: 'Joint ventures, licensing, technology transfer' },
-              { icon: Globe, title: 'Global Operations', desc: 'Serving Southeast Asia, Middle East, and Africa' },
+              { icon: Globe, title: t.contact.globalOperations, desc: t.contact.globalOperationsDesc },
             ].map((item, idx) => (
               <div key={idx} className="flex items-start gap-3 p-4">
                 <item.icon className="w-6 h-6 text-[#1E6F5C] flex-shrink-0 mt-1" />
@@ -118,29 +118,29 @@ export default function Contact() {
                 <div className="flex items-start gap-4">
                   <MapPin className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">Headquarters</h3>
-                    <p className="text-slate-600">Raysun Biopharma Manufacturing Facility<br />Vientiane Capital, Lao PDR</p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.headquarters}</h3>
+                    <p className="text-slate-600">{t.contact.address}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">Email</h3>
-                    <p className="text-slate-600">contact@raysunbiopharma.com<br />business@raysunbiopharma.com</p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.email}</h3>
+                    <p className="text-slate-600">{t.contact.emailAddresses}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Phone className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">Phone</h3>
-                    <p className="text-slate-600">Available upon request</p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.phone}</h3>
+                    <p className="text-slate-600">{t.contact.phoneAvailable}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Clock className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">Business Hours</h3>
-                    <p className="text-slate-600">Monday - Friday: 8:00 AM - 5:00 PM (ICT)<br />Saturday: 8:00 AM - 12:00 PM</p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.businessHours}</h3>
+                    <p className="text-slate-600">{t.contact.businessHoursTime}</p>
                   </div>
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function Contact() {
                     onClick={() => setStatus('idle')}
                     className="mt-4 text-sm text-green-700 hover:underline"
                   >
-                    {t.common.submit} another message
+                    {t.contact.submitAnother}
                   </button>
                 </div>
               )}
@@ -279,7 +279,7 @@ export default function Contact() {
                       onChange={handleChange}
                       className={`w-full px-4 py-2.5 rounded-lg border ${errors.country ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors bg-white`}
                     >
-                      <option value="">Select country</option>
+                      <option value="">{t.contact.selectCountry}</option>
                       {countries.map(c => (
                         <option key={c} value={c}>{c}</option>
                       ))}
@@ -343,7 +343,7 @@ export default function Contact() {
           <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl h-64 flex items-center justify-center">
             <div className="text-center text-slate-400">
               <MapPin className="w-12 h-12 mx-auto mb-2" />
-              <p>Map - Vientiane, Laos</p>
+              <p>{t.contact.mapLocation}</p>
             </div>
           </div>
         </div>

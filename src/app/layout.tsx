@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingActions from "@/components/common/FloatingActions";
 import { footerConfig } from "@/config/footer";
+import { LocaleProvider } from "@/i18n/LocaleContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://raysun-biopharma.com'),
@@ -53,6 +54,12 @@ export const metadata: Metadata = {
     canonical: 'https://raysun-biopharma.com',
     languages: {
       'en': 'https://raysun-biopharma.com',
+      'th': 'https://raysun-biopharma.com',
+      'lo': 'https://raysun-biopharma.com',
+      'vi': 'https://raysun-biopharma.com',
+      'ar': 'https://raysun-biopharma.com',
+      'es': 'https://raysun-biopharma.com',
+      'pt': 'https://raysun-biopharma.com',
     }
   }
 };
@@ -65,12 +72,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer config={footerConfig} />
-        <FloatingActions />
+        <LocaleProvider>
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer config={footerConfig} />
+          <FloatingActions />
+        </LocaleProvider>
       </body>
     </html>
   );

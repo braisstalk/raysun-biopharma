@@ -37,16 +37,16 @@ export default function Home() {
   // Merge content with translations
   const heroConfig = {
     ...hero,
-    title: t.hero.homeTitle,
-    subtitle: t.hero.homeSubtitle,
-    primaryCta: { ...hero?.primaryCta, label: t.hero.homePrimaryCta },
-    secondaryCta: { ...hero?.secondaryCta, label: t.hero.homeSecondaryCta },
+    title: contentTrans.home.hero.title,
+    subtitle: contentTrans.home.hero.subtitle,
+    primaryCta: { ...hero?.primaryCta, label: contentTrans.home.hero.primaryCta },
+    secondaryCta: { ...hero?.secondaryCta, label: contentTrans.home.hero.secondaryCta },
   }
   const videoConfig = videoSection || { title: 'Video', description: '', cta: { label: 'Watch', href: '/' } }
   const statsData = stats || []
-  const aboutData = about || { title: t.pages.about, description: '', cta: { label: t.cta.learnMore, href: '/about' } }
-  const capabilitiesData = capabilities || { title: t.hero.rdTitle, items: [] }
-  const productsData = products || { title: t.pages.products, categories: [] }
+  const aboutData = about || { title: contentTrans.home.about.title, description: '', cta: { label: t.common.learnMore, href: '/about' } }
+  const capabilitiesData = capabilities || { title: contentTrans.home.capabilities.title, items: [] }
+  const productsData = products || { title: contentTrans.home.products.title, categories: [] }
 
   return (
     <>
@@ -75,25 +75,25 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2">ABOUT RAYSUN BIOPHARMA</p>
+              <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.about.toUpperCase()}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                {aboutData.title}
+                {t.hero.aboutTitle}
               </h2>
               <p className="text-slate-600 mb-4">
-                Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.
+                {t.content?.aboutDesc1 || 'Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.'}
               </p>
               <p className="text-slate-600 mb-8">
-                Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.
+                {t.content?.aboutDesc2 || 'Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.'}
               </p>
-              <Link href={aboutData.cta?.href || '/about'} className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-                {aboutData.cta?.label || 'Learn More'} <ArrowRight className="w-4 h-4" />
+              <Link href="/about" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
+                {t.common.learnMore} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-64 md:h-80 flex items-center justify-center overflow-hidden">
               <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)' }}>
                 <div className="text-center">
                   <Factory className="w-12 h-12 md:w-16 md:h-16 text-slate-300 mx-auto mb-3" />
-                  <p className="text-xs md:text-sm text-slate-400 font-medium">Manufacturing Facility</p>
+                  <p className="text-xs md:text-sm text-slate-400 font-medium">{t.content?.manufacturingFacility || 'Manufacturing Facility'}</p>
                 </div>
               </div>
             </div>
@@ -106,7 +106,7 @@ export default function Home() {
         <section className="py-20 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <p className="text-[#1E6F5C] font-medium mb-2">OUR CAPABILITIES</p>
+              <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.capabilities || 'OUR CAPABILITIES'}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{capabilitiesData.title}</h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -131,11 +131,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <p className="text-[#1E6F5C] font-medium mb-2">OUR PRODUCTS</p>
+                <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.products.toUpperCase()}</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{productsData.title}</h2>
               </div>
               <Link href="/products" className="hidden md:inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-                View All Products <ArrowRight className="w-4 h-4" />
+                {contentTrans.home.products.viewAll} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -158,51 +158,51 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2">QUALITY & COMPLIANCE</p>
+              <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.qualityCompliance.toUpperCase()}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                Quality is Our Foundation
+                {t.hero.qualityTitle}
               </h2>
               <p className="text-slate-600 mb-6">
-                Our manufacturing facility operates under strict quality management systems to ensure every product meets international standards. We maintain comprehensive documentation and compliance readiness for regulated markets worldwide.
+                {t.content?.qualityDesc || 'Our manufacturing facility operates under strict quality management systems to ensure every product meets international standards. We maintain comprehensive documentation and compliance readiness for regulated markets worldwide.'}
               </p>
               <div className="space-y-3 mb-8">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">WHO GMP Certified Manufacturing</span>
+                  <span className="text-slate-700">{t.content?.whoGmpCertified || 'WHO GMP Certified Manufacturing'}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">ISO 9001:2015 Quality Management</span>
+                  <span className="text-slate-700">{t.content?.isoCertified || 'ISO 9001:2015 Quality Management'}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">Comprehensive Quality Assurance</span>
+                  <span className="text-slate-700">{t.content?.comprehensiveQA || 'Comprehensive Quality Assurance'}</span>
                 </div>
               </div>
               <Link href="/quality-compliance" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-                Explore Quality Standards <ArrowRight className="w-4 h-4" />
+                {t.common.learnMore} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-50 rounded-xl p-6 text-center">
                 <Shield className="w-10 h-10 text-[#1E6F5C] mx-auto mb-3" />
-                <h3 className="font-semibold text-slate-900 mb-1">GMP Standards</h3>
-                <p className="text-xs text-slate-500">WHO-GMP Certified</p>
+                <h3 className="font-semibold text-slate-900 mb-1">{t.content?.gmpStandards || 'GMP Standards'}</h3>
+                <p className="text-xs text-slate-500">{t.content?.whoGmpCertifiedShort || 'WHO-GMP Certified'}</p>
               </div>
               <div className="bg-slate-50 rounded-xl p-6 text-center">
                 <Award className="w-10 h-10 text-[#1E6F5C] mx-auto mb-3" />
-                <h3 className="font-semibold text-slate-900 mb-1">ISO Certified</h3>
-                <p className="text-xs text-slate-500">Quality Management</p>
+                <h3 className="font-semibold text-slate-900 mb-1">{t.content?.isoCertified || 'ISO Certified'}</h3>
+                <p className="text-xs text-slate-500">{t.content?.qualityManagement || 'Quality Management'}</p>
               </div>
               <div className="bg-slate-50 rounded-xl p-6 text-center">
                 <FileText className="w-10 h-10 text-[#1E6F5C] mx-auto mb-3" />
-                <h3 className="font-semibold text-slate-900 mb-1">Documentation</h3>
-                <p className="text-xs text-slate-500">Complete Records</p>
+                <h3 className="font-semibold text-slate-900 mb-1">{t.content?.documentation || 'Documentation'}</h3>
+                <p className="text-xs text-slate-500">{t.content?.completeRecords || 'Complete Records'}</p>
               </div>
               <div className="bg-slate-50 rounded-xl p-6 text-center">
                 <FlaskConical className="w-10 h-10 text-[#1E6F5C] mx-auto mb-3" />
-                <h3 className="font-semibold text-slate-900 mb-1">QC Testing</h3>
-                <p className="text-xs text-slate-500">Rigorous Standards</p>
+                <h3 className="font-semibold text-slate-900 mb-1">{t.content?.qcTesting || 'QC Testing'}</h3>
+                <p className="text-xs text-slate-500">{t.content?.rigorousStandards || 'Rigorous Standards'}</p>
               </div>
             </div>
           </div>
@@ -213,37 +213,37 @@ export default function Home() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">GLOBAL PRESENCE</p>
+            <p className="text-[#1E6F5C] font-medium mb-2">{contentTrans.home.global.title.toUpperCase()}</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Serving Healthcare Worldwide
+              {t.hero.rdTitle}
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              Our manufacturing capabilities support pharmaceutical companies and healthcare providers across multiple regions with reliable supply and regulatory compliance.
+              {t.content?.globalDesc || 'Our manufacturing capabilities support pharmaceutical companies and healthcare providers across multiple regions with reliable supply and regulatory compliance.'}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <Globe className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">Southeast Asia</h3>
-              <p className="text-sm text-slate-600 mb-4">Primary market focus with established distribution networks in Thailand, Cambodia, Myanmar, Vietnam, and Laos.</p>
+              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.southeastAsia || 'Southeast Asia'}</h3>
+              <p className="text-sm text-slate-600 mb-4">{t.content?.southeastAsiaDesc || 'Primary market focus with established distribution networks in Thailand, Cambodia, Myanmar, Vietnam, and Laos.'}</p>
               <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> Learn more
+                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
               </div>
             </div>
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <MapPin className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">Middle East</h3>
-              <p className="text-sm text-slate-600 mb-4">Growing presence in UAE, Saudi Arabia, and neighboring markets with regulatory-aligned products.</p>
+              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.middleEast || 'Middle East'}</h3>
+              <p className="text-sm text-slate-600 mb-4">{t.content?.middleEastDesc || 'Growing presence in UAE, Saudi Arabia, and neighboring markets with regulatory-aligned products.'}</p>
               <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> Learn more
+                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
               </div>
             </div>
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <Users className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">Africa & Beyond</h3>
-              <p className="text-sm text-slate-600 mb-4">Partnership opportunities for quality generic medicines targeting underserved healthcare markets.</p>
+              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.africaBeyond || 'Africa & Beyond'}</h3>
+              <p className="text-sm text-slate-600 mb-4">{t.content?.africaBeyondDesc || 'Partnership opportunities for quality generic medicines targeting underserved healthcare markets.'}</p>
               <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> Learn more
+                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
               </div>
             </div>
           </div>
@@ -255,11 +255,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2">LATEST NEWS</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Company Updates</h2>
+              <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.latestNews || 'LATEST NEWS'}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.hero.newsTitle}</h2>
             </div>
             <Link href="/news" className="hidden md:inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-              View All News <ArrowRight className="w-4 h-4" />
+              {contentTrans.home.products.viewAll} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -310,28 +310,28 @@ export default function Home() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">RESOURCES</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Downloads & Documents</h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.resources || 'RESOURCES'}</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.hero.resourcesTitle}</h2>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             <Link href="/resources/company-brochure" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
               <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">Company Overview</h3>
+              <h3 className="font-medium text-slate-900 mb-1">{t.content?.companyOverview || 'Company Overview'}</h3>
               <p className="text-xs text-slate-500">PDF • 2.4 MB</p>
             </Link>
             <Link href="/resources/product-catalog" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
               <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">Product Catalog</h3>
+              <h3 className="font-medium text-slate-900 mb-1">{t.content?.productCatalog || 'Product Catalog'}</h3>
               <p className="text-xs text-slate-500">PDF • 5.8 MB</p>
             </Link>
             <Link href="/resources/quality-certifications" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
               <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">Quality Certifications</h3>
+              <h3 className="font-medium text-slate-900 mb-1">{t.content?.qualityCertifications || 'Quality Certifications'}</h3>
               <p className="text-xs text-slate-500">PDF • 1.2 MB</p>
             </Link>
             <Link href="/resources/iso-9001-certificate" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
               <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">Sustainability Report</h3>
+              <h3 className="font-medium text-slate-900 mb-1">{t.content?.sustainabilityReport || 'Sustainability Report'}</h3>
               <p className="text-xs text-slate-500">PDF • 3.5 MB</p>
             </Link>
           </div>

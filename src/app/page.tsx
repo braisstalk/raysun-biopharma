@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Shield, Factory, FlaskConical, Award, FileText, Users, Globe, MapPin, CheckCircle, ArrowUpRight } from 'lucide-react'
 import { getHomeContent } from '@/lib/content'
-import { useTranslation } from '@/i18n/useTranslation'
+import { useLocale } from '@/i18n/LocaleContext'
 import { getContentTranslation } from '@/i18n/content'
 import HomeHeroVideo from '@/components/home/HomeHeroVideo'
 import HomeVideoFeature from '@/components/home/HomeVideoFeature'
@@ -12,19 +12,20 @@ import HomeVideoFeature from '@/components/home/HomeVideoFeature'
 export default function Home() {
   const [content, setContent] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const { t, locale } = useTranslation()
+  const { locale, t, isLoading: localeLoading } = useLocale()
   
-  // Get translations for current locale
-  const contentTrans = getContentTranslation(locale || 'en')
+  // Get translations for current locale - this will update when locale changes
+  const contentTrans = getContentTranslation(locale)
 
-  // Reload content when locale changes
+  // Load content on mount
   useEffect(() => {
     const homeData = getHomeContent()
     setContent(homeData)
     setLoading(false)
-  }, [locale]) // Re-run when locale changes
+  }, [])
 
-  if (loading || !content) {
+  // Show loading while either content or locale is loading
+  if (loading || localeLoading || !content) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -52,7 +53,7 @@ export default function Home() {
   const productsData = products || { title: contentTrans.home.products.title, categories: [] }
 
   return (
-    <>
+    <div key={locale}> {/* Force full re-render when locale changes */}
       {/* Hero Section with Video Background */}
       <HomeHeroVideo config={heroConfig} />
 
@@ -340,6 +341,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

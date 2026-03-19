@@ -14,8 +14,10 @@ export default function HomeHeroVideo({ config }: HomeHeroVideoProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
+    setIsHydrated(true)
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mediaQuery.matches)
     
@@ -33,6 +35,26 @@ export default function HomeHeroVideo({ config }: HomeHeroVideoProps) {
 
   const handleVideoCanPlay = () => {
     setIsLoaded(true)
+  }
+
+  // Don't render until hydrated to prevent hydration mismatch
+  if (!isHydrated) {
+    return (
+      <section className="relative bg-slate-900 text-white pt-16 overflow-hidden min-h-[500px]">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40">
+          <div className="max-w-3xl">
+            <div className="h-6 w-48 bg-slate-700/50 rounded mb-4 animate-pulse" />
+            <div className="h-16 w-full bg-slate-700/50 rounded mb-6 animate-pulse" />
+            <div className="h-24 w-full bg-slate-700/50 rounded mb-8 animate-pulse" />
+            <div className="flex gap-4">
+              <div className="h-12 w-40 bg-slate-700/50 rounded animate-pulse" />
+              <div className="h-12 w-32 bg-slate-700/50 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   // Fallback for reduced motion or video error - premium brand look

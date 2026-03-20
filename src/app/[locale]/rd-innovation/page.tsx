@@ -1,42 +1,179 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, FlaskConical, Lightbulb } from 'lucide-react'
+import { FlaskConical, Lightbulb, ArrowRight, CheckCircle, Microscope, Atom, BookOpen, Users, Target, Beaker, Layers, FileText, Award, Handshake, Rocket, Globe } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 
 export default function RdInnovation() {
   const { t } = useTranslation()
 
+  const rdStats = [
+    { value: '15+', label: 'R&D Scientists' },
+    { value: '30+', label: 'Products in Pipeline' },
+    { value: '8', label: 'Dosage Forms' },
+    { value: '5+', label: 'Research Partnerships' },
+  ]
+
+  const rdCapabilities = [
+    { icon: FlaskConical, title: 'Generic Drug Development', description: 'Full-cycle development of generic pharmaceuticals from formulation screening through bioequivalence studies, targeting WHO Essential Medicines List products for underserved markets.' },
+    { icon: Layers, title: 'Formulation Innovation', description: 'Development of novel drug delivery systems including sustained-release formulations, taste-masked suspensions, and improved bioavailability formulations for existing APIs.' },
+    { icon: Beaker, title: 'Analytical Method Development', description: 'Development and validation of analytical methods for quality control testing, stability studies, and dissolution profiling compliant with pharmacopoeial standards.' },
+    { icon: Microscope, title: 'Stability Studies', description: 'ICH-compliant stability programs supporting product registrations across climatic zones, with dedicated stability chambers for long-term, accelerated, and photostability testing.' },
+    { icon: Atom, title: 'Process Optimization', description: 'Continuous improvement of manufacturing processes through Design of Experiments (DoE), process analytical technology (PAT), and scale-up studies from lab to commercial batches.' },
+    { icon: BookOpen, title: 'Regulatory Dossier Preparation', description: 'Preparation of complete registration dossiers in CTD/eCTD format for multi-market submissions including ASEAN, Middle East, and African regulatory authorities.' },
+  ]
+
+  const focusAreas = [
+    { title: 'Anti-Infectives', description: 'Next-generation antibiotics and antifungals addressing antimicrobial resistance challenges in Southeast Asian and African markets.', status: 'Active' },
+    { title: 'Cardiovascular', description: 'Expanded portfolio of antihypertensives, statins, and anticoagulants in improved formulations for better patient compliance.', status: 'Active' },
+    { title: 'Nutraceuticals', description: 'Evidence-based nutritional supplement formulations combining traditional herbal ingredients with modern pharmaceutical technology.', status: 'Active' },
+    { title: 'Tropical Diseases', description: 'Affordable treatments targeting neglected tropical diseases prevalent in our core ASEAN and African markets.', status: 'Pipeline' },
+    { title: 'Pediatric Formulations', description: 'Age-appropriate dosage forms for children including taste-masked suspensions, dispersible tablets, and mini-tablets.', status: 'Pipeline' },
+    { title: 'Oncology Support', description: 'Supportive care medications for cancer patients including anti-emetics, pain management, and nutritional formulations.', status: 'Pipeline' },
+  ]
+
+  const partnershipModels = [
+    { icon: Handshake, title: 'Contract Development (CDMO)', description: 'End-to-end pharmaceutical development services from early formulation to commercial scale manufacturing, with full regulatory support.' },
+    { icon: Rocket, title: 'Technology Transfer', description: 'Receive and implement manufacturing technology for established products, with validation and regulatory transition support for your market.' },
+    { icon: Users, title: 'Joint Research', description: 'Collaborative research partnerships with academic institutions, research organizations, and pharmaceutical companies for novel product development.' },
+    { icon: Globe, title: 'Licensing Partnerships', description: 'In-licensing opportunities for innovative products to manufacture and distribute across our established market network in ASEAN and beyond.' },
+  ]
+
   return (
     <>
+      {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">R&D INNOVATION</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Driving Pharmaceutical Innovation</h1>
-          <p className="text-xl text-slate-200 max-w-3xl">
-            Developing innovative pharmaceutical solutions for evolving healthcare needs.
-          </p>
+          <p className="text-blue-300 font-medium mb-2">{t.pages.rdInnovation.toUpperCase()}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.rdTitle}</h1>
+          <p className="text-xl text-slate-200 max-w-3xl mb-8">{t.hero.rdSubtitle}</p>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1E6F5C] hover:bg-[#165B46] text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              Research Partnerships <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/products" className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              {t.cta.viewProducts}
+            </Link>
+          </div>
         </div>
       </section>
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-4">Our R&D Focus</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-slate-50 p-6 rounded-xl">
-              <FlaskConical className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold mb-2">Formulation Development</h3>
-              <p className="text-slate-600 text-sm">Novel drug delivery systems</p>
+
+      {/* R&D Stats */}
+      <section className="py-12 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {rdStats.map((stat, idx) => (
+              <div key={idx} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}</div>
+                <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* R&D Vision */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-[#1E6F5C] font-medium mb-2">OUR R&D VISION</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Innovation for Accessible Healthcare</h2>
+              <p className="text-slate-600 mb-4">Our research and development strategy is anchored in a clear mission: to develop high-quality, affordable pharmaceutical products that address unmet healthcare needs in emerging markets.</p>
+              <p className="text-slate-600 mb-6">We focus on adapting proven active pharmaceutical ingredients into improved formulations — better bioavailability, improved stability in tropical climates, and patient-friendly dosage forms that drive treatment adherence.</p>
+              <div className="space-y-3">
+                {['Affordable access to essential medicines', 'Climate-adapted formulations for tropical markets', 'Patient-centric dosage form innovation', 'WHO Essential Medicines List alignment'].map((item) => (
+                  <div key={item} className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#1E6F5C] shrink-0" />
+                    <span className="text-slate-700">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="bg-slate-50 p-6 rounded-xl">
-              <Lightbulb className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold mb-2">Innovation</h3>
-              <p className="text-slate-600 text-sm">Cutting-edge research</p>
+            <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
+              <div className="text-center">
+                <FlaskConical className="w-16 h-16 text-slate-300 mx-auto mb-3" />
+                <p className="text-sm text-slate-400 font-medium">R&D Laboratory</p>
+                <p className="text-xs text-slate-400 mt-1">Photo coming soon</p>
+              </div>
             </div>
-            <div className="bg-slate-50 p-6 rounded-xl">
-              <ArrowRight className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold mb-2">Future Ready</h3>
-              <p className="text-slate-600 text-sm">Advancing healthcare solutions</p>
-            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* R&D Capabilities */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">R&D CAPABILITIES</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Full-Spectrum Development Services</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">From initial concept through regulatory approval, our R&D team provides comprehensive development capabilities across all stages of the pharmaceutical product lifecycle.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {rdCapabilities.map((cap, idx) => (
+              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <cap.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">{cap.title}</h3>
+                <p className="text-sm text-slate-600">{cap.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Research Focus Areas / Pipeline */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">RESEARCH FOCUS AREAS</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Therapeutic Focus & Pipeline</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">Our product development pipeline is focused on therapeutic areas with significant unmet need in our target markets.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {focusAreas.map((area, idx) => (
+              <div key={idx} className="bg-slate-50 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <Target className="w-8 h-8 text-[#1E6F5C]" />
+                  <span className={`text-xs font-medium px-3 py-1 rounded-full ${area.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                    {area.status}
+                  </span>
+                </div>
+                <h3 className="font-bold text-slate-900 mb-2">{area.title}</h3>
+                <p className="text-sm text-slate-600">{area.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partnership Models */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-[#1E6F5C] font-medium mb-2">COLLABORATION</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Partnership Models</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">We offer flexible collaboration frameworks to accelerate pharmaceutical innovation and market access.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {partnershipModels.map((model, idx) => (
+              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm text-center">
+                <model.icon className="w-10 h-10 text-[#1E6F5C] mx-auto mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">{model.title}</h3>
+                <p className="text-sm text-slate-600">{model.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 bg-gradient-to-br from-[#1E6F5C] to-[#165B46]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Let&apos;s Innovate Together</h2>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8">Whether you need contract development services, technology transfer support, or a research collaboration partner — our R&D team is ready to help bring your pharmaceutical products to market.</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors">{t.cta.contact} <ArrowRight className="w-4 h-4" /></Link>
+            <Link href="/manufacturing" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">View Manufacturing</Link>
           </div>
         </div>
       </section>

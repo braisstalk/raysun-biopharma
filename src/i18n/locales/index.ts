@@ -1,11 +1,13 @@
 // Locale translations export
-import { en, Translations } from './en'
+import { en } from './en'
+import type { Translations } from './en'
 import { lo } from './lo'
 import { th } from './th'
 import { vi } from './vi'
 import { ar } from './ar'
 import { es } from './es'
-import { pt } from './pt'
+import { fr } from './fr'
+import { zh } from './zh'
 import { Locale } from '../config'
 
 export const translations: Record<Locale, any> = {
@@ -15,8 +17,9 @@ export const translations: Record<Locale, any> = {
   vi,
   ar,
   es,
-  pt,
+  fr,
+  zh,
 }
 
-export { en, lo, th, vi, ar, es, pt }
+export { en, lo, th, vi, ar, es, fr, zh }
 export type { Translations }

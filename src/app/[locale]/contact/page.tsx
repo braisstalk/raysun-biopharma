@@ -77,7 +77,7 @@ export default function Contact() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">{t.contact.contact.toUpperCase()}</p>
+          <p className="text-blue-300 font-medium mb-2">{t.pages.contact.toUpperCase()}</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.contactTitle}</h1>
           <p className="text-xl text-slate-200 max-w-2xl">
             {t.hero.contactSubtitle}

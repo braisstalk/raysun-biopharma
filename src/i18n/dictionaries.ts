@@ -57,7 +57,8 @@ const th: typeof en = en // Thai - placeholder
 const vi: typeof en = en // Vietnamese - placeholder
 const ar: typeof en = en // Arabic - placeholder
 const es: typeof en = en // Spanish - placeholder
-const pt: typeof en = en // Portuguese - placeholder
+const fr: typeof en = en // French - placeholder
+const zh: typeof en = en // Chinese - placeholder
 
 export const dictionaries: Record<Locale, typeof en> = {
   en,
@@ -66,7 +67,8 @@ export const dictionaries: Record<Locale, typeof en> = {
   vi,
   ar,
   es,
-  pt,
+  fr,
+  zh,
 }
 
 // Get dictionary for a locale (with fallback to English)

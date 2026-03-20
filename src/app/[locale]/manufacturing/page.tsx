@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, CheckCircle, ArrowRight, Thermometer, Wind, Eye } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { getHeroSlides } from '@/config/hero-slides'
 
 export default function Manufacturing() {
   const { t } = useTranslation()
@@ -46,22 +48,8 @@ export default function Manufacturing() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">{t.pages.manufacturing.toUpperCase()}</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.manufacturingTitle}</h1>
-          <p className="text-xl text-slate-200 max-w-3xl mb-8">{t.hero.manufacturingSubtitle}</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/products" className="inline-flex items-center gap-2 bg-[#1E6F5C] hover:bg-[#165B46] text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              {t.cta.viewProducts} <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/contact" className="inline-flex items-center gap-2 border border-white/30 hover:bg-white/10 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              {t.cta.contact}
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel slides={getHeroSlides('manufacturing')} />
 
       {/* Facility Stats */}
       <section className="py-12 bg-white border-b border-slate-100">

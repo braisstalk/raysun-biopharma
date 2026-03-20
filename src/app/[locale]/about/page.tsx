@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle, Target, Eye, Users, Award, MapPin, Building2, Globe, Heart, Shield } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { getHeroSlides } from '@/config/hero-slides'
 
 export default function About() {
   const { t } = useTranslation()
@@ -36,16 +38,8 @@ export default function About() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">{t.pages.about.toUpperCase()}</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.aboutTitle}</h1>
-          <p className="text-xl text-slate-200 max-w-3xl mb-6">
-            {t.hero.aboutSubtitle}
-          </p>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel slides={getHeroSlides('about')} />
 
       {/* Company Highlights */}
       <section className="py-16 bg-white border-b border-slate-100">

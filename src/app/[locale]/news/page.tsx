@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Search, Calendar, ArrowRight } from 'lucide-react'
 import { getNewsContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { getHeroSlides } from '@/config/hero-slides'
 
 export default function News() {
   const content = getNewsContent()
@@ -23,16 +25,8 @@ export default function News() {
 
   return (
     <>
-      {/* Hero - mobile optimized */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">{t.news.newsMedia.toUpperCase()}</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">{t.hero.newsTitle}</h1>
-          <p className="text-base md:text-lg text-slate-300 max-w-2xl">
-            {t.hero.newsSubtitle}
-          </p>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel slides={getHeroSlides('news')} />
 
       {/* Filter bar - mobile optimized */}
       <section className="py-4 md:py-8 bg-slate-50 sticky top-[60px] md:top-16 z-30 border-b">

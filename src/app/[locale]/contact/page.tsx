@@ -3,6 +3,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { getHeroSlides } from '@/config/hero-slides'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -74,16 +76,8 @@ export default function Contact() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">{t.pages.contact.toUpperCase()}</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.hero.contactTitle}</h1>
-          <p className="text-xl text-slate-200 max-w-2xl">
-            {t.hero.contactSubtitle}
-          </p>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel slides={getHeroSlides('contact')} />
 
       {/* Contact Overview */}
       <section className="py-12 bg-white border-b border-slate-100">

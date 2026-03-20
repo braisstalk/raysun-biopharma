@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { FileText, Download, File, Video } from 'lucide-react'
 import { getResourcesContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { getHeroSlides } from '@/config/hero-slides'
 
 const icons: Record<string, React.ElementType> = {
   document: FileText,
@@ -22,15 +24,7 @@ export default function Resources() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-blue-300 font-medium mb-2">RESOURCES</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{hero.title}</h1>
-          <p className="text-lg text-slate-300 max-w-2xl">
-            {hero.subtitle}
-          </p>
-        </div>
-      </section>
+      <HeroCarousel slides={getHeroSlides('resources')} />
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

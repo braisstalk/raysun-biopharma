@@ -174,7 +174,7 @@ export const ar = {
     globalOperationsDesc: 'نخدم جنوب شرق آسيا والشرق الأوسط وأفريقيا',
     headquarters: 'المقر الرئيسي',
     address: 'منشأة تصنيع Raysun Biopharma\nفيينتيان عاصمة لاوس',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'متاح عند الطلب',
     businessHours: 'ساعات العمل',
     businessHoursTime: 'الإثنين - الجمعة: 8:00 صباحًا - 5:00 مساءً (ICT)\nالسبت: 8:00 صباحًا - 12:00 مساءً',

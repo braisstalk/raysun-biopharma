@@ -47,7 +47,7 @@ const mockAnswers: ContentAiMockAnswer[] = [
   },
   {
     keywords: ['contact', 'sales', 'reach', 'phone', 'email', 'support'],
-    answer: 'You can reach our team through: Email: contact@raysunbiopharma.com | Phone: Available upon request | Our business hours are Monday-Friday, 9:00 AM - 6:00 PM (GMT+7). We typically respond within 24-48 hours.',
+    answer: 'You can reach our team through: Email: info@raysunpharma.com | Phone: Available upon request | Our business hours are Monday-Friday, 9:00 AM - 6:00 PM (GMT+7). We typically respond within 24-48 hours.',
     relatedLinks: [
       { label: 'Contact Page', href: '/contact' },
       { label: 'Request Quote', href: '/order-now' },

@@ -188,7 +188,7 @@ export const th = {
     globalOperationsDesc: 'ให้บริการเอเชียตะวันออกเฉียงใต้ ตะวันออกกลาง และแอฟริกา',
     headquarters: 'สำนักงานใหญ่',
     address: 'โรงงานผลิต Raysun Biopharma\nนครหลวงเวียงจันทน์ สปป. ลาว',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'พร้อมให้บริการตามคำขอ',
     businessHours: 'เวลาทำการ',
     businessHoursTime: 'จันทร์ - ศุกร์: 8:00 - 17:00 น. (เวลาไทย)\nเสาร์: 8:00 - 12:00 น.',

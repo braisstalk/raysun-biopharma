@@ -166,7 +166,7 @@ export const zh = {
     globalOperationsDesc: '服务东南亚、中东及非洲地区',
     headquarters: '总部',
     address: '雷神生物制药生产基地\n老挝人民民主共和国万象市',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: '可来电咨询',
     businessHours: '工作时间',
     businessHoursTime: '周一至周五: 8:00 - 17:00 (ICT)\n周六: 8:00 - 12:00',

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle, Target, Eye, Users, Award, MapPin, Building2, Globe, Heart, Shield } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 export default function About() {
   const { t } = useTranslation()
@@ -39,7 +39,13 @@ export default function About() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('about')} />
+      <HeroCarousel
+        badge="ABOUT US"
+        badgeColor="text-blue-300"
+        heading={t.hero.aboutTitle}
+        description={t.hero.aboutSubtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* Company Highlights */}
       <section className="py-16 bg-white border-b border-slate-100">

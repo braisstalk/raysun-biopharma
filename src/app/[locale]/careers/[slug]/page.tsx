@@ -146,8 +146,8 @@ export default async function JobDetail({ params }: Props) {
               </button>
               <p className="text-xs text-slate-500 mt-4 text-center">
                 Or email your CV to<br />
-                <a href="mailto:careers@raysunbiopharma.com" className="text-[#1E6F5C] hover:underline">
-                  careers@raysunbiopharma.com
+                <a href="mailto:info@raysunpharma.com" className="text-[#1E6F5C] hover:underline">
+                  info@raysunpharma.com
                 </a>
               </p>
             </div>

@@ -41,7 +41,7 @@ export const footerConfig: FooterConfig = {
   ],
   contact: {
     title: 'Get in Touch',
-    email: 'contact@raysunbiopharma.com',
+    email: 'info@raysunpharma.com',
     phone: '+856 21 XXX XXXX',
     mobile: '+856 20 XXX XXXX',
     address: 'Vientiane Capital, Lao PDR'

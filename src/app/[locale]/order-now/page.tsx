@@ -25,6 +25,7 @@ export default function OrderNow() {
   
   const [currentStep, setCurrentStep] = useState(1)
   const [orderType, setOrderType] = useState('')
+  const [submitError, setSubmitError] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -46,9 +47,32 @@ export default function OrderNow() {
     setCurrentStep(2)
   }
 
-  const handleSubmitQuote = (e: React.FormEvent) => {
+  const handleSubmitQuote = async (e: React.FormEvent) => {
     e.preventDefault()
-    setCurrentStep(3)
+    setSubmitError(false)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          country: formData.country,
+          message: `Order Type: ${orderType}\n\nProducts:\n${formData.products}\n\nQuantity: ${formData.quantity || 'N/A'}\n\nNote:\n${formData.message || 'None'}`,
+          formSource: 'order',
+          inquiryType: orderType === 'bulk' ? 'Bulk / B2B Order' : orderType === 'rfq' ? 'Request Quotation' : 'Quick Order',
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setCurrentStep(3)
+      } else {
+        setSubmitError(true)
+      }
+    } catch {
+      setSubmitError(true)
+    }
   }
 
   return (
@@ -235,6 +259,12 @@ export default function OrderNow() {
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
                 />
               </div>
+              {submitError && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+                  Something went wrong. Please try again or email us at{' '}
+                  <a href="mailto:info@raysunpharma.com" className="underline font-medium">info@raysunpharma.com</a>
+                </div>
+              )}
               <div className="flex gap-4">
                 <button
                   type="button"

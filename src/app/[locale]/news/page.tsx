@@ -5,7 +5,7 @@ import { Search, Calendar, ArrowRight } from 'lucide-react'
 import { getNewsContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 export default function News() {
   const content = getNewsContent()
@@ -26,7 +26,13 @@ export default function News() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('news')} />
+      <HeroCarousel
+        badge="NEWS"
+        badgeColor="text-blue-300"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* Filter bar - mobile optimized */}
       <section className="py-4 md:py-8 bg-slate-50 sticky top-[60px] md:top-16 z-30 border-b">

@@ -98,7 +98,7 @@ export default function Footer({ config }: FooterProps) {
               <li>
                 <div className="flex items-center gap-2 text-sm text-slate-400">
                   <Mail className="w-4 h-4" />
-                  contact@raysunbiopharma.com
+                  info@raysunpharma.com
                 </div>
               </li>
               <li>

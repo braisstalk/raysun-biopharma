@@ -174,7 +174,7 @@ export const pt = {
     globalOperationsDesc: 'Atendendo o Sudeste Asiático, Oriente Médio e África',
     headquarters: 'Sede',
     address: 'Instalação de fabricação Raysun Biopharma\nVientiane, RDPL do Laos',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'Disponível sob solicitação',
     businessHours: 'Horário de funcionamento',
     businessHoursTime: 'Segunda - Sexta: 8:00 - 17:00 (ICT)\nSábado: 8:00 - 12:00',

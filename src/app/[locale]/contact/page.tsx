@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -36,6 +36,7 @@ export default function Contact() {
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [mailtoLink, setMailtoLink] = useState<string | null>(null)
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -54,10 +55,34 @@ export default function Contact() {
     if (!validateForm()) return
     
     setStatus('submitting')
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setStatus('success')
-    setForm({ name: '', company: '', email: '', phone: '', country: '', inquiryType: 'business', message: '' })
-    setConsent(false)
+    setMailtoLink(null)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          phone: form.phone,
+          country: form.country,
+          inquiryType: form.inquiryType,
+          message: form.message,
+          formSource: 'contact',
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setStatus('success')
+        if (data.mailto) setMailtoLink(data.mailto)
+        setForm({ name: '', company: '', email: '', phone: '', country: '', inquiryType: 'business', message: '' })
+        setConsent(false)
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -77,7 +102,13 @@ export default function Contact() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('contact')} />
+      <HeroCarousel
+        badge="CONTACT"
+        badgeColor="text-emerald-400"
+        heading={t.hero.contactTitle}
+        description={t.hero.contactSubtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* Contact Overview */}
       <section className="py-12 bg-white border-b border-slate-100">

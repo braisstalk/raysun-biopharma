@@ -6,7 +6,8 @@ import { SearchX, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { getProductsContent, getAllProducts, getCurrentSource } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import { getContentTranslation } from '@/i18n/content'
-import ProductsHero from '@/components/products/ProductsHero'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { productsHeroSlides } from '@/config/heroSlides'
 import ProductsSearchBar from '@/components/products/ProductsSearchBar'
 
 function generateSlug(name: string): string {
@@ -90,24 +91,25 @@ export default function Products() {
 
   return (
     <>
-      <ProductsHero
-        title={hero.title}
-        subtitle={hero.subtitle}
-        slides={(hero.slides || []).map((s: any) => ({
-          id: s.id || 'slide-1',
-          title: s.title || '',
-          subtitle: s.subtitle || '',
-          gradient: s.gradient || 'from-blue-900 via-blue-800 to-slate-900',
-          accentColor: s.accentColor || 'blue'
-        }))}
-        searchBar={
-          <ProductsSearchBar
-            placeholder={contentTrans?.products?.searchPlaceholder || hero.searchPlaceholder}
-            value={search}
-            onChange={setSearch}
-          />
-        }
-      />
+      <HeroCarousel
+        badge="200+ Products Available"
+        badgeColor="text-emerald-400"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={productsHeroSlides}
+        align="center"
+      >
+        <div className="relative max-w-md mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-teal-500/10 rounded-2xl blur-xl" />
+          <div className="relative">
+            <ProductsSearchBar
+              placeholder={contentTrans?.products?.searchPlaceholder || hero.searchPlaceholder}
+              value={search}
+              onChange={setSearch}
+            />
+          </div>
+        </div>
+      </HeroCarousel>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" ref={scrollRef}>
         

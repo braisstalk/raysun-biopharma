@@ -6,7 +6,8 @@ import { ArrowRight, Shield, Factory, FlaskConical, Award, FileText, Users, Glob
 import { getHomeContent } from '@/lib/content'
 import { useLocale } from '@/i18n/LocaleContext'
 import { getContentTranslation } from '@/i18n/content'
-import HomeHeroVideo from '@/components/home/HomeHeroVideo'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { homeHeroSlides } from '@/config/heroSlides'
 import HomeVideoFeature from '@/components/home/HomeVideoFeature'
 
 export default function Home() {
@@ -54,8 +55,23 @@ export default function Home() {
 
   return (
     <div key={locale}> {/* Force full re-render when locale changes */}
-      {/* Hero Section with Video Background */}
-      <HomeHeroVideo config={heroConfig} />
+      {/* Hero Section with Carousel */}
+      <HeroCarousel
+        badge="Raysun Biopharma"
+        badgeColor="text-blue-300"
+        heading={heroConfig.title}
+        description={heroConfig.subtitle}
+        slides={homeHeroSlides}
+      >
+        <div className="flex flex-wrap gap-4">
+          <Link href={heroConfig.primaryCta.href} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium text-white transition-colors">
+            {heroConfig.primaryCta.label} <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link href={heroConfig.secondaryCta.href} className="inline-flex items-center gap-2 border-2 border-white/30 hover:border-white px-6 py-3 rounded-lg font-medium text-white transition-colors">
+            {heroConfig.secondaryCta.label}
+          </Link>
+        </div>
+      </HeroCarousel>
 
       {/* Video Feature Section - Below Hero */}
       <HomeVideoFeature config={videoConfig} />

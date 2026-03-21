@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Users, MapPin, Mail, ArrowRight, Briefcase, Clock } from 'lucide-react'
 import { getCareersPageContent, jobDepartments } from '@/lib/content'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 import { useTranslation } from '@/i18n/useTranslation'
 
 export default function Careers() {
@@ -22,7 +22,13 @@ export default function Careers() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('careers')} />
+      <HeroCarousel
+        badge="CAREERS"
+        badgeColor="text-blue-300"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* Overview */}
       <section className="py-16 bg-white border-b border-slate-100">
@@ -124,7 +130,7 @@ export default function Careers() {
           <p className="text-blue-100 max-w-2xl mx-auto mb-6">
             Send us your CV and we'll keep you informed about future opportunities that match your skills and experience.
           </p>
-          <a href="mailto:careers@raysunbiopharma.com" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50">
+          <a href="mailto:info@raysunpharma.com" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50">
             <Mail className="w-4 h-4" /> Email Your CV
           </a>
         </div>

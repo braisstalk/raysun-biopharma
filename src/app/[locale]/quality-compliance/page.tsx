@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Shield, Award, CheckCircle, ArrowRight, FileText, FlaskConical, Eye, ClipboardCheck, BarChart3, RefreshCw, Lock, Globe, BookOpen, Microscope } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 export default function QualityCompliance() {
   const { t } = useTranslation()
@@ -41,7 +41,13 @@ export default function QualityCompliance() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('quality-compliance')} />
+      <HeroCarousel
+        badge="QUALITY"
+        badgeColor="text-emerald-400"
+        heading={t.hero.qualityTitle}
+        description={t.hero.qualitySubtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* Quality Philosophy */}
       <section className="py-20 bg-white">

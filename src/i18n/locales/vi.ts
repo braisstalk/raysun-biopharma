@@ -188,7 +188,7 @@ export const vi = {
     globalOperationsDesc: 'Phục vụ Đông Nam Á, Trung Đông và châu Phi',
     headquarters: 'Trụ sở chính',
     address: 'Cơ sở sản xuất Raysun Biopharma\nThủ đô Viêng Chăn, CHDCND Lào',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'Có sẵn theo yêu cầu',
     businessHours: 'Giờ làm việc',
     businessHoursTime: 'Thứ Hai - Thứ Sáu: 8:00 - 17:00 (ICT)\nThứ Bảy: 8:00 - 12:00',

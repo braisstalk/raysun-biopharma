@@ -165,7 +165,7 @@ export const fr = {
     globalOperationsDesc: 'Au service de l\'Asie du Sud-Est, du Moyen-Orient et de l\'Afrique',
     headquarters: 'Siège social',
     address: 'Raysun Biopharma - Site de production\nVientiane, Laos',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'Disponible sur demande',
     businessHours: 'Heures d\'ouverture',
     businessHoursTime: 'Lundi - Vendredi : 8h00 - 17h00 (ICT)\nSamedi : 8h00 - 12h00',

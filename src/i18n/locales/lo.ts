@@ -175,7 +175,7 @@ export const lo = {
     globalOperationsDesc: 'Serving Southeast Asia, Middle East, and Africa',
     headquarters: 'Headquarters',
     address: 'Raysun Biopharma Manufacturing Facility\nVientiane Capital, Lao PDR',
-    emailAddresses: 'contact@raysunbiopharma.com\nbusiness@raysunbiopharma.com',
+    emailAddresses: 'info@raysunpharma.com',
     phoneAvailable: 'Available upon request',
     businessHours: 'Business Hours',
     businessHoursTime: 'Monday - Friday: 8:00 AM - 5:00 PM (ICT)\nSaturday: 8:00 AM - 12:00 PM',

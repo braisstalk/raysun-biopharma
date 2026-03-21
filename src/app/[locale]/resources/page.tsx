@@ -4,7 +4,7 @@ import { FileText, Download, File, Video } from 'lucide-react'
 import { getResourcesContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 const icons: Record<string, React.ElementType> = {
   document: FileText,
@@ -24,7 +24,13 @@ export default function Resources() {
 
   return (
     <>
-      <HeroCarousel slides={getHeroSlides('resources')} />
+      <HeroCarousel
+        badge="RESOURCES"
+        badgeColor="text-blue-300"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={homeHeroSlides}
+      />
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

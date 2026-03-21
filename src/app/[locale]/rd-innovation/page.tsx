@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { FlaskConical, Lightbulb, ArrowRight, CheckCircle, Microscope, Atom, BookOpen, Users, Target, Beaker, Layers, FileText, Award, Handshake, Rocket, Globe } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import HeroCarousel from '@/components/common/HeroCarousel'
-import { getHeroSlides } from '@/config/hero-slides'
+import { homeHeroSlides } from '@/config/heroSlides'
 
 export default function RdInnovation() {
   const { t } = useTranslation()
@@ -44,7 +44,13 @@ export default function RdInnovation() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel slides={getHeroSlides('rd-innovation')} />
+      <HeroCarousel
+        badge="R&D"
+        badgeColor="text-blue-300"
+        heading={t.hero.rdTitle}
+        description={t.hero.rdSubtitle}
+        slides={homeHeroSlides}
+      />
 
       {/* R&D Stats */}
       <section className="py-12 bg-white border-b border-slate-100">

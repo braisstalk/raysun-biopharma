@@ -10,12 +10,12 @@ export const homeContent: HomeContent = {
     title: 'What science can do',
     subtitle: 'Advancing the future of healthcare through breakthrough science, sustainable innovation, and a relentless commitment to improving lives worldwide.',
     primaryCta: {
-      label: 'Explore Our Science',
-      href: '/what-science-can-do'
+      label: 'Explore Our Products',
+      href: '/products'
     },
     secondaryCta: {
-      label: 'Our Products',
-      href: '/products'
+      label: 'Contact Us',
+      href: '/contact'
     }
   },
   

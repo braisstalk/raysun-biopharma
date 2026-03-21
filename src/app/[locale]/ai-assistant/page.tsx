@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Bot, Send, ArrowRight, ExternalLink, Clock } from 'lucide-react'
 import { getAiAssistantContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { aiAssistantHeroSlides } from '@/config/heroSlides'
 
 
 export default function AiAssistant() {
@@ -79,18 +81,14 @@ export default function AiAssistant() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-blue-900 text-white py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Bot className="w-10 h-10 text-blue-400" />
-            <p className="text-blue-300 font-medium">AI ASSISTANT</p>
-          </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">{hero.title}</h1>
-          <p className="text-base md:text-lg text-slate-300 max-w-2xl">
-            {hero.subtitle}
-          </p>
-        </div>
-      </section>
+      <HeroCarousel
+        icon={<Bot className="w-10 h-10 text-blue-400" />}
+        badge="AI ASSISTANT"
+        badgeColor="text-blue-300"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={aiAssistantHeroSlides}
+      />
 
       {/* Quick Questions */}
       <section className="py-8 bg-slate-50 border-b">

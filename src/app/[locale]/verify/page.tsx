@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { Shield, Search, AlertTriangle, CheckCircle, FileCheck, UserCheck, Package, Phone, Mail, ExternalLink } from 'lucide-react'
 import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { verifyHeroSlides } from '@/config/heroSlides'
 
 const icons: Record<string, React.ElementType> = {
   product: Package,
@@ -86,15 +88,13 @@ export default function Verify() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#1E6F5C] text-white py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-emerald-400 font-medium mb-2">VERIFICATION CENTER</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">{hero.title}</h1>
-          <p className="text-base md:text-lg text-slate-300 max-w-2xl">
-            {hero.subtitle}
-          </p>
-        </div>
-      </section>
+      <HeroCarousel
+        badge="VERIFICATION CENTER"
+        badgeColor="text-emerald-400"
+        heading={hero.title}
+        description={hero.subtitle}
+        slides={verifyHeroSlides}
+      />
 
       {/* Verification Types */}
       <section className="py-8 md:py-12 bg-slate-50 border-b">

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Heart, FlaskConical, Users, Globe, FileText, ChevronRight } from 'lucide-react'
+import HeroCarousel from '@/components/common/HeroCarousel'
+import { scienceHeroSlides } from '@/config/heroSlides'
 
 const features = [
   {
@@ -41,23 +43,13 @@ export default function WhatScienceCanDo() {
   return (
     <>
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-24 md:py-32">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-20 w-96 h-96 bg-teal-400 rounded-full blur-3xl" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-blue-300 font-medium mb-4">WHAT SCIENCE CAN DO</p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Transforming Lives Through Pharmaceutical Science
-            </h1>
-            <p className="text-lg text-slate-300 mb-8 max-w-2xl">
-              At Raysun Biopharma, science is more than research—it's a commitment to improving lives. We combine cutting-edge technology with deep expertise to develop medicines that make a real difference.
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel
+        badge="WHAT SCIENCE CAN DO"
+        badgeColor="text-blue-300"
+        heading="Transforming Lives Through Pharmaceutical Science"
+        description="At Raysun Biopharma, science is more than research — it's a commitment to improving lives. We combine cutting-edge technology with deep expertise to develop medicines that make a real difference."
+        slides={scienceHeroSlides}
+      />
 
       {/* Stats */}
       <section className="bg-slate-50 py-12">

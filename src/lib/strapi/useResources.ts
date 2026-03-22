@@ -75,7 +75,7 @@ export function useResources(): {
 
     async function fetchResources() {
       try {
-        const url = `${STRAPI_URL}/api/resources?populate=file&sort=sortOrder:asc&pagination[pageSize]=100&publicationState=live`
+        const url = `${STRAPI_URL}/api/resources?populate=file&sort=sortOrder:asc&pagination[pageSize]=100`
         const res = await fetch(url)
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const json = await res.json()
@@ -114,7 +114,7 @@ export function useResourceBySlug(slug: string): {
 
     async function fetchResource() {
       try {
-        const url = `${STRAPI_URL}/api/resources?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=file&publicationState=live`
+        const url = `${STRAPI_URL}/api/resources?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=file`
         const res = await fetch(url)
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const json = await res.json()

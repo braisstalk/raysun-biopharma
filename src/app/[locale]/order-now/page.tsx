@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { ShoppingCart, FileText, CheckCircle, CreditCard, Truck, Package, ArrowRight, Search, Clock, Shield, Users, Mail, Phone, ChevronRight } from 'lucide-react'
 import { getOrderContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { orderHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 const icons: Record<string, React.ElementType> = {
   quick: ShoppingCart,
@@ -80,12 +79,12 @@ export default function OrderNow() {
   return (
     <>
       {/* Hero */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="order-now"
         badge="ORDER CENTER"
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
-        slides={orderHeroSlides}
       />
 
       {/* Progress Steps */}

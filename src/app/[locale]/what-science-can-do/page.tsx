@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Heart, FlaskConical, Users, Globe, FileText, ChevronRight } from 'lucide-react'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { scienceHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 const features = [
   {
@@ -43,12 +42,12 @@ export default function WhatScienceCanDo() {
   return (
     <>
       {/* Hero */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="what-science-can-do"
         badge="WHAT SCIENCE CAN DO"
         badgeColor="text-blue-300"
         heading="Transforming Lives Through Pharmaceutical Science"
         description="At Raysun Biopharma, science is more than research — it's a commitment to improving lives. We combine cutting-edge technology with deep expertise to develop medicines that make a real difference."
-        slides={scienceHeroSlides}
       />
 
       {/* Stats */}

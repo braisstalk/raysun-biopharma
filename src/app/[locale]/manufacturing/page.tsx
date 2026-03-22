@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, CheckCircle, ArrowRight, Thermometer, Wind, Eye } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 export default function Manufacturing() {
   const { t } = useTranslation()
@@ -49,12 +48,12 @@ export default function Manufacturing() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="manufacturing"
         badge="MANUFACTURING"
         badgeColor="text-blue-300"
         heading={t.hero.manufacturingTitle}
         description={t.hero.manufacturingSubtitle}
-        slides={homeHeroSlides}
       />
 
       {/* Facility Stats */}

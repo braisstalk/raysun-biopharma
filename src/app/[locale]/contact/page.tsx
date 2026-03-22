@@ -3,8 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -102,12 +101,12 @@ export default function Contact() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="contact"
         badge="CONTACT"
         badgeColor="text-emerald-400"
         heading={t.hero.contactTitle}
         description={t.hero.contactSubtitle}
-        slides={homeHeroSlides}
       />
 
       {/* Contact Overview */}

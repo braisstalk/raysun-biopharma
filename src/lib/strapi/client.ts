@@ -1,4 +1,5 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://raysun-cms-production.up.railway.app'
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || ''
 
 interface StrapiResponse<T> {
   data: T
@@ -39,11 +40,17 @@ export async function fetchStrapi<T>(
       })
     }
 
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+
+    if (STRAPI_TOKEN) {
+      headers['Authorization'] = `Bearer ${STRAPI_TOKEN}`
+    }
+
     const res = await fetch(url.toString(), {
-      next: { revalidate: 60 }, // ISR: revalidate every 60 seconds
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      next: { revalidate: 60 },
+      headers,
     })
 
     if (!res.ok) {

@@ -6,8 +6,7 @@ import { SearchX, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { getProductsContent, getAllProducts, getCurrentSource } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import { getContentTranslation } from '@/i18n/content'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { productsHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import ProductsSearchBar from '@/components/products/ProductsSearchBar'
 
 function generateSlug(name: string): string {
@@ -91,12 +90,12 @@ export default function Products() {
 
   return (
     <>
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="products"
         badge="200+ Products Available"
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
-        slides={productsHeroSlides}
         align="center"
       >
         <div className="relative max-w-md mx-auto">
@@ -109,7 +108,7 @@ export default function Products() {
             />
           </div>
         </div>
-      </HeroCarousel>
+      </StrapiHeroCarousel>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" ref={scrollRef}>
         

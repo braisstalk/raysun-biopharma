@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { Shield, Search, AlertTriangle, CheckCircle, FileCheck, UserCheck, Package, Phone, Mail, ExternalLink } from 'lucide-react'
 import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { verifyHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 const icons: Record<string, React.ElementType> = {
   product: Package,
@@ -88,12 +87,12 @@ export default function Verify() {
   return (
     <>
       {/* Hero */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="verify"
         badge="VERIFICATION CENTER"
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
-        slides={verifyHeroSlides}
       />
 
       {/* Verification Types */}

@@ -3,8 +3,7 @@ import Link from 'next/link'
 import { FileText, Download, File, Video } from 'lucide-react'
 import { getResourcesContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 const icons: Record<string, React.ElementType> = {
   document: FileText,
@@ -24,12 +23,12 @@ export default function Resources() {
 
   return (
     <>
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="resources"
         badge="RESOURCES"
         badgeColor="text-blue-300"
         heading={hero.title}
         description={hero.subtitle}
-        slides={homeHeroSlides}
       />
 
       <section className="py-20 bg-white">

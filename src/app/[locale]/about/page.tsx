@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { ArrowRight, CheckCircle, Target, Eye, Users, Award, MapPin, Building2, Globe, Heart, Shield } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 export default function About() {
   const { t } = useTranslation()
@@ -39,12 +38,12 @@ export default function About() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="about"
         badge="ABOUT US"
         badgeColor="text-blue-300"
         heading={t.hero.aboutTitle}
         description={t.hero.aboutSubtitle}
-        slides={homeHeroSlides}
       />
 
       {/* Company Highlights */}

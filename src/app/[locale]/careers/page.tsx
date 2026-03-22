@@ -4,8 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Users, MapPin, Mail, ArrowRight, Briefcase, Clock } from 'lucide-react'
 import { getCareersPageContent, jobDepartments } from '@/lib/content'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useTranslation } from '@/i18n/useTranslation'
 
 export default function Careers() {
@@ -22,12 +21,12 @@ export default function Careers() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="careers"
         badge="CAREERS"
         badgeColor="text-blue-300"
         heading={hero.title}
         description={hero.subtitle}
-        slides={homeHeroSlides}
       />
 
       {/* Overview */}

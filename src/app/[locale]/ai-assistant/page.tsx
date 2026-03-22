@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { Bot, Send, ArrowRight, ExternalLink, Clock } from 'lucide-react'
 import { getAiAssistantContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { aiAssistantHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 
 export default function AiAssistant() {
@@ -81,13 +80,13 @@ export default function AiAssistant() {
   return (
     <>
       {/* Hero */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="ai-assistant"
         icon={<Bot className="w-10 h-10 text-blue-400" />}
         badge="AI ASSISTANT"
         badgeColor="text-blue-300"
         heading={hero.title}
         description={hero.subtitle}
-        slides={aiAssistantHeroSlides}
       />
 
       {/* Quick Questions */}

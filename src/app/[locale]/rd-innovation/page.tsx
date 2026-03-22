@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { FlaskConical, Lightbulb, ArrowRight, CheckCircle, Microscope, Atom, BookOpen, Users, Target, Beaker, Layers, FileText, Award, Handshake, Rocket, Globe } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
-import HeroCarousel from '@/components/common/HeroCarousel'
-import { homeHeroSlides } from '@/config/heroSlides'
+import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 export default function RdInnovation() {
   const { t } = useTranslation()
@@ -44,12 +43,12 @@ export default function RdInnovation() {
   return (
     <>
       {/* Hero Carousel */}
-      <HeroCarousel
+      <StrapiHeroCarousel
+        page="rd-innovation"
         badge="R&D"
         badgeColor="text-blue-300"
         heading={t.hero.rdTitle}
         description={t.hero.rdSubtitle}
-        slides={homeHeroSlides}
       />
 
       {/* R&D Stats */}

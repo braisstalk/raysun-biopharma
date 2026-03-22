@@ -29,13 +29,14 @@ export interface MappedResource {
   slug: string
   title: string
   description: string
-  type: 'document' | 'video' | 'link'
+  resourceType: 'document' | 'video' | 'link'
   category: string
   status: 'public' | 'request' | 'restricted' | 'pending'
   fileSize?: string
   updatedDate?: string
   sortOrder: number
-  downloadUrl?: string
+  fileUrl?: string
+  fileName?: string
 }
 
 function capitalizeFirst(str: string): string {
@@ -43,26 +44,20 @@ function capitalizeFirst(str: string): string {
 }
 
 function mapResource(raw: StrapiResource): MappedResource {
-  let downloadUrl: string | undefined
-  if (raw.file) {
-    downloadUrl = raw.file.url.startsWith('/')
-      ? `${STRAPI_URL}${raw.file.url}`
-      : raw.file.url
-  }
-
   return {
     id: String(raw.id),
     documentId: raw.documentId,
     slug: raw.slug,
     title: raw.title,
     description: raw.description || '',
-    type: raw.resourceType || 'document',
+    resourceType: raw.resourceType || 'document',
     category: capitalizeFirst(raw.category),
     status: raw.status || 'public',
     fileSize: raw.fileSize || undefined,
     updatedDate: raw.updatedDate || undefined,
     sortOrder: raw.sortOrder,
-    downloadUrl,
+    fileUrl: raw.file?.url ? (raw.file.url.startsWith('/') ? `${STRAPI_URL}${raw.file.url}` : raw.file.url) : undefined,
+    fileName: raw.file?.name,
   }
 }
 
@@ -157,8 +152,8 @@ export function useRelatedResources(
       let scoreA = 0, scoreB = 0
       if (a.category === currentResource.category) scoreA += 10
       if (b.category === currentResource.category) scoreB += 10
-      if (a.type === currentResource.type) scoreA += 5
-      if (b.type === currentResource.type) scoreB += 5
+      if (a.resourceType === currentResource.resourceType) scoreA += 5
+      if (b.resourceType === currentResource.resourceType) scoreB += 5
       return scoreB - scoreA
     })
     .slice(0, limit)

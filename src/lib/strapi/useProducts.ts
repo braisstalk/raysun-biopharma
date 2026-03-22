@@ -132,7 +132,7 @@ export async function getProducts(options?: {
     params['filters[category][$eq]'] = options.category
   }
 
-  if (options?.type && options.type !== 'all') {
+  if (options?.type) {
     params['filters[productType][$eq]'] = options.type
   }
 
@@ -288,5 +288,4 @@ export function useRelatedProducts(product: MappedProduct | null, limit: number 
   return { related, loading, error, refetch: fetchRelated }
 }
 
-// ── Type Exports ──
-export type { StrapiProduct, MappedProduct, StrapiMedia }
+// Types are already exported via 'export interface' above

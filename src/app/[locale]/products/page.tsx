@@ -42,7 +42,7 @@ function useProductsWithFallback() {
     category: p.category,
     dosageForm: p.dosageForm,
     description: p.description,
-    indication: p.indication || '',
+    indication: p.indications?.join(', ') || '',
     tags: p.tags || [],
     type: p.type || 'generic',
     strength: null,

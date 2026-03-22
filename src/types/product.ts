@@ -3,6 +3,7 @@
 export interface Product {
   id: string
   name: string
+  slug?: string
   category: string
   dosageForm: string
   description: string

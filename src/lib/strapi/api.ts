@@ -2,6 +2,11 @@ import { fetchStrapi, fetchStrapiList } from './client'
 
 // ── Types ──
 
+interface FooterLink {
+  label: string
+  href: string
+}
+
 export interface StrapiGlobal {
   id: number
   documentId: string
@@ -30,6 +35,14 @@ export interface StrapiGlobal {
   homeAboutDesc2: string | null
   homeAboutCtaLabel: string | null
   homeAboutCtaLink: string | null
+  // Footer fields
+  footerQuickLinks: FooterLink[] | null
+  footerProductLinks: FooterLink[] | null
+  footerBottomLinks: FooterLink[] | null
+  footerQuickLinksTitle: string | null
+  footerProductsTitle: string | null
+  footerContactTitle: string | null
+  footerCopyright: string | null
 }
 
 export interface StrapiHeroSlide {

@@ -18,7 +18,7 @@ const fallbackData = {
   socialYoutube: 'https://youtube.com/@raysunbiopharma',
 }
 
-const quickLinks = [
+const fallbackQuickLinks = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
   { label: 'Manufacturing', href: '/manufacturing' },
@@ -28,13 +28,19 @@ const quickLinks = [
   { label: 'What science can do', href: '/what-science-can-do' },
 ]
 
-const productLinks = [
+const fallbackProductLinks = [
   { label: 'Softgels', href: '/products?category=softgels' },
   { label: 'Tablets', href: '/products?category=tablets' },
   { label: 'Capsules', href: '/products?category=capsules' },
   { label: 'Creams & Ointments', href: '/products?category=creams' },
   { label: 'Injections', href: '/products?category=injections' },
   { label: 'Traditional Medicines', href: '/products?category=traditional' },
+]
+
+const fallbackBottomLinks = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Sitemap', href: '/sitemap' },
 ]
 
 export default function Footer() {
@@ -50,6 +56,13 @@ export default function Footer() {
   }, [])
 
   const data = global || fallbackData as any
+  const quickLinks = (global?.footerQuickLinks && global.footerQuickLinks.length > 0) ? global.footerQuickLinks : fallbackQuickLinks
+  const productLinks = (global?.footerProductLinks && global.footerProductLinks.length > 0) ? global.footerProductLinks : fallbackProductLinks
+  const bottomLinks = (global?.footerBottomLinks && global.footerBottomLinks.length > 0) ? global.footerBottomLinks : fallbackBottomLinks
+  const quickLinksTitle = global?.footerQuickLinksTitle || 'Quick Links'
+  const productsTitle = global?.footerProductsTitle || 'Products'
+  const contactTitle = global?.footerContactTitle || 'Contact'
+  const copyright = global?.footerCopyright || `© ${new Date().getFullYear()} Raysun Biopharma. All rights reserved`
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -84,7 +97,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4">{quickLinksTitle}</h4>
             <ul className="space-y-2">
               {quickLinks.map((link, idx) => (
                 <li key={idx}>
@@ -98,7 +111,7 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold mb-4">Products</h4>
+            <h4 className="font-semibold mb-4">{productsTitle}</h4>
             <ul className="space-y-2">
               {productLinks.map((link, idx) => (
                 <li key={idx}>
@@ -112,7 +125,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
+            <h4 className="font-semibold mb-4">{contactTitle}</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-slate-400 text-sm">
                 <Mail className="w-4 h-4 flex-shrink-0" />
@@ -135,12 +148,14 @@ export default function Footer() {
       <div className="border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} Raysun Biopharma. All rights reserved
+            {copyright}
           </p>
           <div className="flex gap-6 text-sm text-slate-500">
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
+            {bottomLinks.map((link, idx) => (
+              <Link key={idx} href={link.href} className="hover:text-white transition-colors">
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

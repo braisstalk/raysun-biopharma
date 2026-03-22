@@ -4,38 +4,74 @@ import Link from 'next/link'
 import { Shield, Award, CheckCircle, ArrowRight, FileText, FlaskConical, Eye, ClipboardCheck, BarChart3, RefreshCw, Lock, Globe, BookOpen, Microscope } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { usePageContent } from '@/lib/strapi'
+import type { PageContent } from '@/lib/strapi'
+
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Shield, Award, CheckCircle, ArrowRight, FileText, FlaskConical, Eye,
+  ClipboardCheck, BarChart3, RefreshCw, Lock, Globe, BookOpen, Microscope
+}
+
+interface QualityContent extends PageContent {
+  certifications?: Array<{ icon: string; title: string; subtitle: string; description: string; year: string }>
+  qaActivities?: Array<{ icon: string; title: string; description: string }>
+  qcCapabilities?: Array<{ title: string; items: string[] }>
+  regulatoryMarkets?: Array<{ region: string; countries: string; status: string }>
+  qualityPhilosophy?: {
+    title: string
+    description: string
+    subDescription: string
+    checklist: string[]
+  }
+}
 
 export default function QualityCompliance() {
   const { t } = useTranslation()
+  const pageData = usePageContent('quality-compliance')
+  const content = pageData?.content as QualityContent | null
 
-  const certifications = [
-    { icon: Award, title: 'WHO GMP', subtitle: 'Good Manufacturing Practice', description: 'All production lines certified to World Health Organization GMP standards, ensuring products meet international quality expectations for regulated and semi-regulated markets.', year: '2017' },
-    { icon: Shield, title: 'ISO 9001:2015', subtitle: 'Quality Management System', description: 'Systematic approach to quality management covering all processes from material procurement through manufacturing to distribution and post-market surveillance.', year: '2021' },
-    { icon: Globe, title: 'ISO 14001', subtitle: 'Environmental Management', description: 'Commitment to environmentally responsible manufacturing with waste minimization, energy efficiency, and sustainable practices throughout our operations.', year: '2024' },
+  // Fallback data
+  const certifications = content?.certifications ?? [
+    { icon: 'Award', title: 'WHO GMP', subtitle: 'Good Manufacturing Practice', description: 'All production lines certified to World Health Organization GMP standards, ensuring products meet international quality expectations for regulated and semi-regulated markets.', year: '2017' },
+    { icon: 'Shield', title: 'ISO 9001:2015', subtitle: 'Quality Management System', description: 'Systematic approach to quality management covering all processes from material procurement through manufacturing to distribution and post-market surveillance.', year: '2021' },
+    { icon: 'Globe', title: 'ISO 14001', subtitle: 'Environmental Management', description: 'Commitment to environmentally responsible manufacturing with waste minimization, energy efficiency, and sustainable practices throughout our operations.', year: '2024' },
   ]
 
-  const qaActivities = [
-    { icon: ClipboardCheck, title: 'Document Control', description: 'Comprehensive documentation system managing SOPs, batch records, specifications, and change control across all departments.' },
-    { icon: RefreshCw, title: 'Change Control', description: 'Structured change management process for equipment, processes, and systems ensuring no uncontrolled changes impact product quality.' },
-    { icon: Eye, title: 'Internal Audits', description: 'Regular self-inspections and internal audits across all GMP areas to identify and resolve compliance gaps proactively.' },
-    { icon: BarChart3, title: 'CAPA Management', description: 'Systematic Corrective and Preventive Action (CAPA) program to investigate deviations and prevent recurrence.' },
-    { icon: BookOpen, title: 'Training Program', description: 'Continuous GMP and job-specific training for all personnel with competency assessments and refresher schedules.' },
-    { icon: Lock, title: 'Supplier Qualification', description: 'Rigorous supplier approval program including audits, quality agreements, and ongoing performance monitoring for all critical materials.' },
+  const qaActivities = content?.qaActivities ?? [
+    { icon: 'ClipboardCheck', title: 'Document Control', description: 'Comprehensive documentation system managing SOPs, batch records, specifications, and change control across all departments.' },
+    { icon: 'RefreshCw', title: 'Change Control', description: 'Structured change management process for equipment, processes, and systems ensuring no uncontrolled changes impact product quality.' },
+    { icon: 'Eye', title: 'Internal Audits', description: 'Regular self-inspections and internal audits across all GMP areas to identify and resolve compliance gaps proactively.' },
+    { icon: 'BarChart3', title: 'CAPA Management', description: 'Systematic Corrective and Preventive Action (CAPA) program to investigate deviations and prevent recurrence.' },
+    { icon: 'BookOpen', title: 'Training Program', description: 'Continuous GMP and job-specific training for all personnel with competency assessments and refresher schedules.' },
+    { icon: 'Lock', title: 'Supplier Qualification', description: 'Rigorous supplier approval program including audits, quality agreements, and ongoing performance monitoring for all critical materials.' },
   ]
 
-  const qcCapabilities = [
+  const qcCapabilities = content?.qcCapabilities ?? [
     { title: 'Chemical Analysis', items: ['HPLC & UPLC systems', 'UV-Vis Spectrophotometry', 'IR Spectroscopy (FTIR)', 'Dissolution testing apparatus', 'Karl Fischer titration'] },
     { title: 'Physical Testing', items: ['Hardness & friability testing', 'Disintegration testing', 'Particle size analysis', 'Weight variation analysis', 'Viscosity measurement'] },
     { title: 'Microbiological Testing', items: ['Bioburden testing', 'Sterility testing', 'Endotoxin (LAL) testing', 'Environmental monitoring', 'Water system monitoring'] },
     { title: 'Stability Studies', items: ['ICH-compliant stability chambers', 'Long-term stability (25°C/60% RH)', 'Accelerated stability (40°C/75% RH)', 'Photostability testing', 'In-use stability studies'] },
   ]
 
-  const regulatoryMarkets = [
+  const regulatoryMarkets = content?.regulatoryMarkets ?? [
     { region: 'ASEAN', countries: 'Laos, Thailand, Vietnam, Cambodia, Myanmar, Malaysia, Singapore', status: 'Active registrations' },
     { region: 'Middle East', countries: 'UAE, Saudi Arabia, Oman, Kuwait', status: 'Growing portfolio' },
     { region: 'Africa', countries: 'East & West Africa', status: 'Expanding presence' },
     { region: 'South Asia', countries: 'Bangladesh, Sri Lanka', status: 'Market development' },
   ]
+
+  const qualityPhilosophy = content?.qualityPhilosophy ?? {
+    title: 'Built on Quality, Driven by Compliance',
+    description: 'At Raysun Biopharma, quality is not a department — it is embedded in every aspect of our operations. From facility design to final product release, our quality management system ensures that every product meets the highest standards of safety, efficacy, and purity.',
+    subDescription: 'Our quality systems are designed to meet the regulatory expectations of multiple markets simultaneously, enabling us to serve customers across ASEAN, the Middle East, and Africa with confidence.',
+    checklist: [
+      'Zero tolerance for quality deviations',
+      'Continuous improvement culture',
+      'Data-driven decision making',
+      'Regulatory-first mindset'
+    ]
+  }
 
   return (
     <>
@@ -54,11 +90,11 @@ export default function QualityCompliance() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">QUALITY PHILOSOPHY</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Built on Quality, Driven by Compliance</h2>
-              <p className="text-slate-600 mb-4">At Raysun Biopharma, quality is not a department — it is embedded in every aspect of our operations. From facility design to final product release, our quality management system ensures that every product meets the highest standards of safety, efficacy, and purity.</p>
-              <p className="text-slate-600 mb-6">Our quality systems are designed to meet the regulatory expectations of multiple markets simultaneously, enabling us to serve customers across ASEAN, the Middle East, and Africa with confidence.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{qualityPhilosophy.title}</h2>
+              <p className="text-slate-600 mb-4">{qualityPhilosophy.description}</p>
+              <p className="text-slate-600 mb-6">{qualityPhilosophy.subDescription}</p>
               <div className="space-y-3">
-                {['Zero tolerance for quality deviations', 'Continuous improvement culture', 'Data-driven decision making', 'Regulatory-first mindset'].map((item) => (
+                {qualityPhilosophy.checklist.map((item) => (
                   <div key={item} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-[#1E6F5C] shrink-0" />
                     <span className="text-slate-700">{item}</span>
@@ -85,15 +121,18 @@ export default function QualityCompliance() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Internationally Recognized Standards</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {certifications.map((cert, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-8 shadow-sm">
-                <cert.icon className="w-12 h-12 text-[#1E6F5C] mb-4" />
-                <h3 className="font-bold text-xl text-slate-900 mb-1">{cert.title}</h3>
-                <p className="text-sm text-[#1E6F5C] font-medium mb-3">{cert.subtitle}</p>
-                <p className="text-sm text-slate-600 mb-4">{cert.description}</p>
-                <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full">Since {cert.year}</span>
-              </div>
-            ))}
+            {certifications.map((cert, idx) => {
+              const Icon = iconMap[cert.icon] || Award
+              return (
+                <div key={idx} className="bg-white rounded-xl p-8 shadow-sm">
+                  <Icon className="w-12 h-12 text-[#1E6F5C] mb-4" />
+                  <h3 className="font-bold text-xl text-slate-900 mb-1">{cert.title}</h3>
+                  <p className="text-sm text-[#1E6F5C] font-medium mb-3">{cert.subtitle}</p>
+                  <p className="text-sm text-slate-600 mb-4">{cert.description}</p>
+                  <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full">Since {cert.year}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -107,13 +146,16 @@ export default function QualityCompliance() {
             <p className="text-slate-600 max-w-2xl mx-auto">Our Quality Assurance team oversees all aspects of the pharmaceutical quality system, ensuring compliance with GMP requirements and continuous improvement.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {qaActivities.map((activity, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-xl p-6">
-                <activity.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                <h3 className="font-semibold text-slate-900 mb-2">{activity.title}</h3>
-                <p className="text-sm text-slate-600">{activity.description}</p>
-              </div>
-            ))}
+            {qaActivities.map((activity, idx) => {
+              const Icon = iconMap[activity.icon] || CheckCircle
+              return (
+                <div key={idx} className="bg-slate-50 rounded-xl p-6">
+                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <h3 className="font-semibold text-slate-900 mb-2">{activity.title}</h3>
+                  <p className="text-sm text-slate-600">{activity.description}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

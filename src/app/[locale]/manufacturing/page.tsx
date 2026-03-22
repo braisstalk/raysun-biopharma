@@ -4,45 +4,77 @@ import Link from 'next/link'
 import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, CheckCircle, ArrowRight, Thermometer, Wind, Eye } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { usePageContent } from '@/lib/strapi'
+import type { PageContent } from '@/lib/strapi'
+
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill,
+  CheckCircle, ArrowRight, Thermometer, Wind, Eye
+}
+
+interface ManufacturingContent extends PageContent {
+  facilityStats?: Array<{ value: string; unit: string; label: string }>
+  productionLines?: Array<{ icon: string; title: string; description: string; specs: string[] }>
+  facilityFeatures?: Array<{ icon: string; title: string; description: string }>
+  facilityOverview?: {
+    title: string
+    description: string
+    subDescription: string
+    tags: string[]
+  }
+  qcSteps?: Array<{ step: string; title: string; desc: string }>
+  mfgCertifications?: Array<{ title: string; description: string; year: string }>
+}
 
 export default function Manufacturing() {
   const { t } = useTranslation()
+  const pageData = usePageContent('manufacturing')
+  const content = pageData?.content as ManufacturingContent | null
 
-  const facilityStats = [
+  // Fallback data
+  const facilityStats = content?.facilityStats ?? [
     { value: '12,000', unit: 'm²', label: 'Total Facility Area' },
     { value: '6', unit: '', label: 'Production Lines' },
     { value: '50+', unit: '', label: 'Products Manufactured' },
     { value: '24/7', unit: '', label: 'Operational Capability' },
   ]
 
-  const productionLines = [
-    { icon: Pill, title: 'Tablets & Film-Coated Tablets', description: 'High-speed tablet compression and film-coating lines capable of producing standard tablets, bi-layer tablets, and enteric-coated formulations.', specs: ['Capacity: 200 million tablets/year', 'Compression: rotary press technology', 'Coating: fully automated film-coating system'] },
-    { icon: Droplets, title: 'Softgel Capsules', description: 'State-of-the-art rotary die softgel encapsulation for pharmaceutical and nutraceutical products with precise fill-weight control.', specs: ['Capacity: 100 million capsules/year', 'Fill range: 100mg - 1500mg', 'Gelatin and vegetarian options'] },
-    { icon: Package, title: 'Hard Capsules', description: 'Automatic capsule filling lines for powder, pellet, and granule formulations with weight variation control systems.', specs: ['Capacity: 150 million capsules/year', 'Sizes: 00 to 4', 'Powder and pellet filling'] },
-    { icon: Syringe, title: 'Sterile Injectables', description: 'Dedicated sterile manufacturing area with laminar flow isolators for small-volume parenteral products and lyophilized formulations.', specs: ['ISO Class 5 cleanroom', 'Ampoules and vials', 'Terminal sterilization & aseptic fill'] },
-    { icon: Droplets, title: 'Creams & Ointments', description: 'Semi-solid manufacturing with vacuum homogenizers for topical pharmaceutical products including creams, ointments, and gels.', specs: ['Batch size: 50-500 kg', 'Vacuum homogenization', 'Automated tube/jar filling'] },
-    { icon: FlaskConical, title: 'Oral Liquids & Syrups', description: 'Liquid manufacturing and filling lines for oral solutions, suspensions, and syrups with in-line filtration systems.', specs: ['Batch size: 500-5000 L', 'In-line filtration', 'Automatic bottle filling & capping'] },
+  const productionLines = content?.productionLines ?? [
+    { icon: 'Pill', title: 'Tablets & Film-Coated Tablets', description: 'High-speed tablet compression and film-coating lines capable of producing standard tablets, bi-layer tablets, and enteric-coated formulations.', specs: ['Capacity: 200 million tablets/year', 'Compression: rotary press technology', 'Coating: fully automated film-coating system'] },
+    { icon: 'Droplets', title: 'Softgel Capsules', description: 'State-of-the-art rotary die softgel encapsulation for pharmaceutical and nutraceutical products with precise fill-weight control.', specs: ['Capacity: 100 million capsules/year', 'Fill range: 100mg - 1500mg', 'Gelatin and vegetarian options'] },
+    { icon: 'Package', title: 'Hard Capsules', description: 'Automatic capsule filling lines for powder, pellet, and granule formulations with weight variation control systems.', specs: ['Capacity: 150 million capsules/year', 'Sizes: 00 to 4', 'Powder and pellet filling'] },
+    { icon: 'Syringe', title: 'Sterile Injectables', description: 'Dedicated sterile manufacturing area with laminar flow isolators for small-volume parenteral products and lyophilized formulations.', specs: ['ISO Class 5 cleanroom', 'Ampoules and vials', 'Terminal sterilization & aseptic fill'] },
+    { icon: 'Droplets', title: 'Creams & Ointments', description: 'Semi-solid manufacturing with vacuum homogenizers for topical pharmaceutical products including creams, ointments, and gels.', specs: ['Batch size: 50-500 kg', 'Vacuum homogenization', 'Automated tube/jar filling'] },
+    { icon: 'FlaskConical', title: 'Oral Liquids & Syrups', description: 'Liquid manufacturing and filling lines for oral solutions, suspensions, and syrups with in-line filtration systems.', specs: ['Batch size: 500-5000 L', 'In-line filtration', 'Automatic bottle filling & capping'] },
   ]
 
-  const facilityFeatures = [
-    { icon: Wind, title: 'HVAC Systems', description: 'Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments across all production areas.' },
-    { icon: Thermometer, title: 'Environmental Monitoring', description: 'Continuous temperature, humidity, and differential pressure monitoring with automated alert systems.' },
-    { icon: Eye, title: 'Water Systems', description: 'Purified Water (PW) and Water for Injection (WFI) generation systems with continuous TOC and conductivity monitoring.' },
-    { icon: Gauge, title: 'Utilities Infrastructure', description: 'Dedicated pharmaceutical-grade utilities including compressed air, nitrogen generation, and steam systems.' },
+  const facilityFeatures = content?.facilityFeatures ?? [
+    { icon: 'Wind', title: 'HVAC Systems', description: 'Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments across all production areas.' },
+    { icon: 'Thermometer', title: 'Environmental Monitoring', description: 'Continuous temperature, humidity, and differential pressure monitoring with automated alert systems.' },
+    { icon: 'Eye', title: 'Water Systems', description: 'Purified Water (PW) and Water for Injection (WFI) generation systems with continuous TOC and conductivity monitoring.' },
+    { icon: 'Gauge', title: 'Utilities Infrastructure', description: 'Dedicated pharmaceutical-grade utilities including compressed air, nitrogen generation, and steam systems.' },
   ]
 
-  const certifications = [
-    { title: 'WHO GMP', description: 'World Health Organization Good Manufacturing Practice certification for all production lines', year: '2017' },
-    { title: 'ISO 9001:2015', description: 'Quality Management System certification ensuring consistent quality standards', year: '2021' },
-    { title: 'ISO 14001', description: 'Environmental Management System certification for sustainable manufacturing', year: '2024' },
-  ]
+  const facilityOverview = content?.facilityOverview ?? {
+    title: 'World-Class Manufacturing Facility',
+    description: 'Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure.',
+    subDescription: 'Every aspect of our facility — from cleanroom design to utility systems — is engineered to ensure product quality, operator safety, and regulatory compliance across all markets we serve.',
+    tags: ['WHO GMP Certified', 'ISO 9001:2015', 'ISO Class 7/8 Cleanrooms']
+  }
 
-  const qcSteps = [
+  const qcSteps = content?.qcSteps ?? [
     { step: '01', title: 'Raw Material Testing', desc: 'Identity, purity, and potency testing of all incoming materials' },
     { step: '02', title: 'In-Process Controls', desc: 'Real-time monitoring of critical process parameters during production' },
     { step: '03', title: 'Finished Product Testing', desc: 'Comprehensive testing including dissolution, assay, and stability' },
     { step: '04', title: 'Packaging & Labeling', desc: 'Automated inspection systems for packaging integrity and label accuracy' },
     { step: '05', title: 'Batch Release', desc: 'QA review and batch release by qualified persons before distribution' },
+  ]
+
+  const certifications = content?.mfgCertifications ?? [
+    { title: 'WHO GMP', description: 'World Health Organization Good Manufacturing Practice certification for all production lines', year: '2017' },
+    { title: 'ISO 9001:2015', description: 'Quality Management System certification ensuring consistent quality standards', year: '2021' },
+    { title: 'ISO 14001', description: 'Environmental Management System certification for sustainable manufacturing', year: '2024' },
   ]
 
   return (
@@ -76,11 +108,11 @@ export default function Manufacturing() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">OUR FACILITY</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">World-Class Manufacturing Facility</h2>
-              <p className="text-slate-600 mb-4">Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure.</p>
-              <p className="text-slate-600 mb-6">Every aspect of our facility — from cleanroom design to utility systems — is engineered to ensure product quality, operator safety, and regulatory compliance across all markets we serve.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{facilityOverview.title}</h2>
+              <p className="text-slate-600 mb-4">{facilityOverview.description}</p>
+              <p className="text-slate-600 mb-6">{facilityOverview.subDescription}</p>
               <div className="flex flex-wrap gap-3">
-                {['WHO GMP Certified', 'ISO 9001:2015', 'ISO Class 7/8 Cleanrooms'].map((tag) => (
+                {facilityOverview.tags.map((tag) => (
                   <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1E6F5C]/10 text-[#1E6F5C] rounded-full text-sm font-medium">
                     <CheckCircle className="w-3.5 h-3.5" /> {tag}
                   </span>
@@ -107,20 +139,23 @@ export default function Manufacturing() {
             <p className="text-slate-600 max-w-2xl mx-auto">Six dedicated production lines covering all major pharmaceutical dosage forms, each equipped with modern machinery and in-process quality controls.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {productionLines.map((line, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <line.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                <h3 className="font-bold text-slate-900 mb-2">{line.title}</h3>
-                <p className="text-sm text-slate-600 mb-4">{line.description}</p>
-                <ul className="space-y-1.5">
-                  {line.specs.map((spec, sIdx) => (
-                    <li key={sIdx} className="flex items-start gap-2 text-xs text-slate-500">
-                      <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> {spec}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {productionLines.map((line, idx) => {
+              const Icon = iconMap[line.icon] || Pill
+              return (
+                <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <h3 className="font-bold text-slate-900 mb-2">{line.title}</h3>
+                  <p className="text-sm text-slate-600 mb-4">{line.description}</p>
+                  <ul className="space-y-1.5">
+                    {line.specs.map((spec, sIdx) => (
+                      <li key={sIdx} className="flex items-start gap-2 text-xs text-slate-500">
+                        <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> {spec}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -133,13 +168,16 @@ export default function Manufacturing() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Pharmaceutical-Grade Infrastructure</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {facilityFeatures.map((feature, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-xl p-6">
-                <feature.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
-                <p className="text-sm text-slate-600">{feature.description}</p>
-              </div>
-            ))}
+            {facilityFeatures.map((feature, idx) => {
+              const Icon = iconMap[feature.icon] || Gauge
+              return (
+                <div key={idx} className="bg-slate-50 rounded-xl p-6">
+                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
+                  <p className="text-sm text-slate-600">{feature.description}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

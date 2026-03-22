@@ -9,3 +9,4 @@ export {
   type StrapiPage,
 } from './api'
 export { useHomeData, type HomeDataFromCMS } from './useHomeData'
+export { usePageContent, type PageData, type PageContent } from './usePageContent'

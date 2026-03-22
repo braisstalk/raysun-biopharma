@@ -4,20 +4,58 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle, Target, Eye, Users, Award, MapPin, Building2, Globe, Heart, Shield } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { usePageContent } from '@/lib/strapi'
+import type { PageContent } from '@/lib/strapi'
+
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Shield, Heart, Target, CheckCircle, Users, Award, MapPin, Building2, Globe,
+  Eye, ArrowRight
+}
+
+interface AboutContent extends PageContent {
+  highlights?: Array<{ icon: string; value: string; labelKey: string }>
+  mission?: { icon: string; titleKey: string; descKey: string }
+  vision?: { icon: string; titleKey: string; descKey: string }
+  values?: Array<{ icon: string; titleKey: string; descKey: string }>
+  milestones?: Array<{ year: string; title: string; desc: string }>
+  regions?: string[]
+  ctaLinks?: Array<{ href: string; labelKey: string; variant?: string }>
+}
 
 export default function About() {
   const { t } = useTranslation()
+  const pageData = usePageContent('about')
+  const content = pageData?.content as AboutContent | null
 
-  // Company highlights - using translations
-  const highlights = [
-    { value: '10+', label: t.stats.years, icon: Award },
-    { value: '12,000', label: t.stats.sqm, icon: Building2 },
-    { value: '6+', label: t.stats.countries, icon: Globe },
-    { value: '100+', label: t.stats.team, icon: Users },
+  // Fallback data
+  const highlights = content?.highlights ?? [
+    { value: '10+', labelKey: 'stats.years', icon: 'Award' },
+    { value: '12,000', labelKey: 'stats.sqm', icon: 'Building2' },
+    { value: '6+', labelKey: 'stats.countries', icon: 'Globe' },
+    { value: '100+', labelKey: 'stats.team', icon: 'Users' },
   ]
 
-  // Milestones - professional timeline
-  const milestones = [
+  const mission = content?.mission ?? {
+    icon: 'Target',
+    titleKey: 'about.ourMission',
+    descKey: 'about.missionDesc'
+  }
+
+  const vision = content?.vision ?? {
+    icon: 'Eye',
+    titleKey: 'about.ourVision',
+    descKey: 'about.visionDesc'
+  }
+
+  const values = content?.values ?? [
+    { icon: 'Shield', titleKey: 'about.qualityFirst', descKey: 'about.qualityFirstDesc' },
+    { icon: 'Heart', titleKey: 'about.patientCentric', descKey: 'about.patientCentricDesc' },
+    { icon: 'Target', titleKey: 'about.continuousInnovation', descKey: 'about.continuousInnovationDesc' },
+    { icon: 'CheckCircle', titleKey: 'about.regulatoryExcellence', descKey: 'about.regulatoryExcellenceDesc' },
+  ]
+
+  const milestones = content?.milestones ?? [
     { year: '2014', title: 'Company Founded', desc: 'Raysun Biopharma established in Vientiane, Laos' },
     { year: '2016', title: 'Factory Completed', desc: '12,000 sqm state-of-the-art manufacturing facility completed' },
     { year: '2017', title: 'GMP Certification', desc: 'Achieved WHO GMP certification for all production lines' },
@@ -27,13 +65,17 @@ export default function About() {
     { year: '2025', title: 'Global Presence', desc: 'Serving patients across multiple countries worldwide' },
   ]
 
-  // Values as cards - using translations
-  const values = [
-    { icon: Shield, title: t.about.qualityFirst, desc: t.about.qualityFirstDesc },
-    { icon: Heart, title: t.about.patientCentric, desc: t.about.patientCentricDesc },
-    { icon: Target, title: t.about.continuousInnovation, desc: t.about.continuousInnovationDesc },
-    { icon: CheckCircle, title: t.about.regulatoryExcellence, desc: t.about.regulatoryExcellenceDesc },
+  const regions = content?.regions ?? ['Laos', 'Thailand', 'Cambodia', 'Vietnam', 'Myanmar', 'Middle East', 'Africa']
+
+  const ctaLinks = content?.ctaLinks ?? [
+    { href: '/manufacturing', labelKey: 'nav.manufacturing' },
+    { href: '/quality-compliance', labelKey: 'nav.qualityCompliance' },
+    { href: '/rd-innovation', labelKey: 'nav.rdInnovation' },
+    { href: '/contact', labelKey: 'common.contact', variant: 'outline' },
   ]
+
+  const MissionIcon = iconMap[mission.icon] || Target
+  const VisionIcon = iconMap[vision.icon] || Eye
 
   return (
     <>
@@ -50,13 +92,16 @@ export default function About() {
       <section className="py-16 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {highlights.map((h, idx) => (
-              <div key={idx} className="text-center">
-                <h.icon className="w-8 h-8 text-[#1E6F5C] mx-auto mb-2" />
-                <div className="text-3xl font-bold text-slate-900">{h.value}</div>
-                <div className="text-sm text-slate-600">{h.label}</div>
-              </div>
-            ))}
+            {highlights.map((h, idx) => {
+              const Icon = iconMap[h.icon] || Award
+              return (
+                <div key={idx} className="text-center">
+                  <Icon className="w-8 h-8 text-[#1E6F5C] mx-auto mb-2" />
+                  <div className="text-3xl font-bold text-slate-900">{h.value}</div>
+                  <div className="text-sm text-slate-600">{(t as unknown as Record<string, string>)[h.labelKey] || h.labelKey}</div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -66,17 +111,17 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8 mb-16">
             <div className="bg-gradient-to-br from-[#1E6F5C] to-[#289c76] text-white rounded-2xl p-8">
-              <Target className="w-10 h-10 mb-4 opacity-90" />
-              <h2 className="text-2xl font-bold mb-4">{t.about.ourMission}</h2>
+              <MissionIcon className="w-10 h-10 mb-4 opacity-90" />
+              <h2 className="text-2xl font-bold mb-4">{(t as unknown as Record<string, string>)[mission.titleKey] || mission.titleKey}</h2>
               <p className="text-blue-100 text-lg">
-                {t.about.missionDesc}
+                {(t as unknown as Record<string, string>)[mission.descKey] || mission.descKey}
               </p>
             </div>
             <div className="bg-slate-900 text-white rounded-2xl p-8">
-              <Eye className="w-10 h-10 mb-4" />
-              <h2 className="text-2xl font-bold mb-4">{t.about.ourVision}</h2>
+              <VisionIcon className="w-10 h-10 mb-4" />
+              <h2 className="text-2xl font-bold mb-4">{(t as unknown as Record<string, string>)[vision.titleKey] || vision.titleKey}</h2>
               <p className="text-slate-300 text-lg">
-                {t.about.visionDesc}
+                {(t as unknown as Record<string, string>)[vision.descKey] || vision.descKey}
               </p>
             </div>
           </div>
@@ -91,13 +136,16 @@ export default function About() {
             <h2 className="text-3xl font-bold text-slate-900">{t.about.whatDrivesUs}</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((v, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <v.icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                <h3 className="font-semibold text-slate-900 mb-2">{v.title}</h3>
-                <p className="text-sm text-slate-600">{v.desc}</p>
-              </div>
-            ))}
+            {values.map((v, idx) => {
+              const Icon = iconMap[v.icon] || CheckCircle
+              return (
+                <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <h3 className="font-semibold text-slate-900 mb-2">{(t as unknown as Record<string, string>)[v.titleKey] || v.titleKey}</h3>
+                  <p className="text-sm text-slate-600">{(t as unknown as Record<string, string>)[v.descKey] || v.descKey}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -162,7 +210,7 @@ export default function About() {
                 {t.about.globalPresenceDesc}
               </p>
               <div className="grid grid-cols-2 gap-3">
-                {['Laos', 'Thailand', 'Cambodia', 'Vietnam', 'Myanmar', 'Middle East', 'Africa'].map((region, idx) => (
+                {regions.map((region, idx) => (
                   <div key={idx} className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#1E6F5C]" />
                     <span className="text-sm text-slate-700">{region}</span>
@@ -190,18 +238,22 @@ export default function About() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/manufacturing" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
-              {t.nav.manufacturing} <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/quality-compliance" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
-              {t.nav.qualityCompliance} <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/rd-innovation" className="bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2">
-              {t.nav.rdInnovation} <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/contact" className="border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 flex items-center gap-2">
-              {t.common.contact}
-            </Link>
+            {ctaLinks.map((link, idx) => {
+              const isOutline = link.variant === 'outline'
+              return (
+                <Link
+                  key={idx}
+                  href={link.href}
+                  className={isOutline
+                    ? "border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 flex items-center gap-2"
+                    : "bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50 flex items-center gap-2"
+                  }
+                >
+                  {(t as unknown as Record<string, string>)[link.labelKey] || link.labelKey}
+                  {!isOutline && <ArrowRight className="w-4 h-4" />}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>

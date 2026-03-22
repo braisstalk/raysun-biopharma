@@ -9,7 +9,7 @@ export interface StrapiResource {
   title: string
   slug: string
   description: string | null
-  category: 'corporate' | 'facility' | 'products' | 'quality' | 'media' | 'other'
+  category: string
   resourceType: 'document' | 'video' | 'link'
   status: 'public' | 'request' | 'restricted' | 'pending'
   fileSize: string | null
@@ -19,12 +19,8 @@ export interface StrapiResource {
     id: number
     url: string
     name: string
-    size: number
-    mime: string
+    alternativeText: string | null
   } | null
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
 }
 
 export interface MappedResource {
@@ -33,40 +29,40 @@ export interface MappedResource {
   slug: string
   title: string
   description: string
+  type: 'document' | 'video' | 'link'
   category: string
-  resourceType: 'document' | 'video' | 'link'
   status: 'public' | 'request' | 'restricted' | 'pending'
-  fileSize: string
-  updatedDate: string
+  fileSize?: string
+  updatedDate?: string
   sortOrder: number
-  fileUrl?: string
-  fileName?: string
+  downloadUrl?: string
 }
 
-const categoryLabels: Record<string, string> = {
-  corporate: 'Corporate',
-  facility: 'Facility',
-  products: 'Products',
-  quality: 'Quality',
-  media: 'Media',
-  other: 'Other',
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 function mapResource(raw: StrapiResource): MappedResource {
+  let downloadUrl: string | undefined
+  if (raw.file) {
+    downloadUrl = raw.file.url.startsWith('/')
+      ? `${STRAPI_URL}${raw.file.url}`
+      : raw.file.url
+  }
+
   return {
     id: String(raw.id),
     documentId: raw.documentId,
     slug: raw.slug,
     title: raw.title,
     description: raw.description || '',
-    category: categoryLabels[raw.category] || raw.category,
-    resourceType: raw.resourceType,
-    status: raw.status,
-    fileSize: raw.fileSize || '',
-    updatedDate: raw.updatedDate || '',
+    type: raw.resourceType || 'document',
+    category: capitalizeFirst(raw.category),
+    status: raw.status || 'public',
+    fileSize: raw.fileSize || undefined,
+    updatedDate: raw.updatedDate || undefined,
     sortOrder: raw.sortOrder,
-    fileUrl: raw.file?.url ? (raw.file.url.startsWith('/') ? `${STRAPI_URL}${raw.file.url}` : raw.file.url) : undefined,
-    fileName: raw.file?.name,
+    downloadUrl,
   }
 }
 
@@ -161,7 +157,9 @@ export function useRelatedResources(
       let scoreA = 0, scoreB = 0
       if (a.category === currentResource.category) scoreA += 10
       if (b.category === currentResource.category) scoreB += 10
-      return scoreB - scoreA || a.sortOrder - b.sortOrder
+      if (a.type === currentResource.type) scoreA += 5
+      if (b.type === currentResource.type) scoreB += 5
+      return scoreB - scoreA
     })
     .slice(0, limit)
 }

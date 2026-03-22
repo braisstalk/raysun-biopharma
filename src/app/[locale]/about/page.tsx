@@ -25,8 +25,7 @@ interface AboutContent extends PageContent {
 
 export default function About() {
   const { t } = useTranslation()
-  const pageData = usePageContent('about')
-  const content = pageData?.content as AboutContent | null
+  const content = usePageContent('about') as AboutContent | null
 
   // Fallback data
   const highlights = content?.highlights ?? [

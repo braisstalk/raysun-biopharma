@@ -4,82 +4,61 @@ import Link from 'next/link'
 import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, CheckCircle, ArrowRight, Thermometer, Wind, Eye } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import { usePageContent } from '@/lib/strapi'
-import type { PageContent } from '@/lib/strapi'
+import { usePageContent } from '@/lib/strapi/usePageContent'
 
-// Icon mapping
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill,
-  CheckCircle, ArrowRight, Thermometer, Wind, Eye
-}
-
-interface ManufacturingContent extends PageContent {
-  facilityStats?: Array<{ value: string; unit: string; label: string }>
-  productionLines?: Array<{ icon: string; title: string; description: string; specs: string[] }>
-  facilityFeatures?: Array<{ icon: string; title: string; description: string }>
-  facilityOverview?: {
-    title: string
-    description: string
-    subDescription: string
-    tags: string[]
-  }
-  qcSteps?: Array<{ step: string; title: string; desc: string }>
-  mfgCertifications?: Array<{ title: string; description: string; year: string }>
+const iconMap: Record<string, React.ElementType> = {
+  Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, Thermometer, Wind, Eye,
 }
 
 export default function Manufacturing() {
   const { t } = useTranslation()
-  const pageData = usePageContent('manufacturing')
-  const content = pageData?.content as ManufacturingContent | null
+  const cms = usePageContent('manufacturing')
 
-  // Fallback data
-  const facilityStats = content?.facilityStats ?? [
+  const facilityStats = cms?.facilityStats || [
     { value: '12,000', unit: 'm²', label: 'Total Facility Area' },
     { value: '6', unit: '', label: 'Production Lines' },
     { value: '50+', unit: '', label: 'Products Manufactured' },
     { value: '24/7', unit: '', label: 'Operational Capability' },
   ]
 
-  const productionLines = content?.productionLines ?? [
-    { icon: 'Pill', title: 'Tablets & Film-Coated Tablets', description: 'High-speed tablet compression and film-coating lines capable of producing standard tablets, bi-layer tablets, and enteric-coated formulations.', specs: ['Capacity: 200 million tablets/year', 'Compression: rotary press technology', 'Coating: fully automated film-coating system'] },
-    { icon: 'Droplets', title: 'Softgel Capsules', description: 'State-of-the-art rotary die softgel encapsulation for pharmaceutical and nutraceutical products with precise fill-weight control.', specs: ['Capacity: 100 million capsules/year', 'Fill range: 100mg - 1500mg', 'Gelatin and vegetarian options'] },
-    { icon: 'Package', title: 'Hard Capsules', description: 'Automatic capsule filling lines for powder, pellet, and granule formulations with weight variation control systems.', specs: ['Capacity: 150 million capsules/year', 'Sizes: 00 to 4', 'Powder and pellet filling'] },
-    { icon: 'Syringe', title: 'Sterile Injectables', description: 'Dedicated sterile manufacturing area with laminar flow isolators for small-volume parenteral products and lyophilized formulations.', specs: ['ISO Class 5 cleanroom', 'Ampoules and vials', 'Terminal sterilization & aseptic fill'] },
-    { icon: 'Droplets', title: 'Creams & Ointments', description: 'Semi-solid manufacturing with vacuum homogenizers for topical pharmaceutical products including creams, ointments, and gels.', specs: ['Batch size: 50-500 kg', 'Vacuum homogenization', 'Automated tube/jar filling'] },
-    { icon: 'FlaskConical', title: 'Oral Liquids & Syrups', description: 'Liquid manufacturing and filling lines for oral solutions, suspensions, and syrups with in-line filtration systems.', specs: ['Batch size: 500-5000 L', 'In-line filtration', 'Automatic bottle filling & capping'] },
+  const productionLines = cms?.productionLines || [
+    { icon: 'Pill', title: 'Tablets & Film-Coated Tablets', description: 'High-speed tablet compression and film-coating lines.', specs: ['Capacity: 200 million tablets/year', 'Compression: rotary press technology', 'Coating: fully automated film-coating system'] },
+    { icon: 'Droplets', title: 'Softgel Capsules', description: 'State-of-the-art rotary die softgel encapsulation.', specs: ['Capacity: 100 million capsules/year', 'Fill range: 100mg - 1500mg', 'Gelatin and vegetarian options'] },
+    { icon: 'Package', title: 'Hard Capsules', description: 'Automatic capsule filling lines for powder and pellet formulations.', specs: ['Capacity: 150 million capsules/year', 'Sizes: 00 to 4', 'Powder and pellet filling'] },
+    { icon: 'Syringe', title: 'Sterile Injectables', description: 'Dedicated sterile manufacturing area with laminar flow isolators.', specs: ['ISO Class 5 cleanroom', 'Ampoules and vials', 'Terminal sterilization & aseptic fill'] },
+    { icon: 'Droplets', title: 'Creams & Ointments', description: 'Semi-solid manufacturing with vacuum homogenizers.', specs: ['Batch size: 50-500 kg', 'Vacuum homogenization', 'Automated tube/jar filling'] },
+    { icon: 'FlaskConical', title: 'Oral Liquids & Syrups', description: 'Liquid manufacturing and filling lines for oral solutions.', specs: ['Batch size: 500-5000 L', 'In-line filtration', 'Automatic bottle filling & capping'] },
   ]
 
-  const facilityFeatures = content?.facilityFeatures ?? [
-    { icon: 'Wind', title: 'HVAC Systems', description: 'Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments across all production areas.' },
-    { icon: 'Thermometer', title: 'Environmental Monitoring', description: 'Continuous temperature, humidity, and differential pressure monitoring with automated alert systems.' },
-    { icon: 'Eye', title: 'Water Systems', description: 'Purified Water (PW) and Water for Injection (WFI) generation systems with continuous TOC and conductivity monitoring.' },
-    { icon: 'Gauge', title: 'Utilities Infrastructure', description: 'Dedicated pharmaceutical-grade utilities including compressed air, nitrogen generation, and steam systems.' },
+  const facilityFeatures = cms?.facilityFeatures || [
+    { icon: 'Wind', title: 'HVAC Systems', description: 'Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments.' },
+    { icon: 'Thermometer', title: 'Environmental Monitoring', description: 'Continuous temperature, humidity, and differential pressure monitoring.' },
+    { icon: 'Eye', title: 'Water Systems', description: 'Purified Water and Water for Injection generation systems.' },
+    { icon: 'Gauge', title: 'Utilities Infrastructure', description: 'Dedicated pharmaceutical-grade utilities including compressed air and steam systems.' },
   ]
 
-  const facilityOverview = content?.facilityOverview ?? {
-    title: 'World-Class Manufacturing Facility',
-    description: 'Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure.',
-    subDescription: 'Every aspect of our facility — from cleanroom design to utility systems — is engineered to ensure product quality, operator safety, and regulatory compliance across all markets we serve.',
-    tags: ['WHO GMP Certified', 'ISO 9001:2015', 'ISO Class 7/8 Cleanrooms']
-  }
-
-  const qcSteps = content?.qcSteps ?? [
-    { step: '01', title: 'Raw Material Testing', desc: 'Identity, purity, and potency testing of all incoming materials' },
-    { step: '02', title: 'In-Process Controls', desc: 'Real-time monitoring of critical process parameters during production' },
-    { step: '03', title: 'Finished Product Testing', desc: 'Comprehensive testing including dissolution, assay, and stability' },
-    { step: '04', title: 'Packaging & Labeling', desc: 'Automated inspection systems for packaging integrity and label accuracy' },
-    { step: '05', title: 'Batch Release', desc: 'QA review and batch release by qualified persons before distribution' },
-  ]
-
-  const certifications = content?.mfgCertifications ?? [
+  const certifications = cms?.certifications || [
     { title: 'WHO GMP', description: 'World Health Organization Good Manufacturing Practice certification for all production lines', year: '2017' },
     { title: 'ISO 9001:2015', description: 'Quality Management System certification ensuring consistent quality standards', year: '2021' },
     { title: 'ISO 14001', description: 'Environmental Management System certification for sustainable manufacturing', year: '2024' },
   ]
 
+  const qcSteps = cms?.qcSteps || [
+    { step: '01', title: 'Raw Material Testing', description: 'Identity, purity, and potency testing of all incoming materials' },
+    { step: '02', title: 'In-Process Controls', description: 'Real-time monitoring of critical process parameters during production' },
+    { step: '03', title: 'Finished Product Testing', description: 'Comprehensive testing including dissolution, assay, and stability' },
+    { step: '04', title: 'Packaging & Labeling', description: 'Automated inspection systems for packaging integrity and label accuracy' },
+    { step: '05', title: 'Batch Release', description: 'QA review and batch release by qualified persons before distribution' },
+  ]
+
+  const facilityOverview = cms?.facilityOverview || {
+    title: 'World-Class Manufacturing Facility',
+    description: 'Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure.',
+    tags: ['WHO GMP Certified', 'ISO 9001:2015', 'ISO Class 7/8 Cleanrooms'],
+  }
+
   return (
     <>
-      {/* Hero Carousel */}
       <StrapiHeroCarousel
         page="manufacturing"
         badge="MANUFACTURING"
@@ -92,7 +71,7 @@ export default function Manufacturing() {
       <section className="py-12 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {facilityStats.map((stat, idx) => (
+            {facilityStats.map((stat: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}<span className="text-lg font-normal text-slate-500">{stat.unit}</span></div>
                 <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
@@ -109,10 +88,9 @@ export default function Manufacturing() {
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">OUR FACILITY</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{facilityOverview.title}</h2>
-              <p className="text-slate-600 mb-4">{facilityOverview.description}</p>
-              <p className="text-slate-600 mb-6">{facilityOverview.subDescription}</p>
+              <p className="text-slate-600 mb-6">{facilityOverview.description}</p>
               <div className="flex flex-wrap gap-3">
-                {facilityOverview.tags.map((tag) => (
+                {facilityOverview.tags.map((tag: string) => (
                   <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1E6F5C]/10 text-[#1E6F5C] rounded-full text-sm font-medium">
                     <CheckCircle className="w-3.5 h-3.5" /> {tag}
                   </span>
@@ -123,7 +101,6 @@ export default function Manufacturing() {
               <div className="text-center">
                 <Factory className="w-16 h-16 text-slate-300 mx-auto mb-3" />
                 <p className="text-sm text-slate-400 font-medium">Manufacturing Facility</p>
-                <p className="text-xs text-slate-400 mt-1">Photo coming soon</p>
               </div>
             </div>
           </div>
@@ -136,18 +113,17 @@ export default function Manufacturing() {
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">PRODUCTION CAPABILITIES</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Production Lines</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">Six dedicated production lines covering all major pharmaceutical dosage forms, each equipped with modern machinery and in-process quality controls.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {productionLines.map((line, idx) => {
-              const Icon = iconMap[line.icon] || Pill
+            {productionLines.map((line: any, idx: number) => {
+              const LineIcon = iconMap[line.icon] || Factory
               return (
                 <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <LineIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
                   <h3 className="font-bold text-slate-900 mb-2">{line.title}</h3>
                   <p className="text-sm text-slate-600 mb-4">{line.description}</p>
                   <ul className="space-y-1.5">
-                    {line.specs.map((spec, sIdx) => (
+                    {(line.specs || []).map((spec: string, sIdx: number) => (
                       <li key={sIdx} className="flex items-start gap-2 text-xs text-slate-500">
                         <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> {spec}
                       </li>
@@ -168,11 +144,11 @@ export default function Manufacturing() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Pharmaceutical-Grade Infrastructure</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {facilityFeatures.map((feature, idx) => {
-              const Icon = iconMap[feature.icon] || Gauge
+            {facilityFeatures.map((feature: any, idx: number) => {
+              const FIcon = iconMap[feature.icon] || Shield
               return (
                 <div key={idx} className="bg-slate-50 rounded-xl p-6">
-                  <Icon className="w-10 h-10 text-[#1E6F5C] mb-4" />
+                  <FIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
                   <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
                   <p className="text-sm text-slate-600">{feature.description}</p>
                 </div>
@@ -190,7 +166,7 @@ export default function Manufacturing() {
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Manufacturing Certifications</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {certifications.map((cert, idx) => (
+            {certifications.map((cert: any, idx: number) => (
               <div key={idx} className="bg-white rounded-xl p-8 shadow-sm text-center">
                 <Award className="w-12 h-12 text-[#1E6F5C] mx-auto mb-4" />
                 <h3 className="font-bold text-xl text-slate-900 mb-2">{cert.title}</h3>
@@ -208,14 +184,13 @@ export default function Manufacturing() {
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">QUALITY CONTROL</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">From Raw Material to Finished Product</h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">Every stage of production is monitored by our quality control team to ensure consistent product quality and regulatory compliance.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {qcSteps.map((item, idx) => (
+            {qcSteps.map((item: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="w-12 h-12 bg-[#1E6F5C] text-white rounded-full flex items-center justify-center font-bold text-sm mx-auto mb-3">{item.step}</div>
                 <h3 className="font-semibold text-slate-900 text-sm mb-1">{item.title}</h3>
-                <p className="text-xs text-slate-500">{item.desc}</p>
+                <p className="text-xs text-slate-500">{item.description || item.desc}</p>
               </div>
             ))}
           </div>
@@ -226,7 +201,7 @@ export default function Manufacturing() {
       <section className="py-16 bg-gradient-to-br from-[#1E6F5C] to-[#165B46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Partner With Us</h2>
-          <p className="text-white/80 max-w-2xl mx-auto mb-8">Leverage our manufacturing capabilities for your pharmaceutical products. We offer contract manufacturing, private labeling, and technology transfer services.</p>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8">Leverage our manufacturing capabilities for your pharmaceutical products.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors">{t.cta.contact} <ArrowRight className="w-4 h-4" /></Link>
             <Link href="/products" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">{t.cta.viewProducts}</Link>

@@ -14,7 +14,7 @@ export interface PageContent {
   milestones?: Array<{ year: string; title: string; desc: string }>
   regions?: string[]
   ctaLinks?: Array<{ href: string; labelKey: string; variant?: string }>
-  
+
   // Manufacturing page
   facilityStats?: Array<{ value: string; unit: string; label: string }>
   productionLines?: Array<{ icon: string; title: string; description: string; specs: string[] }>
@@ -22,34 +22,41 @@ export interface PageContent {
   facilityOverview?: {
     title: string
     description: string
-    subDescription: string
     tags: string[]
   }
-  qcSteps?: Array<{ step: string; title: string; desc: string }>
-  
+  qcSteps?: Array<{ step: string; title: string; description: string; desc?: string }>
+
   // R&D page
+  stats?: Array<{ value: string; label: string }>
   rdStats?: Array<{ value: string; label: string }>
   rdCapabilities?: Array<{ icon: string; title: string; description: string }>
-  focusAreas?: Array<{ title: string; description: string; status: string }>
+  focusAreas?: Array<{ icon: string; title: string; description: string; status?: string }>
   partnershipModels?: Array<{ icon: string; title: string; description: string }>
+  pipeline?: Array<{ phase: string; count: number; description: string }>
+  capabilities?: string[]
   rdVision?: {
     title: string
     description: string
     subDescription: string
     checklist: string[]
   }
-  
+
   // Quality page
   certifications?: Array<{ icon: string; title: string; subtitle: string; description: string; year: string }>
   qaActivities?: Array<{ icon: string; title: string; description: string }>
-  qcCapabilities?: Array<{ title: string; items: string[] }>
-  regulatoryMarkets?: Array<{ region: string; countries: string; status: string }>
+  qcCapabilities?: string[]
+  regulatoryMarkets?: Array<{ region: string; status: string; products?: string }>
   qualityPhilosophy?: {
     title: string
     description: string
     subDescription: string
     checklist: string[]
   }
+  philosophy?: {
+    title: string
+    description: string
+  }
+  qmsFramework?: Array<{ title: string; description: string }>
 }
 
 export interface PageData {
@@ -66,8 +73,8 @@ export interface PageData {
 
 // ── Hook ──
 
-export function usePageContent(slug: string): PageData | null {
-  const [data, setData] = useState<PageData | null>(null)
+export function usePageContent(slug: string): PageContent | null {
+  const [data, setData] = useState<PageContent | null>(null)
 
   useEffect(() => {
     if (!slug) return
@@ -80,7 +87,7 @@ export function usePageContent(slug: string): PageData | null {
       .then(json => {
         if (json.data && json.data.length > 0) {
           const page = json.data[0] as PageData
-          setData(page)
+          setData(page.content)
         }
       })
       .catch(err => {

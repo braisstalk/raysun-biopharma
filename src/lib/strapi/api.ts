@@ -17,6 +17,19 @@ export interface StrapiGlobal {
   socialX: string
   socialInstagram: string
   complianceDisclaimer: string
+  // Home page fields
+  homeHeroTitle: string | null
+  homeHeroSubtitle: string | null
+  homeHeroPrimaryCtaLabel: string | null
+  homeHeroPrimaryCtaLink: string | null
+  homeHeroSecondaryCtaLabel: string | null
+  homeHeroSecondaryCtaLink: string | null
+  homeStats: Array<{ value: string; label: string }> | null
+  homeAboutTitle: string | null
+  homeAboutDesc1: string | null
+  homeAboutDesc2: string | null
+  homeAboutCtaLabel: string | null
+  homeAboutCtaLink: string | null
 }
 
 export interface StrapiHeroSlide {

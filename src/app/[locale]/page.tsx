@@ -7,12 +7,14 @@ import { getHomeContent } from '@/lib/content'
 import { useLocale } from '@/i18n/LocaleContext'
 import { getContentTranslation } from '@/i18n/content'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { useHomeData } from '@/lib/strapi/useHomeData'
 import HomeVideoFeature from '@/components/home/HomeVideoFeature'
 
 export default function Home() {
   const [content, setContent] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const { locale, t, isLoading: localeLoading } = useLocale()
+  const cmsHome = useHomeData()
   
   // Get translations for current locale - this will update when locale changes
   const contentTrans = getContentTranslation(locale)
@@ -41,10 +43,16 @@ export default function Home() {
   // Merge content with translations - use contentTrans which updates when locale changes
   const heroConfig = {
     ...hero,
-    title: contentTrans.home.hero.title,
-    subtitle: contentTrans.home.hero.subtitle,
-    primaryCta: { ...hero?.primaryCta, label: contentTrans.home.hero.primaryCta },
-    secondaryCta: { ...hero?.secondaryCta, label: contentTrans.home.hero.secondaryCta },
+    title: cmsHome?.heroTitle || contentTrans.home.hero.title,
+    subtitle: cmsHome?.heroSubtitle || contentTrans.home.hero.subtitle,
+    primaryCta: {
+      label: cmsHome?.heroPrimaryCtaLabel || contentTrans.home.hero.primaryCta,
+      href: cmsHome?.heroPrimaryCtaLink || hero?.primaryCta?.href || '/products',
+    },
+    secondaryCta: {
+      label: cmsHome?.heroSecondaryCtaLabel || contentTrans.home.hero.secondaryCta,
+      href: cmsHome?.heroSecondaryCtaLink || hero?.secondaryCta?.href || '/contact',
+    },
   }
   const videoConfig = videoSection || { title: 'Video', description: '', cta: { label: 'Watch', href: '/' } }
   const statsData = stats || []
@@ -79,7 +87,7 @@ export default function Home() {
       <section className="bg-slate-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {statsData.map((stat: any, idx: number) => (
+            {(cmsHome?.stats || statsData).map((stat: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}</div>
                 <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
@@ -99,10 +107,10 @@ export default function Home() {
                 {t.hero.aboutTitle}
               </h2>
               <p className="text-slate-600 mb-4">
-                {t.content?.aboutDesc1 || 'Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.'}
+                {cmsHome?.aboutDesc1 || t.content?.aboutDesc1 || 'Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.'}
               </p>
               <p className="text-slate-600 mb-8">
-                {t.content?.aboutDesc2 || 'Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.'}
+                {cmsHome?.aboutDesc2 || t.content?.aboutDesc2 || 'Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.'}
               </p>
               <Link href="/about" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
                 {t.common.learnMore} <ArrowRight className="w-4 h-4" />

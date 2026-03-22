@@ -8,3 +8,4 @@ export {
   type StrapiHeroSlide,
   type StrapiPage,
 } from './api'
+export { useHomeData, type HomeDataFromCMS } from './useHomeData'

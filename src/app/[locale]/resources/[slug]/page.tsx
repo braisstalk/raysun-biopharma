@@ -1,33 +1,35 @@
 'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ArrowLeft, FileText, Video, Link as LinkIcon, Download, Mail, Eye, Lock, Clock, ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowLeft, FileText, Video, Link as LinkIcon, Download, Mail, Eye, Lock, Clock, ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
 import { getResourceBySlug, getRelatedResources } from '@/lib/content'
-import type { ContentResourceDetail, ResourceStatus } from '@/lib/content/types/content-resources'
+import { useResourceBySlug, useRelatedResources, MappedResource } from '@/lib/strapi/useResources'
+import type { ResourceStatus } from '@/lib/content/types/content-resources'
 
 const statusConfig: Record<ResourceStatus, { label: string; description: string; color: string; icon: React.ElementType }> = {
-  public: { 
-    label: 'Public', 
-    description: 'Available for direct download', 
+  public: {
+    label: 'Public',
+    description: 'Available for direct download',
     color: 'bg-green-100 text-green-700',
     icon: CheckCircle
   },
-  request: { 
-    label: 'Request Access', 
-    description: 'Submit a request to access this resource', 
+  request: {
+    label: 'Request Access',
+    description: 'Submit a request to access this resource',
     color: 'bg-amber-100 text-amber-700',
     icon: Mail
   },
-  restricted: { 
-    label: 'Restricted', 
-    description: 'Authorized personnel only', 
+  restricted: {
+    label: 'Restricted',
+    description: 'Authorized personnel only',
     color: 'bg-red-100 text-red-700',
     icon: Lock
   },
-  pending: { 
-    label: 'Pending', 
-    description: 'Under review', 
+  pending: {
+    label: 'Pending',
+    description: 'Under review',
     color: 'bg-slate-100 text-slate-700',
     icon: Clock
   }
@@ -39,17 +41,53 @@ const typeIcons: Record<string, React.ElementType> = {
   link: LinkIcon
 }
 
+// Map local resource to MappedResource format
+function mapLocalResource(local: any): MappedResource {
+  return {
+    id: local.id,
+    documentId: local.id,
+    slug: local.slug,
+    title: local.title,
+    description: local.description,
+    category: local.category,
+    resourceType: local.type,
+    status: local.status,
+    fileSize: local.fileSize || '',
+    updatedDate: local.updatedDate || '',
+    sortOrder: 0,
+  }
+}
+
 export default function ResourceDetail() {
   const params = useParams()
   const slug = params?.slug as string
-  
-  const resource = getResourceBySlug(slug)
-  const relatedResources = resource ? getRelatedResources(resource.id) : []
+
+  const { resource: cmsResource, loading, error } = useResourceBySlug(slug)
+  const localResource = getResourceBySlug(slug)
+
+  // Use CMS data if available, fallback to local
+  const resource: MappedResource | null = cmsResource || (localResource ? mapLocalResource(localResource) : null)
+
+  // Get related resources from CMS if available, fallback to local
+  const { resources: relatedFromCms } = useRelatedResources(resource, 3)
+  const localRelated = localResource ? getRelatedResources(localResource.id).map(mapLocalResource) : []
+  const relatedResources = relatedFromCms.length > 0 ? relatedFromCms : localRelated
 
   const [requestStatus, setRequestStatus] = useState<'idle' | 'requested'>('idle')
 
   const handleRequestAccess = () => {
     setRequestStatus('requested')
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[#1E6F5C] animate-spin mx-auto mb-4" />
+          <p className="text-slate-600">Loading resource...</p>
+        </div>
+      </div>
+    )
   }
 
   if (!resource) {
@@ -68,7 +106,7 @@ export default function ResourceDetail() {
 
   const status = statusConfig[resource.status]
   const StatusIcon = status.icon
-  const TypeIcon = typeIcons[resource.type] || FileText
+  const TypeIcon = typeIcons[resource.resourceType] || FileText
 
   return (
     <>
@@ -135,7 +173,7 @@ export default function ResourceDetail() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-slate-500">Type</span>
-                    <span className="text-sm font-medium text-slate-900 capitalize">{resource.type}</span>
+                    <span className="text-sm font-medium text-slate-900 capitalize">{resource.resourceType}</span>
                   </div>
                   {resource.fileSize && (
                     <div className="flex items-center justify-between">
@@ -159,13 +197,13 @@ export default function ResourceDetail() {
               {/* Actions Card */}
               <div className="bg-slate-50 rounded-xl p-6">
                 <h3 className="font-semibold text-slate-900 mb-4">Actions</h3>
-                
+
                 {resource.status === 'public' && (
                   <button className="w-full bg-[#1E6F5C] text-white py-3 rounded-lg font-medium hover:opacity-90 flex items-center justify-center gap-2 mb-3">
                     <Download className="w-4 h-4" /> Download PDF
                   </button>
                 )}
-                
+
                 {resource.status === 'request' && (
                   <>
                     {requestStatus === 'requested' ? (
@@ -175,7 +213,7 @@ export default function ResourceDetail() {
                         <p className="text-xs text-green-600">We'll review and respond within 24-48 hours.</p>
                       </div>
                     ) : (
-                      <button 
+                      <button
                         onClick={handleRequestAccess}
                         className="w-full bg-[#1E6F5C] text-white py-3 rounded-lg font-medium hover:opacity-90 flex items-center justify-center gap-2 mb-3"
                       >
@@ -184,7 +222,7 @@ export default function ResourceDetail() {
                     )}
                   </>
                 )}
-                
+
                 {resource.status === 'restricted' && (
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
                     <Lock className="w-8 h-8 text-amber-600 mx-auto mb-2" />
@@ -195,7 +233,7 @@ export default function ResourceDetail() {
                     </Link>
                   </div>
                 )}
-                
+
                 <button className="w-full border border-slate-200 text-slate-700 py-3 rounded-lg font-medium hover:bg-slate-100 flex items-center justify-center gap-2">
                   <Eye className="w-4 h-4" /> Preview
                 </button>
@@ -212,11 +250,11 @@ export default function ResourceDetail() {
             <h2 className="text-2xl font-bold text-slate-900 mb-8">Related Resources</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedResources.map((related) => {
-                const RelatedIcon = typeIcons[related.type] || FileText
+                const RelatedIcon = typeIcons[related.resourceType] || FileText
                 const relatedStatus = statusConfig[related.status]
                 return (
-                  <Link 
-                    key={related.id} 
+                  <Link
+                    key={related.id}
                     href={`/resources/${related.slug}`}
                     className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
                   >

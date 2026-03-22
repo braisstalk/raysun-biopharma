@@ -27,3 +27,10 @@ export {
   useRelatedNews,
   type MappedNewsArticle,
 } from './useNews'
+export {
+  useResources,
+  useResourceBySlug,
+  useRelatedResources,
+  type StrapiResource,
+  type MappedResource,
+} from './useResources'

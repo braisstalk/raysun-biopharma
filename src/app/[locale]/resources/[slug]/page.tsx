@@ -69,7 +69,7 @@ export default function ResourceDetail() {
   const resource: MappedResource | null = cmsResource || (localResource ? mapLocalResource(localResource) : null)
 
   // Get related resources from CMS if available, fallback to local
-  const { resources: relatedFromCms } = useRelatedResources(resource, 3)
+  const relatedFromCms = useRelatedResources(resource, 3)
   const localRelated = localResource ? getRelatedResources(localResource.id).map(mapLocalResource) : []
   const relatedResources = relatedFromCms.length > 0 ? relatedFromCms : localRelated
 

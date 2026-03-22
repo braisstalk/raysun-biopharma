@@ -1,30 +1,56 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, Calendar, ArrowRight } from 'lucide-react'
-import { getNewsContent } from '@/lib/content'
+import { Search, Calendar, ArrowRight, Loader2 } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { useNews, type MappedNewsArticle } from '@/lib/strapi/useNews'
+import { getNewsContent } from '@/lib/content'
+
+const CATEGORIES = [
+  { id: 'All', label: 'All' },
+  { id: 'Quality', label: 'Quality' },
+  { id: 'Business', label: 'Business' },
+  { id: 'Innovation', label: 'Innovation' },
+  { id: 'Products', label: 'Products' },
+  { id: 'Recognition', label: 'Recognition' },
+]
+
+function mapLocalNews(): MappedNewsArticle[] {
+  const content = getNewsContent()
+  return content.items.map((item, idx) => ({
+    id: String(idx + 1),
+    documentId: String(idx + 1),
+    slug: item.slug,
+    title: item.title,
+    excerpt: item.excerpt,
+    content: '',
+    date: item.date,
+    category: item.category,
+  }))
+}
 
 export default function News() {
-  const content = getNewsContent()
   const { t } = useTranslation()
-  const { hero, categories, items } = content
-  
+  const { articles: cmsArticles, loading, error } = useNews()
+  const articles = cmsArticles.length > 0 ? cmsArticles : (loading ? [] : mapLocalNews())
+
+  const hero = { title: 'Latest News & Updates', subtitle: 'Stay informed about our latest developments, partnerships, and achievements.' }
+
   const [activeCat, setActiveCat] = useState('All')
   const [search, setSearch] = useState('')
 
-  const categoryLabels = categories.map(c => c.label)
-  
-  const filtered = items.filter(n => {
-    const matchCat = activeCat === 'All' || n.category === activeCat
-    const matchSearch = n.title.toLowerCase().includes(search.toLowerCase())
-    return matchCat && matchSearch
-  })
+  const filtered = useMemo(() => {
+    return articles.filter(n => {
+      const matchCat = activeCat === 'All' || n.category === activeCat
+      const matchSearch = !search || n.title.toLowerCase().includes(search.toLowerCase()) || n.excerpt.toLowerCase().includes(search.toLowerCase())
+      return matchCat && matchSearch
+    })
+  }, [articles, activeCat, search])
 
   return (
     <>
-      {/* Hero Carousel */}
       <StrapiHeroCarousel
         page="news"
         badge="NEWS"
@@ -33,27 +59,25 @@ export default function News() {
         description={hero.subtitle}
       />
 
-      {/* Filter bar - mobile optimized */}
+      {/* Filter bar */}
       <section className="py-4 md:py-8 bg-slate-50 sticky top-[60px] md:top-16 z-30 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3">
-            {/* Category chips - horizontal scroll on mobile */}
             <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 -mx-4 px-4">
-              {categoryLabels.map(cat => (
+              {CATEGORIES.map(cat => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCat(cat)}
+                  key={cat.id}
+                  onClick={() => setActiveCat(cat.id)}
                   className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 ${
-                    activeCat === cat
+                    activeCat === cat.id
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                   }`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
-            {/* Search - full width on mobile */}
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
@@ -71,7 +95,14 @@ export default function News() {
       {/* News Grid */}
       <section className="py-8 md:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filtered.length === 0 ? (
+          {loading && articles.length === 0 && (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="w-8 h-8 text-[#1E6F5C] animate-spin" />
+              <span className="ml-3 text-slate-500">Loading news...</span>
+            </div>
+          )}
+
+          {!loading && filtered.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-slate-500">{t.news.noNewsFound}</p>
             </div>
@@ -79,7 +110,13 @@ export default function News() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((item) => (
                 <article key={item.id} className="bg-slate-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
+                  {item.image ? (
+                    <div className="h-40 overflow-hidden bg-slate-100">
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
+                  )}
                   <div className="p-6">
                     <div className="flex items-center gap-2 text-xs text-blue-600 mb-2">
                       <Calendar className="w-3 h-3" />
@@ -96,6 +133,10 @@ export default function News() {
                 </article>
               ))}
             </div>
+          )}
+
+          {error && !loading && (
+            <p className="text-center text-xs text-amber-500 mt-4">(using offline data)</p>
           )}
         </div>
       </section>

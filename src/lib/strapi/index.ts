@@ -21,3 +21,9 @@ export {
   type MappedProduct,
   type StrapiMedia,
 } from './useProducts'
+export {
+  useNews,
+  useNewsBySlug,
+  useRelatedNews,
+  type MappedNewsArticle,
+} from './useNews'

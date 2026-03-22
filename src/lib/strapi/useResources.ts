@@ -10,16 +10,17 @@ export interface StrapiResource {
   slug: string
   description: string | null
   category: string
-  resourceType: 'document' | 'video' | 'link'
-  status: 'public' | 'request' | 'restricted' | 'pending'
+  resourceType?: string
+  status?: string
   fileSize: string | null
   updatedDate: string | null
   sortOrder: number
-  file: {
-    id: number
-    url: string
-    name: string
-    alternativeText: string | null
+  file?: {
+    id?: number
+    url?: string
+    name?: string
+    size?: number
+    mime?: string
   } | null
 }
 
@@ -44,15 +45,17 @@ function capitalizeFirst(str: string): string {
 }
 
 function mapResource(raw: StrapiResource): MappedResource {
+  const resourceType = raw.resourceType as MappedResource['resourceType'] || 'document'
+  const status = raw.status as MappedResource['status'] || 'public'
   return {
     id: String(raw.id),
     documentId: raw.documentId,
     slug: raw.slug,
     title: raw.title,
     description: raw.description || '',
-    resourceType: raw.resourceType || 'document',
+    resourceType,
     category: capitalizeFirst(raw.category),
-    status: raw.status || 'public',
+    status,
     fileSize: raw.fileSize || undefined,
     updatedDate: raw.updatedDate || undefined,
     sortOrder: raw.sortOrder,

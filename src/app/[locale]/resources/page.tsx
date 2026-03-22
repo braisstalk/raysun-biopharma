@@ -51,11 +51,16 @@ export default function Resources() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Use CMS data if available, fallback to local config
+  // Use CMS data if available and not loading, otherwise fallback to local config
   const resources = useMemo(() => {
-    if (cmsResources.length > 0) return cmsResources
-    return localContent.items.map(mapLocalToResource)
-  }, [cmsResources, localContent.items])
+    // If CMS has data and loading is complete, use CMS data
+    if (cmsResources.length > 0 && !loading) return cmsResources
+    // If CMS fetch failed (has error) or still loading, use local fallback
+    if (error || loading || cmsResources.length === 0) {
+      return localContent.items.map(mapLocalToResource)
+    }
+    return cmsResources
+  }, [cmsResources, loading, error, localContent.items])
 
   // Filter resources by category and search
   const filteredResources = useMemo(() => {
@@ -123,55 +128,51 @@ export default function Resources() {
             </div>
           </div>
 
-          {/* Loading State */}
-          {loading && (
+          {/* Loading State - only show if no resources available */}
+          {loading && filteredResources.length === 0 && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
               <span className="ml-3 text-slate-600">Loading resources...</span>
             </div>
           )}
 
-          {/* Error State - Silent fallback to local data */}
-          {error && cmsResources.length === 0 && (
+          {/* CMS Status - show when CMS fetch fails but we have fallback */}
+          {error && filteredResources.length > 0 && (
             <div className="text-sm text-slate-500 mb-4">
-              Using local data (CMS unavailable)
+              Showing cached data (CMS unavailable)
             </div>
           )}
 
           {/* Resources Grid */}
-          {!loading && (
+          {filteredResources.length > 0 && (
             <>
               <div className="mb-4 text-sm text-slate-500">
                 Showing {filteredResources.length} of {resources.length} resources
+                {loading && ' (updating...)'}
               </div>
 
-              {filteredResources.length === 0 ? (
-                <div className="text-center py-12 text-slate-500">
-                  No resources found matching your criteria.
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredResources.map((res) => {
-                    const Icon = icons[res.resourceType] || File
-                    return (
-                      <Link
-                        key={res.id}
-                        href={`/resources/${res.slug}`}
-                        className="bg-slate-50 rounded-xl p-6 text-left hover:shadow-md transition-shadow group"
-                      >
-                        <div className="flex items-start justify-between mb-4">
-                          <Icon className="w-10 h-10 text-blue-600" />
-                          <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded uppercase">
-                            {res.resourceType}
-                          </span>
-                        </div>
-                        <h3 className="font-semibold text-slate-900 group-hover:text-blue-600">
-                          {res.title}
-                        </h3>
-                        <p className="text-sm text-slate-500 mt-2 line-clamp-2">
-                          {res.description}
-                        </p>
-                        <div className="flex items-center justify-between mt-4">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredResources.map((res) => {
+                  const Icon = icons[res.resourceType] || File
+                  return (
+                    <Link
+                      key={res.id}
+                      href={`/resources/${res.slug}`}
+                      className="bg-slate-50 rounded-xl p-6 text-left hover:shadow-md transition-shadow group"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <Icon className="w-10 h-10 text-blue-600" />
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded uppercase">
+                          {res.resourceType}
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-slate-900 group-hover:text-blue-600">
+                        {res.title}
+                      </h3>
+                      <p className="text-sm text-slate-500 mt-2 line-clamp-2">
+                        {res.description}
+                      </p>
+                      <div className="flex items-center justify-between mt-4">
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-slate-500">{res.category}</span>
                             {res.fileSize && (
@@ -184,7 +185,6 @@ export default function Resources() {
                     )
                   })}
                 </div>
-              )}
             </>
           )}
         </div>

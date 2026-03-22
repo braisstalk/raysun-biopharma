@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { SearchX, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { useProducts, type MappedProduct } from '@/lib/strapi'
 import { getProductsContent, getAllProducts, getCurrentSource } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import { getContentTranslation } from '@/i18n/content'
@@ -13,30 +14,101 @@ function generateSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 }
 
-export default function Products() {
-  const productsPage = getProductsContent()
-  const allProducts = getAllProducts()
-  const { t, locale } = useTranslation()
-  const contentTrans = getContentTranslation(locale || 'en')
-  
-  const { hero, tabs, categories } = productsPage
-  
-  // Helper to get translated category name
-  const getCategoryName = (catId: string, fallbackName: string) => {
-    return contentTrans?.products?.categories?.[catId] || fallbackName
-  }
-  const products = allProducts
-  const perPage = productsPage.perPage
-
+// Fallback to local config if CMS fails
+function useProductsWithFallback() {
   const [activeTab, setActiveTab] = useState('all')
   const [activeCategory, setActiveCategory] = useState('all')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
 
+  const { products: cmsProducts, pagination, loading, error } = useProducts({
+    category: activeCategory,
+    type: activeTab === 'brand' || activeTab === 'generic' ? activeTab : undefined,
+    search: search || undefined,
+    page,
+    pageSize: 12,
+  })
+
+  // Get local products as fallback
+  const localConfig = getProductsContent()
+  const localProducts = getAllProducts()
+
+  // Determine which source to use
+  const useCMS = !error && cmsProducts.length > 0
+  const products = useCMS ? cmsProducts : localProducts.map(p => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug || generateSlug(p.name),
+    category: p.category,
+    dosageForm: p.dosageForm,
+    description: p.description,
+    indication: p.indication || '',
+    tags: p.tags || [],
+    type: p.type || 'generic',
+    strength: null,
+    packaging: null,
+    shelfLife: null,
+    storageConditions: null,
+    images: [],
+    documents: { dataSheet: null, coa: null },
+  } as MappedProduct))
+
+  const totalItems = useCMS ? pagination.total : localProducts.length
+  const totalPages = useCMS ? pagination.pageCount : Math.ceil(localProducts.length / localConfig.perPage)
+  const isLoading = loading
+
+  return {
+    products,
+    totalItems,
+    totalPages,
+    isLoading,
+    useCMS,
+    activeTab,
+    setActiveTab,
+    activeCategory,
+    setActiveCategory,
+    search,
+    setSearch,
+    page,
+    setPage,
+    localConfig,
+  }
+}
+
+export default function Products() {
+  const {
+    products,
+    totalItems,
+    totalPages,
+    isLoading,
+    useCMS,
+    activeTab,
+    setActiveTab,
+    activeCategory,
+    setActiveCategory,
+    search,
+    setSearch,
+    page,
+    setPage,
+    localConfig,
+  } = useProductsWithFallback()
+
+  const { t, locale } = useTranslation()
+  const contentTrans = getContentTranslation(locale || 'en')
+  
+  const { hero, tabs, categories, perPage } = localConfig
+
+  // Helper to get translated category name
+  const getCategoryName = (catId: string, fallbackName: string) => {
+    return contentTrans?.products?.categories?.[catId] || fallbackName
+  }
+
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Filter products
+  // Filter products locally for non-CMS mode
   const filtered = useMemo(() => {
+    if (useCMS) return products
+    
     const q = search.toLowerCase().trim()
     return products.filter((p) => {
       if (activeTab === 'brand' && p.type !== 'brand') return false
@@ -53,28 +125,28 @@ export default function Products() {
       }
       return true
     })
-  }, [products, activeTab, activeCategory, search])
+  }, [products, activeTab, activeCategory, search, useCMS])
 
   // Category counts
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: filtered.length }
-    for (const p of filtered) {
+    const counts: Record<string, number> = { all: useCMS ? totalItems : filtered.length }
+    for (const p of products) {
       counts[p.category] = (counts[p.category] || 0) + 1
     }
     return counts
-  }, [filtered])
+  }, [products, filtered.length, useCMS, totalItems])
 
   // Pagination
-  const totalPages = Math.ceil(filtered.length / perPage)
   const paged = useMemo(() => {
+    if (useCMS) return products // CMS already paginates
     const start = (page - 1) * perPage
     return filtered.slice(start, start + perPage)
-  }, [filtered, page, perPage])
+  }, [filtered, page, perPage, useCMS, products])
 
   // Reset page on filter change
   useEffect(() => {
     setPage(1)
-  }, [activeTab, activeCategory, search])
+  }, [activeTab, activeCategory, search, setPage])
 
   // Scroll to top on page change
   useEffect(() => {
@@ -84,9 +156,6 @@ export default function Products() {
   }, [page])
 
   const isSearching = search.trim().length > 0
-
-  // Generate slug helper for links
-  const getProductSlug = (p: typeof products[0]) => p.slug || generateSlug(p.name)
 
   return (
     <>
@@ -176,17 +245,28 @@ export default function Products() {
             {/* Results count */}
             <div className="mb-4">
               <p className="text-sm text-slate-500">
-                {t.common.showing} <span className="font-semibold text-slate-700">{paged.length}</span> {t.common.of} <span className="font-semibold text-slate-700">{filtered.length}</span> {t.common.results}
+                {t.common.showing} <span className="font-semibold text-slate-700">{paged.length}</span> {t.common.of} <span className="font-semibold text-slate-700">{useCMS ? totalItems : filtered.length}</span> {t.common.results}
                 {isSearching && (
                   <span className="ml-2">
                     for "<span className="text-[#1E6F5C]">{search}</span>"
                   </span>
                 )}
+                {!useCMS && (
+                  <span className="ml-2 text-xs text-amber-600">(Using local data)</span>
+                )}
               </p>
             </div>
 
+            {/* Loading State */}
+            {isLoading && (
+              <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+                <div className="animate-spin w-8 h-8 border-2 border-[#1E6F5C] border-t-transparent rounded-full mx-auto mb-4" />
+                <p className="text-slate-600">Loading products...</p>
+              </div>
+            )}
+
             {/* Product Grid */}
-            {paged.length === 0 ? (
+            {!isLoading && paged.length === 0 ? (
               <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
                 <SearchX className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">{t.common.noResults}</h3>
@@ -199,42 +279,51 @@ export default function Products() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {paged.map((product) => {
-                  const slug = getProductSlug(product)
-                  const hue = (parseInt(product.id.replace(/\D/g, ''), 10) * 37) % 360
-                  return (
-                    <Link
-                      key={product.id}
-                      href={`/products/${slug}`}
-                      className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-[#1E6F5C]/30 transition-all"
-                    >
-                      <div
-                        className="h-24 rounded-lg mb-4 flex items-center justify-center"
-                        style={{ background: `hsl(${hue}, 60%, 95%)` }}
+              !isLoading && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {paged.map((product) => {
+                    const hue = (parseInt(product.id.replace(/\D/g, ''), 10) * 37) % 360
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`/products/${product.slug}`}
+                        className="group bg-white rounded-xl border border-slate-200 p-4 hover:shadow-lg hover:border-[#1E6F5C]/30 transition-all"
                       >
-                        <span className="text-2xl">💊</span>
-                      </div>
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] line-clamp-2 text-sm">
-                          {product.name}
-                        </h3>
-                      </div>
-                      <p className="text-xs text-slate-500 mb-2">{product.dosageForm}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
-                          {product.type === 'brand' ? t.products.brands : t.products.generics}
-                        </span>
-                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1E6F5C] transition-colors" />
-                      </div>
-                    </Link>
-                  )
-                })}
-              </div>
+                        <div
+                          className="h-24 rounded-lg mb-4 flex items-center justify-center"
+                          style={{ background: `hsl(${hue}, 60%, 95%)` }}
+                        >
+                          {product.images && product.images.length > 0 ? (
+                            <img 
+                              src={product.images[0].thumbnail || product.images[0].url} 
+                              alt={product.images[0].alt}
+                              className="h-20 w-20 object-contain"
+                            />
+                          ) : (
+                            <span className="text-2xl">💊</span>
+                          )}
+                        </div>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] line-clamp-2 text-sm">
+                            {product.name}
+                          </h3>
+                        </div>
+                        <p className="text-xs text-slate-500 mb-2">{product.dosageForm}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                            {product.type === 'brand' ? t.products.brands : t.products.generics}
+                          </span>
+                          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1E6F5C] transition-colors" />
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )
             )}
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {!isLoading && totalPages > 1 && (
               <div className="mt-8 flex items-center justify-center gap-2">
                 <button
                   onClick={() => setPage(p => Math.max(1, p - 1))}

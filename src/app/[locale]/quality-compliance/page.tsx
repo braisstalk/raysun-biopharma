@@ -14,10 +14,12 @@ export default function QualityCompliance() {
   const { t } = useTranslation()
   const cms = usePageContent('quality-compliance')
 
-  const philosophy = cms?.philosophy || {
+  // CMS 使用 qualityPhilosophy，提供 fallback
+  const philosophy = (cms?.qualityPhilosophy || cms?.philosophy || {
     title: 'Built on Quality, Driven by Compliance',
     description: 'At Raysun Biopharma, quality is not a department — it is embedded in every aspect of our operations. From facility design to final product release, our quality management system ensures that every product meets the highest standards of safety, efficacy, and purity.',
-  }
+    checklist: ['Zero tolerance for quality deviations', 'Continuous improvement culture', 'Data-driven decision making', 'Regulatory-first mindset'],
+  }) as any
 
   const certifications = cms?.certifications || [
     { icon: 'Award', title: 'WHO GMP', subtitle: 'Good Manufacturing Practice', description: 'All production lines certified to World Health Organization GMP standards.', year: '2017' },
@@ -25,19 +27,26 @@ export default function QualityCompliance() {
     { icon: 'Leaf', title: 'ISO 14001', subtitle: 'Environmental Management', description: 'Commitment to environmentally responsible manufacturing.', year: '2024' },
   ]
 
-  const qmsFramework = cms?.qmsFramework || [
+  // CMS 使用 qaActivities，但代码期望 qmsFramework，进行转换
+  const qmsFramework = (cms?.qmsFramework || (cms?.qaActivities as any[])?.map((qa: any) => ({
+    title: qa.title,
+    description: qa.description,
+    icon: qa.icon,
+  })) || [
     { title: 'Document Control', description: 'Comprehensive SOP management with version control and electronic approval workflows' },
     { title: 'Change Control', description: 'Structured change management process for facilities, processes, and documentation' },
     { title: 'CAPA System', description: 'Corrective and Preventive Action system for continuous quality improvement' },
     { title: 'Training Management', description: 'Competency-based training program for all manufacturing and quality personnel' },
     { title: 'Supplier Qualification', description: 'Rigorous supplier audit and qualification program for raw materials and packaging' },
     { title: 'Batch Record Review', description: '100% review of batch manufacturing records prior to product release' },
-  ]
+  ])
 
+  // CMS 数据是对象数组 {title, items}，fallback 也使用相同结构
   const qcCapabilities = cms?.qcCapabilities || [
-    'HPLC & UPLC Systems', 'UV-Vis Spectrophotometry', 'Dissolution Testing (USP)',
-    'Friability & Hardness Testing', 'Particle Size Analysis', 'Microbiological Testing',
-    'Stability Testing (ICH Zones)', 'Water Testing (TOC, Conductivity)',
+    { title: 'Chemical Analysis', items: ['HPLC & UPLC Systems', 'UV-Vis Spectrophotometry', 'Dissolution Testing (USP)', 'Karl Fischer titration'] },
+    { title: 'Physical Testing', items: ['Friability & Hardness Testing', 'Particle Size Analysis', 'Disintegration testing'] },
+    { title: 'Microbiological Testing', items: ['Bioburden testing', 'Sterility testing', 'Endotoxin (LAL) testing'] },
+    { title: 'Stability Studies', items: ['ICH-compliant stability chambers', 'Accelerated stability', 'Photostability testing'] },
   ]
 
   const regulatoryMarkets = cms?.regulatoryMarkets || [
@@ -67,7 +76,7 @@ export default function QualityCompliance() {
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{philosophy.title}</h2>
               <p className="text-slate-600 mb-6">{philosophy.description}</p>
               <div className="space-y-3">
-                {['Zero tolerance for quality deviations', 'Continuous improvement culture', 'Data-driven decision making', 'Regulatory-first mindset'].map((item) => (
+                {(philosophy.checklist || ['Zero tolerance for quality deviations', 'Continuous improvement culture', 'Data-driven decision making', 'Regulatory-first mindset']).map((item: string) => (
                   <div key={item} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-[#1E6F5C] shrink-0" />
                     <span className="text-slate-700">{item}</span>
@@ -135,11 +144,18 @@ export default function QualityCompliance() {
             <p className="text-[#1E6F5C] font-medium mb-2">QUALITY CONTROL LABORATORY</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Advanced Analytical Capabilities</h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {qcCapabilities.map((cap: string, idx: number) => (
-              <div key={idx} className="flex items-center gap-2 bg-white rounded-lg p-4">
-                <CheckCircle className="w-4 h-4 text-[#1E6F5C] shrink-0" />
-                <span className="text-sm text-slate-700">{cap}</span>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {(qcCapabilities as any[]).map((cap: any, idx: number) => (
+              <div key={idx} className="bg-white rounded-xl p-6">
+                <h3 className="font-semibold text-slate-900 mb-4">{cap.title}</h3>
+                <ul className="space-y-2">
+                  {(cap.items || []).map((item: string, itemIdx: number) => (
+                    <li key={itemIdx} className="flex items-start gap-2 text-sm text-slate-600">
+                      <CheckCircle className="w-4 h-4 text-[#1E6F5C] shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

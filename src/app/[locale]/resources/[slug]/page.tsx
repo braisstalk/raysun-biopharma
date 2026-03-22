@@ -79,7 +79,8 @@ export default function ResourceDetail() {
     setRequestStatus('requested')
   }
 
-  if (loading) {
+  // Show loading spinner only if no resource available AND still loading
+  if (loading && !resource) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">

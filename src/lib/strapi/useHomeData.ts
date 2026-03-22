@@ -17,6 +17,33 @@ export interface HomeDataFromCMS {
   aboutDesc2: string | null
   aboutCtaLabel: string | null
   aboutCtaLink: string | null
+  // 6 home sections
+  capabilities: {
+    title: string
+    items: Array<{ title: string; description: string; icon: string }>
+  } | null
+  productCategories: {
+    title: string
+    categories: Array<{ name: string; description: string; count: number; href: string }>
+  } | null
+  quality: {
+    title: string
+    description: string
+    features: Array<{ title: string; description: string }>
+  } | null
+  globalMarkets: {
+    title: string
+    subtitle: string
+    markets: Array<{ name: string; description: string; icon: string }>
+  } | null
+  news: {
+    title: string
+    items: Array<{ date: string; title: string; category: string; href: string }>
+  } | null
+  resources: {
+    title: string
+    items: Array<{ title: string; type: string; size: string; href: string }>
+  } | null
 }
 
 export function useHomeData(): HomeDataFromCMS | null {
@@ -44,6 +71,13 @@ export function useHomeData(): HomeDataFromCMS | null {
             aboutDesc2: g.homeAboutDesc2,
             aboutCtaLabel: g.homeAboutCtaLabel,
             aboutCtaLink: g.homeAboutCtaLink,
+            // 6 home sections
+            capabilities: g.homeCapabilities,
+            productCategories: g.homeProductCategories,
+            quality: g.homeQuality,
+            globalMarkets: g.homeGlobalMarkets,
+            news: g.homeNews,
+            resources: g.homeResources,
           })
         }
       })

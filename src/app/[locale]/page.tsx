@@ -57,8 +57,44 @@ export default function Home() {
   const videoConfig = videoSection || { title: 'Video', description: '', cta: { label: 'Watch', href: '/' } }
   const statsData = stats || []
   const aboutData = about || { title: contentTrans.home.about.title, description: '', cta: { label: t.common.learnMore, href: '/about' } }
-  const capabilitiesData = capabilities || { title: contentTrans.home.capabilities.title, items: [] }
-  const productsData = products || { title: contentTrans.home.products.title, categories: [] }
+  // Use CMS data for 6 sections with fallback to local content
+  const capabilitiesData = cmsHome?.capabilities || capabilities || { title: contentTrans.home.capabilities.title, items: [] }
+  const productsData = cmsHome?.productCategories || products || { title: contentTrans.home.products.title, categories: [] }
+  const qualityData = cmsHome?.quality || {
+    title: t.hero.qualityTitle,
+    description: t.content?.qualityDesc || 'Our manufacturing facility operates under strict quality management systems to ensure every product meets international standards.',
+    features: [
+      { title: t.content?.whoGmpCertified || 'WHO GMP Certified Manufacturing', description: '' },
+      { title: t.content?.isoCertified || 'ISO 9001:2015 Quality Management', description: '' },
+      { title: t.content?.comprehensiveQA || 'Comprehensive Quality Assurance', description: '' },
+    ]
+  }
+  const globalMarketsData = cmsHome?.globalMarkets || {
+    title: contentTrans.home.global.title,
+    subtitle: t.content?.globalDesc || 'Our manufacturing capabilities support pharmaceutical companies and healthcare providers across multiple regions with reliable supply and regulatory compliance.',
+    markets: [
+      { name: t.content?.southeastAsia || 'Southeast Asia', description: t.content?.southeastAsiaDesc || 'Primary market focus with established distribution networks in Thailand, Cambodia, Myanmar, Vietnam, and Laos.', icon: 'Globe' },
+      { name: t.content?.middleEast || 'Middle East', description: t.content?.middleEastDesc || 'Growing presence in UAE, Saudi Arabia, and neighboring markets with regulatory-aligned products.', icon: 'MapPin' },
+      { name: t.content?.africaBeyond || 'Africa & Beyond', description: t.content?.africaBeyondDesc || 'Partnership opportunities for quality generic medicines targeting underserved healthcare markets.', icon: 'Users' },
+    ]
+  }
+  const newsData = cmsHome?.news || {
+    title: t.hero.newsTitle,
+    items: [
+      { date: 'Mar 2026', title: 'GMP Re-certification Success', category: 'Quality', href: '/news/gmp-re-certification-success' },
+      { date: 'Mar 2026', title: 'ASEAN Distribution Partnership', category: 'Business', href: '/news/new-asean-distribution-partnership' },
+      { date: 'Feb 2026', title: 'R&D Facility Expansion', category: 'Innovation', href: '/news/rd-facility-expansion' },
+    ]
+  }
+  const resourcesData = cmsHome?.resources || {
+    title: t.hero.resourcesTitle,
+    items: [
+      { title: t.content?.companyOverview || 'Company Overview', type: 'PDF', size: '2.4 MB', href: '/resources/company-brochure' },
+      { title: t.content?.productCatalog || 'Product Catalog', type: 'PDF', size: '5.8 MB', href: '/resources/product-catalog' },
+      { title: t.content?.qualityCertifications || 'Quality Certifications', type: 'PDF', size: '1.2 MB', href: '/resources/quality-certifications' },
+      { title: t.content?.sustainabilityReport || 'Sustainability Report', type: 'PDF', size: '3.5 MB', href: '/resources/iso-9001-certificate' },
+    ]
+  }
 
   return (
     <div key={locale}> {/* Force full re-render when locale changes */}
@@ -187,24 +223,18 @@ export default function Home() {
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.qualityCompliance.toUpperCase()}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                {t.hero.qualityTitle}
+                {qualityData.title}
               </h2>
               <p className="text-slate-600 mb-6">
-                {t.content?.qualityDesc || 'Our manufacturing facility operates under strict quality management systems to ensure every product meets international standards. We maintain comprehensive documentation and compliance readiness for regulated markets worldwide.'}
+                {qualityData.description}
               </p>
               <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">{t.content?.whoGmpCertified || 'WHO GMP Certified Manufacturing'}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">{t.content?.isoCertified || 'ISO 9001:2015 Quality Management'}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                  <span className="text-slate-700">{t.content?.comprehensiveQA || 'Comprehensive Quality Assurance'}</span>
-                </div>
+                {qualityData.features?.map((feature: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
+                    <span className="text-slate-700">{feature.title}</span>
+                  </div>
+                ))}
               </div>
               <Link href="/quality-compliance" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
                 {t.common.learnMore} <ArrowRight className="w-4 h-4" />
@@ -242,37 +272,25 @@ export default function Home() {
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">{contentTrans.home.global.title.toUpperCase()}</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              {t.hero.rdTitle}
+              {globalMarketsData.title}
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              {t.content?.globalDesc || 'Our manufacturing capabilities support pharmaceutical companies and healthcare providers across multiple regions with reliable supply and regulatory compliance.'}
+              {globalMarketsData.subtitle}
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <Globe className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.southeastAsia || 'Southeast Asia'}</h3>
-              <p className="text-sm text-slate-600 mb-4">{t.content?.southeastAsiaDesc || 'Primary market focus with established distribution networks in Thailand, Cambodia, Myanmar, Vietnam, and Laos.'}</p>
-              <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
+            {globalMarketsData.markets?.map((market: any, idx: number) => (
+              <div key={idx} className="bg-white rounded-xl p-6 shadow-sm">
+                {market.icon === 'Globe' && <Globe className="w-10 h-10 text-[#1E6F5C] mb-4" />}
+                {market.icon === 'MapPin' && <MapPin className="w-10 h-10 text-[#1E6F5C] mb-4" />}
+                {market.icon === 'Users' && <Users className="w-10 h-10 text-[#1E6F5C] mb-4" />}
+                <h3 className="font-semibold text-slate-900 mb-2">{market.name}</h3>
+                <p className="text-sm text-slate-600 mb-4">{market.description}</p>
+                <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
+                  <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
+                </div>
               </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <MapPin className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.middleEast || 'Middle East'}</h3>
-              <p className="text-sm text-slate-600 mb-4">{t.content?.middleEastDesc || 'Growing presence in UAE, Saudi Arabia, and neighboring markets with regulatory-aligned products.'}</p>
-              <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <Users className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="font-semibold text-slate-900 mb-2">{t.content?.africaBeyond || 'Africa & Beyond'}</h3>
-              <p className="text-sm text-slate-600 mb-4">{t.content?.africaBeyondDesc || 'Partnership opportunities for quality generic medicines targeting underserved healthcare markets.'}</p>
-              <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
-                <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -283,52 +301,28 @@ export default function Home() {
           <div className="flex justify-between items-end mb-12">
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.latestNews || 'LATEST NEWS'}</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.hero.newsTitle}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{newsData.title}</h2>
             </div>
             <Link href="/news" className="hidden md:inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
               {contentTrans.home.products.viewAll} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            <Link href="/news/gmp-re-certification-success" className="group">
-              <div className="bg-slate-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-[#1E6F5C] mb-2">
-                    <span>Mar 2026</span>
-                    <span>•</span>
-                    <span>Quality</span>
+            {newsData.items?.map((item: any, idx: number) => (
+              <Link key={idx} href={item.href || '#'} className="group">
+                <div className="bg-slate-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 text-xs text-[#1E6F5C] mb-2">
+                      <span>{item.date}</span>
+                      <span>•</span>
+                      <span>{item.category}</span>
+                    </div>
+                    <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]">{item.title}</h3>
                   </div>
-                  <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]">GMP Re-certification Success</h3>
                 </div>
-              </div>
-            </Link>
-            <Link href="/news/new-asean-distribution-partnership" className="group">
-              <div className="bg-slate-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-[#1E6F5C] mb-2">
-                    <span>Mar 2026</span>
-                    <span>•</span>
-                    <span>Business</span>
-                  </div>
-                  <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]">ASEAN Distribution Partnership</h3>
-                </div>
-              </div>
-            </Link>
-            <Link href="/news/rd-facility-expansion" className="group">
-              <div className="bg-slate-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300" />
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs text-[#1E6F5C] mb-2">
-                    <span>Feb 2026</span>
-                    <span>•</span>
-                    <span>Innovation</span>
-                  </div>
-                  <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]">R&D Facility Expansion</h3>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -338,29 +332,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.resources || 'RESOURCES'}</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{t.hero.resourcesTitle}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{resourcesData.title}</h2>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
-            <Link href="/resources/company-brochure" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
-              <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">{t.content?.companyOverview || 'Company Overview'}</h3>
-              <p className="text-xs text-slate-500">PDF • 2.4 MB</p>
-            </Link>
-            <Link href="/resources/product-catalog" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
-              <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">{t.content?.productCatalog || 'Product Catalog'}</h3>
-              <p className="text-xs text-slate-500">PDF • 5.8 MB</p>
-            </Link>
-            <Link href="/resources/quality-certifications" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
-              <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">{t.content?.qualityCertifications || 'Quality Certifications'}</h3>
-              <p className="text-xs text-slate-500">PDF • 1.2 MB</p>
-            </Link>
-            <Link href="/resources/iso-9001-certificate" className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
-              <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-              <h3 className="font-medium text-slate-900 mb-1">{t.content?.sustainabilityReport || 'Sustainability Report'}</h3>
-              <p className="text-xs text-slate-500">PDF • 3.5 MB</p>
-            </Link>
+            {resourcesData.items?.map((item: any, idx: number) => (
+              <Link key={idx} href={item.href || '#'} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
+                <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
+                <h3 className="font-medium text-slate-900 mb-1">{item.title}</h3>
+                <p className="text-xs text-slate-500">{item.type} • {item.size}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

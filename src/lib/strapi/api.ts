@@ -43,6 +43,33 @@ export interface StrapiGlobal {
   footerProductsTitle: string | null
   footerContactTitle: string | null
   footerCopyright: string | null
+  // Home section fields (6 sections)
+  homeCapabilities: {
+    title: string
+    items: Array<{ title: string; description: string; icon: string }>
+  } | null
+  homeProductCategories: {
+    title: string
+    categories: Array<{ name: string; description: string; count: number; href: string }>
+  } | null
+  homeQuality: {
+    title: string
+    description: string
+    features: Array<{ title: string; description: string }>
+  } | null
+  homeGlobalMarkets: {
+    title: string
+    subtitle: string
+    markets: Array<{ name: string; description: string; icon: string }>
+  } | null
+  homeNews: {
+    title: string
+    items: Array<{ date: string; title: string; category: string; href: string }>
+  } | null
+  homeResources: {
+    title: string
+    items: Array<{ title: string; type: string; size: string; href: string }>
+  } | null
 }
 
 export interface StrapiHeroSlide {

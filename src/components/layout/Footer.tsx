@@ -1,74 +1,94 @@
 'use client'
 
 import Link from 'next/link'
-import { Mail, Phone, MapPin, Linkedin, Facebook, Youtube, ArrowUpRight } from 'lucide-react'
-import { FooterConfig } from '@/types/footer'
-import { useTranslation } from '@/i18n/useTranslation'
+import { useEffect, useState } from 'react'
+import { Mail, Phone, MapPin } from 'lucide-react'
+import { STRAPI_URL } from '@/lib/strapi/client'
+import type { StrapiGlobal } from '@/lib/strapi/api'
 
-interface FooterProps {
-  config: FooterConfig
+// Fallback data in case CMS is unavailable
+const fallbackData = {
+  siteName: 'Raysun Biopharma',
+  siteDescription: 'A leading pharmaceutical manufacturer committed to advancing global healthcare through quality medicines and sustainable innovation.',
+  contactEmail: 'info@raysunpharma.com',
+  contactPhone: 'Available upon request',
+  address: 'Vientiane, Laos',
+  socialLinkedin: 'https://linkedin.com/company/raysunbiopharma',
+  socialFacebook: 'https://facebook.com/raysunbiopharma',
+  socialYoutube: 'https://youtube.com/@raysunbiopharma',
 }
 
-export default function Footer({ config }: FooterProps) {
-  const { t } = useTranslation()
-  const currentYear = new Date().getFullYear()
+const quickLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Manufacturing', href: '/manufacturing' },
+  { label: 'Products', href: '/products' },
+  { label: 'News', href: '/news' },
+  { label: 'Contact Us', href: '/contact' },
+  { label: 'What science can do', href: '/what-science-can-do' },
+]
+
+const productLinks = [
+  { label: 'Softgels', href: '/products?category=softgels' },
+  { label: 'Tablets', href: '/products?category=tablets' },
+  { label: 'Capsules', href: '/products?category=capsules' },
+  { label: 'Creams & Ointments', href: '/products?category=creams' },
+  { label: 'Injections', href: '/products?category=injections' },
+  { label: 'Traditional Medicines', href: '/products?category=traditional' },
+]
+
+export default function Footer() {
+  const [global, setGlobal] = useState<StrapiGlobal | null>(null)
+
+  useEffect(() => {
+    fetch(`${STRAPI_URL}/api/global`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.data) setGlobal(json.data)
+      })
+      .catch(() => {})
+  }, [])
+
+  const data = global || fallbackData as any
 
   return (
-    <footer className="bg-slate-900 text-slate-300">
-      {/* Main Footer Content */}
+    <footer className="bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          
-          {/* Column 1: Brand & Social */}
-          <div className="lg:col-span-1">
-            <div className="text-xl font-bold text-white mb-4">
-              <span className="text-blue-400">Raysun</span>
-              <span className="text-slate-300">Biopharma</span>
-            </div>
-            <p className="text-sm text-slate-400 mb-6 leading-relaxed">
-              {config.brand.description}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">
+              <span className="text-blue-400">Raysun</span>Biopharma
+            </h3>
+            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+              {data.siteDescription || fallbackData.siteDescription}
             </p>
-            
-            {/* Social Icons */}
             <div className="flex gap-3">
-              <a 
-                href={config.brand.socials.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all group"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a 
-                href={config.brand.socials.facebook} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all group"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a 
-                href={config.brand.socials.youtube} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all group"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-4 h-4" />
-              </a>
+              {data.socialLinkedin && (
+                <a href={data.socialLinkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+              )}
+              {data.socialFacebook && (
+                <a href={data.socialFacebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+              )}
+              {data.socialYoutube && (
+                <a href={data.socialYoutube} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">{t.footer.quickLinks}</h3>
-            <ul className="space-y-3">
-              {config.columns[0]?.links.map((link, idx) => (
+            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2">
+              {quickLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link href={link.href} className="text-sm text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-1 group">
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Link href={link.href} className="text-slate-400 hover:text-white text-sm transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -76,14 +96,13 @@ export default function Footer({ config }: FooterProps) {
             </ul>
           </div>
 
-          {/* Column 3: Products */}
+          {/* Products */}
           <div>
-            <h3 className="text-white font-semibold mb-4">{t.common.products}</h3>
-            <ul className="space-y-3">
-              {config.columns[1]?.links.map((link, idx) => (
+            <h4 className="font-semibold mb-4">Products</h4>
+            <ul className="space-y-2">
+              {productLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link href={link.href} className="text-sm text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-1 group">
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Link href={link.href} className="text-slate-400 hover:text-white text-sm transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -91,52 +110,37 @@ export default function Footer({ config }: FooterProps) {
             </ul>
           </div>
 
-          {/* Column 4: Contact */}
+          {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-4">{t.common.contact}</h3>
+            <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-3">
-              <li>
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <Mail className="w-4 h-4" />
-                  info@raysunpharma.com
-                </div>
+              <li className="flex items-center gap-2 text-slate-400 text-sm">
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                {data.contactEmail || fallbackData.contactEmail}
               </li>
-              <li>
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <Phone className="w-4 h-4" />
-                  Available upon request
-                </div>
+              <li className="flex items-center gap-2 text-slate-400 text-sm">
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                {data.contactPhone || fallbackData.contactPhone}
               </li>
-              <li>
-                <div className="flex items-center gap-2 text-sm text-slate-400">
-                  <MapPin className="w-4 h-4" />
-                  Vientiane, Laos
-                </div>
+              <li className="flex items-center gap-2 text-slate-400 text-sm">
+                <MapPin className="w-4 h-4 flex-shrink-0" />
+                {data.address || fallbackData.address}
               </li>
             </ul>
           </div>
-
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500">
-              © {currentYear} Raysun Biopharma. {t.footer.allRightsReserved}
-            </p>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="text-sm text-slate-500 hover:text-blue-400 transition-colors">
-                {t.footer.privacyPolicy}
-              </Link>
-              <Link href="/terms" className="text-sm text-slate-500 hover:text-blue-400 transition-colors">
-                {t.footer.termsOfService}
-              </Link>
-              <Link href="/sitemap" className="text-sm text-slate-500 hover:text-blue-400 transition-colors">
-                {t.footer.sitemap}
-              </Link>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-slate-500">
+            © {new Date().getFullYear()} Raysun Biopharma. All rights reserved
+          </p>
+          <div className="flex gap-6 text-sm text-slate-500">
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

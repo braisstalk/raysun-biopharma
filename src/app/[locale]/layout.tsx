@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import FloatingActions from '@/components/common/FloatingActions'
-import { footerConfig } from '@/config/footer'
+
 import { LocaleProvider } from '@/i18n/LocaleContext'
 
 // Generate static params for all locales
@@ -102,7 +102,7 @@ export default async function LocaleLayout({
       <main className="min-h-screen">
         {children}
       </main>
-      <Footer config={footerConfig} />
+      <Footer />
       <FloatingActions />
     </LocaleProvider>
   )

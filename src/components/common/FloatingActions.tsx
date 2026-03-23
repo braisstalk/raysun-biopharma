@@ -4,25 +4,27 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Bot, ShoppingCart, MessageCircle, X } from 'lucide-react'
 import { useRfqCart } from '@/contexts/RfqCartContext'
+import AiChatPanel from './AiChatPanel'
 
 export default function FloatingActions() {
   const { itemCount } = useRfqCart()
   const [contactOpen, setContactOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(false)
 
   return (
     <>
       <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3">
-        {/* AI Assistant */}
-        <Link
-          href="/ai-assistant"
+        {/* AI Assistant - opens chat panel */}
+        <button
+          onClick={() => { setAiOpen(!aiOpen); setContactOpen(false) }}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
           title="AI Assistant"
         >
-          <Bot className="w-4 h-4 sm:w-5 sm:h-5" />
+          {aiOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Bot className="w-4 h-4 sm:w-5 sm:h-5" />}
           <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
             AI Assistant
           </span>
-        </Link>
+        </button>
 
         {/* Order Now - links to order page */}
         <Link
@@ -43,7 +45,7 @@ export default function FloatingActions() {
 
         {/* Contact Us */}
         <button
-          onClick={() => setContactOpen(!contactOpen)}
+          onClick={() => { setContactOpen(!contactOpen); setAiOpen(false) }}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
           title="Contact Us"
         >
@@ -53,6 +55,9 @@ export default function FloatingActions() {
           </span>
         </button>
       </div>
+
+      {/* AI Chat Panel */}
+      <AiChatPanel open={aiOpen} onClose={() => setAiOpen(false)} />
 
       {/* Contact Us QR Code Popup */}
       {contactOpen && (

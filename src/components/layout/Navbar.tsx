@@ -6,12 +6,36 @@ import { Menu, X, Globe, ChevronDown, Search, Shield, ArrowRight } from 'lucide-
 import { navigationConfig, getNavLabel } from '@/config/navigation'
 import { Locale } from '@/i18n/config'
 import { useTranslation } from '@/i18n/useTranslation'
+import { STRAPI_URL } from '@/lib/strapi/client'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLangOpen, setIsLangOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const { t, locale, setLocale } = useTranslation()
+
+  // CMS navigation data
+  const [cmsMenuItems, setCmsMenuItems] = useState<typeof navigationConfig.items | null>(null)
+  const [cmsCtaButtons, setCmsCtaButtons] = useState<typeof navigationConfig.ctaButtons | null>(null)
+
+  useEffect(() => {
+    fetch(`${STRAPI_URL}/api/global`)
+      .then(res => res.ok ? res.json() : null)
+      .then(json => {
+        if (json?.data) {
+          if (json.data.navMenuItems && Array.isArray(json.data.navMenuItems) && json.data.navMenuItems.length > 0) {
+            setCmsMenuItems(json.data.navMenuItems)
+          }
+          if (json.data.navCtaButtons) {
+            setCmsCtaButtons(json.data.navCtaButtons)
+          }
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  const menuItems = cmsMenuItems || navigationConfig.items
+  const ctaButtons = cmsCtaButtons || navigationConfig.ctaButtons
 
   // Get current locale
   const currentLocale = locale || 'en'
@@ -55,7 +79,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center gap-1">
-            {navigationConfig.items.map((item, idx) => (
+            {menuItems.map((item, idx) => (
               <div key={idx} className="relative">
                 {item.hasDropdown ? (
                   <>
@@ -110,11 +134,11 @@ export default function Navbar() {
 
             {/* Verify */}
             <Link
-              href={navigationConfig.ctaButtons.verify.href}
+              href={ctaButtons.verify.href}
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
             >
               <Shield className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">{navigationConfig.ctaButtons.verify.label}</span>
+              <span className="hidden lg:inline">{ctaButtons.verify.label}</span>
             </Link>
 
             {/* Language Switcher */}
@@ -166,7 +190,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="xl:hidden bg-white border-t border-slate-100">
           <div className="px-4 py-3 space-y-1 max-h-[70vh] overflow-y-auto">
-            {navigationConfig.items.map((item, idx) => (
+            {menuItems.map((item, idx) => (
               <div key={idx}>
                 {item.hasDropdown ? (
                   <>
@@ -208,12 +232,12 @@ export default function Navbar() {
             ))}
             <hr className="my-2" />
             <Link
-              href={navigationConfig.ctaButtons.verify.href}
+              href={ctaButtons.verify.href}
               onClick={() => setIsMenuOpen(false)}
               className="flex items-center gap-2 px-3 py-3 text-sm font-medium text-slate-600 hover:bg-blue-50 rounded-lg"
             >
               <Shield className="w-4 h-4" />
-              {navigationConfig.ctaButtons.verify.label}
+              {ctaButtons.verify.label}
             </Link>
           </div>
         </div>

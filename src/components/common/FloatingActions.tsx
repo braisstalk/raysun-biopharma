@@ -4,17 +4,19 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Bot, ShoppingCart, MessageCircle, X } from 'lucide-react'
 import { useRfqCart } from '@/contexts/RfqCartContext'
+import { useGlobalConfig } from '@/lib/strapi/useGlobalConfig'
 import AiChatPanel from './AiChatPanel'
 
 export default function FloatingActions() {
   const { itemCount } = useRfqCart()
+  const globalConfig = useGlobalConfig()
   const [contactOpen, setContactOpen] = useState(false)
   const [aiOpen, setAiOpen] = useState(false)
 
   return (
     <>
       <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 sm:gap-3">
-        {/* AI Assistant - opens chat panel */}
+        {/* AI Assistant */}
         <button
           onClick={() => { setAiOpen(!aiOpen); setContactOpen(false) }}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
@@ -26,7 +28,7 @@ export default function FloatingActions() {
           </span>
         </button>
 
-        {/* Order Now - links to order page */}
+        {/* Order Now */}
         <Link
           href="/order-now"
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
@@ -59,7 +61,7 @@ export default function FloatingActions() {
       {/* AI Chat Panel */}
       <AiChatPanel open={aiOpen} onClose={() => setAiOpen(false)} />
 
-      {/* Contact Us QR Code Popup */}
+      {/* Contact Us QR Code Popup - now reads from CMS */}
       {contactOpen && (
         <>
           <div className="fixed inset-0 z-[55] bg-black/30 backdrop-blur-sm" onClick={() => setContactOpen(false)} />
@@ -71,25 +73,35 @@ export default function FloatingActions() {
               </button>
             </div>
             <div className="space-y-5">
+              {/* WhatsApp QR */}
               <div className="text-center">
                 <p className="text-sm font-medium text-slate-700 mb-2">WhatsApp Business</p>
-                <div className="w-36 h-36 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
-                  <div className="text-center text-slate-400">
-                    <MessageCircle className="w-8 h-8 mx-auto mb-1" />
-                    <p className="text-xs">QR Code</p>
-                    <p className="text-[10px]">Upload via CMS</p>
+                {globalConfig?.whatsappQrCodeUrl ? (
+                  <img src={globalConfig.whatsappQrCodeUrl} alt="WhatsApp QR Code" className="w-40 h-40 mx-auto rounded-xl object-contain border border-slate-200" />
+                ) : (
+                  <div className="w-40 h-40 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
+                    <div className="text-center text-slate-400">
+                      <MessageCircle className="w-8 h-8 mx-auto mb-1" />
+                      <p className="text-xs">QR Code</p>
+                      <p className="text-[10px]">Upload via CMS</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
+              {/* WeCom QR */}
               <div className="text-center">
                 <p className="text-sm font-medium text-slate-700 mb-2">WeCom / Enterprise WeChat</p>
-                <div className="w-36 h-36 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
-                  <div className="text-center text-slate-400">
-                    <MessageCircle className="w-8 h-8 mx-auto mb-1" />
-                    <p className="text-xs">QR Code</p>
-                    <p className="text-[10px]">Upload via CMS</p>
+                {globalConfig?.wecomQrCodeUrl ? (
+                  <img src={globalConfig.wecomQrCodeUrl} alt="WeCom QR Code" className="w-40 h-40 mx-auto rounded-xl object-contain border border-slate-200" />
+                ) : (
+                  <div className="w-40 h-40 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
+                    <div className="text-center text-slate-400">
+                      <MessageCircle className="w-8 h-8 mx-auto mb-1" />
+                      <p className="text-xs">QR Code</p>
+                      <p className="text-[10px]">Upload via CMS</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <p className="text-xs text-slate-400 text-center mt-4">Scan to connect with our team</p>

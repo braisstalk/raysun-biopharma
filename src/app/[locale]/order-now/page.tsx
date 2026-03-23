@@ -11,18 +11,17 @@ import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Products' },
-  { id: 'antibiotics', label: 'Antibiotics' },
-  { id: 'cardiovascular', label: 'Cardiovascular' },
-  { id: 'pain', label: 'Pain & Inflammation' },
-  { id: 'dermatology', label: 'Dermatology' },
-  { id: 'vitamins', label: 'Vitamins' },
-  { id: 'gastrointestinal', label: 'GI' },
-  { id: 'respiratory', label: 'Respiratory' },
-  { id: 'traditional', label: 'Traditional' },
-  { id: 'other', label: 'Other' },
-]
+const CATEGORY_LABELS: Record<string, string> = {
+  antibiotics: 'Antibiotics',
+  cardiovascular: 'Cardiovascular',
+  pain: 'Pain & Inflammation',
+  dermatology: 'Dermatology',
+  vitamins: 'Vitamins & Supplements',
+  gastrointestinal: 'Gastrointestinal',
+  respiratory: 'Respiratory',
+  traditional: 'Traditional / Herbal',
+  other: 'Other',
+}
 
 function mapLocalProducts(): MappedProduct[] {
   return productsPageConfig.products.map(p => ({
@@ -55,6 +54,15 @@ export default function OrderNow() {
   const [showCheckout, setShowCheckout] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
   const [form, setForm] = useState({ name: '', email: '', company: '', country: '', message: '' })
+
+  // 从产品数据动态生成分类列表
+  const CATEGORIES = useMemo(() => {
+    const cats = [...new Set(products.map(p => p.category))].filter(Boolean)
+    return [
+      { id: 'all', label: 'All Products' },
+      ...cats.map(id => ({ id, label: CATEGORY_LABELS[id] || id })),
+    ]
+  }, [products])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()

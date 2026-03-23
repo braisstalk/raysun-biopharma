@@ -50,3 +50,8 @@ export {
   type VerifyPageData,
   type OrderPageData,
 } from './useFunctionalPages'
+
+export {
+  useGlobalConfig,
+  type GlobalConfig,
+} from './useGlobalConfig'

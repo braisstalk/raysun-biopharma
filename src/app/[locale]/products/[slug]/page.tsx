@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowLeft, Shield, ShoppingCart, Mail, FileText, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { useRfqCart } from '@/contexts/RfqCartContext'
 import { useProductBySlug, useRelatedProducts, type MappedProduct } from '@/lib/strapi'
+import { useGlobalConfig } from '@/lib/strapi/useGlobalConfig'
 import { productsPageConfig } from '@/config/products'
 import { useTranslation } from '@/i18n/useTranslation'
 
@@ -70,12 +71,15 @@ export default function ProductDetailPage() {
 
   // Try to get product from CMS
   const { product: cmsProduct, loading: cmsLoading, error: cmsError } = useProductBySlug(slug)
-  
+
   // Get related products from CMS if available
   const { related: cmsRelated, loading: relatedLoading } = useRelatedProducts(cmsProduct, 4)
 
   // RFQ Cart
   const { addItem } = useRfqCart()
+
+  // Global config for compliance disclaimer
+  const globalConfig = useGlobalConfig()
 
   // Fallback to local config
   const localProduct = !cmsProduct ? getLocalProductBySlug(slug) : null
@@ -341,10 +345,7 @@ export default function ProductDetailPage() {
             <div className="bg-amber-50 rounded-2xl border border-amber-200 p-6">
               <h2 className="text-lg font-bold text-amber-900 mb-3">Regulatory Notice</h2>
               <p className="text-sm text-amber-800 leading-relaxed">
-                This product information is provided for reference purposes only. 
-                Product availability, registration status, and specifications may vary by country. 
-                Please contact us for specific regulatory information in your target market. 
-                All products are manufactured in accordance with international GMP standards.
+                {globalConfig?.complianceDisclaimer || 'This product information is provided for reference purposes only. Product availability, registration status, and specifications may vary by country. Please contact us for specific regulatory information in your target market. All products must be used in accordance with locally approved prescribing information.'}
               </p>
             </div>
           </div>

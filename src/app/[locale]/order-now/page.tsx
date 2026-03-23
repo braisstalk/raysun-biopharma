@@ -120,8 +120,8 @@ export default function OrderNow() {
         page="order-now"
         badge="ORDER CENTER"
         badgeColor="text-emerald-400"
-        heading="Order Now"
-        description="Browse our product catalog, add items to your cart, and submit your inquiry."
+        heading={t.order.orderNow}
+        description={t.order.browseCatalog}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -135,7 +135,7 @@ export default function OrderNow() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder={t.order.searchProducts}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
@@ -167,7 +167,7 @@ export default function OrderNow() {
             ) : filtered.length === 0 ? (
               <div className="text-center py-16 text-slate-500">
                 <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                <p>No products found. Try a different search.</p>
+                <p>{t.order.noProducts}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -218,13 +218,13 @@ export default function OrderNow() {
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <ShoppingCart className="w-5 h-5 text-emerald-600" />
-                  <h2 className="font-bold text-slate-900">Your Order</h2>
+                  <h2 className="font-bold text-slate-900">{t.order.yourOrder}</h2>
                   {itemCount > 0 && (
                     <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">{itemCount}</span>
                   )}
                 </div>
                 {items.length > 0 && !showCheckout && (
-                  <button onClick={clearCart} className="text-xs text-slate-400 hover:text-red-500">Clear</button>
+                  <button onClick={clearCart} className="text-xs text-slate-400 hover:text-red-500">{t.order.clearAll}</button>
                 )}
               </div>
 
@@ -242,8 +242,8 @@ export default function OrderNow() {
                 ) : items.length === 0 ? (
                   <div className="p-8 text-center">
                     <ShoppingCart className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <p className="text-sm font-medium text-slate-900 mb-1">Cart is empty</p>
-                    <p className="text-xs text-slate-500">Add products from the catalog</p>
+                    <p className="text-sm font-medium text-slate-900 mb-1">{t.order.cartEmpty}</p>
+                    <p className="text-xs text-slate-500">{t.order.addProducts}</p>
                   </div>
                 ) : !showCheckout ? (
                   <div className="p-4">

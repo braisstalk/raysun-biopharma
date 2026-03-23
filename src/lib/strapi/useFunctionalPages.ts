@@ -3,16 +3,10 @@
 import { useState, useEffect } from 'react'
 import { STRAPI_URL } from './client'
 
-// ── Types for new form-based fields ──
-
 export interface InquiryType {
   id: string
   label: string
   description: string
-}
-
-export interface CountryItem {
-  name: string
 }
 
 export interface VerifyType {
@@ -45,6 +39,12 @@ export interface ContactPageData {
 
 export interface VerifyPageData {
   types: VerifyType[]
+  mockResults: Array<{
+    code: string
+    status: 'success' | 'warning' | 'error'
+    message: string
+    details?: string
+  }>
   helpTitle: string
   helpDescription: string
   reportTitle: string
@@ -59,8 +59,6 @@ export interface OrderPageData {
   countries: string[]
 }
 
-// ── Hook for Contact page ──
-
 export function useContactPage(): ContactPageData | null {
   const [data, setData] = useState<ContactPageData | null>(null)
 
@@ -72,24 +70,17 @@ export function useContactPage(): ContactPageData | null {
       })
       .then(json => {
         if (json.data && json.data.length > 0) {
-          const page = json.data[0]
-          // Try new fields first, fallback to content JSON
-          const inquiryTypes = page.contactInquiryTypes?.map((t: any) => ({
-            id: t.id,
-            label: t.label,
-            description: t.description
-          })) || page.content?.inquiryTypes
-
-          const countries = page.contactCountries?.map((c: any) => c.name) || page.content?.countries
-
-          setData({
-            inquiryTypes: inquiryTypes || [],
-            countries: countries || [],
-            officeEmail: page.contactOfficeEmail || page.content?.officeInfo?.email || '',
-            officePhone: page.contactOfficePhone || page.content?.officeInfo?.phone || '',
-            officeAddress: page.contactOfficeAddress || page.content?.officeInfo?.address || '',
-            officeHours: page.contactOfficeHours || page.content?.officeInfo?.businessHours || ''
-          })
+          const c = json.data[0].content
+          if (c) {
+            setData({
+              inquiryTypes: c.inquiryTypes || [],
+              countries: c.countries || [],
+              officeEmail: c.officeInfo?.email || '',
+              officePhone: c.officeInfo?.phone || '',
+              officeAddress: c.officeInfo?.address || '',
+              officeHours: c.officeInfo?.businessHours || '',
+            })
+          }
         }
       })
       .catch(err => {
@@ -99,8 +90,6 @@ export function useContactPage(): ContactPageData | null {
 
   return data
 }
-
-// ── Hook for Verify page ──
 
 export function useVerifyPage(): VerifyPageData | null {
   const [data, setData] = useState<VerifyPageData | null>(null)
@@ -113,21 +102,17 @@ export function useVerifyPage(): VerifyPageData | null {
       })
       .then(json => {
         if (json.data && json.data.length > 0) {
-          const page = json.data[0]
-          // Try new fields first, fallback to content JSON
-          const types = page.verifyTypes?.map((t: any) => ({
-            id: t.id,
-            label: t.label,
-            placeholder: t.placeholder
-          })) || page.content?.types
-
-          setData({
-            types: types || [],
-            helpTitle: page.verifyHelpTitle || page.content?.helpSection?.title || '',
-            helpDescription: page.verifyHelpDescription || page.content?.helpSection?.description || '',
-            reportTitle: page.verifyReportTitle || page.content?.reportSection?.title || '',
-            reportDescription: page.verifyReportDescription || page.content?.reportSection?.description || ''
-          })
+          const c = json.data[0].content
+          if (c) {
+            setData({
+              types: c.types || [],
+              mockResults: c.mockResults || [],
+              helpTitle: c.helpSection?.title || '',
+              helpDescription: c.helpSection?.description || '',
+              reportTitle: c.reportSection?.title || '',
+              reportDescription: c.reportSection?.description || '',
+            })
+          }
         }
       })
       .catch(err => {
@@ -137,8 +122,6 @@ export function useVerifyPage(): VerifyPageData | null {
 
   return data
 }
-
-// ── Hook for Order page ──
 
 export function useOrderPage(): OrderPageData | null {
   const [data, setData] = useState<OrderPageData | null>(null)
@@ -151,30 +134,16 @@ export function useOrderPage(): OrderPageData | null {
       })
       .then(json => {
         if (json.data && json.data.length > 0) {
-          const page = json.data[0]
-          // Try new fields first, fallback to content JSON
-          const orderTypes = page.orderTypes?.map((t: any) => ({
-            id: t.id,
-            title: t.title,
-            description: t.description,
-            icon: t.icon
-          })) || page.content?.orderTypes
-
-          const paymentMethods = page.orderPaymentMethods?.map((m: any) => ({
-            id: m.id,
-            name: m.name,
-            status: m.status
-          })) || page.content?.paymentMethods
-
-          const countries = page.orderCountries?.map((c: any) => c.name) || page.content?.countries
-
-          setData({
-            orderTypes: orderTypes || [],
-            paymentMethods: paymentMethods || [],
-            trackingPlaceholder: page.orderTrackingPlaceholder || page.content?.trackingPlaceholder || '',
-            helpText: page.orderHelpText || page.content?.helpText || '',
-            countries: countries || []
-          })
+          const c = json.data[0].content
+          if (c) {
+            setData({
+              orderTypes: c.orderTypes || [],
+              paymentMethods: c.paymentMethods || [],
+              trackingPlaceholder: c.trackingPlaceholder || '',
+              helpText: c.helpText || '',
+              countries: c.countries || [],
+            })
+          }
         }
       })
       .catch(err => {

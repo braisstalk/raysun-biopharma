@@ -34,3 +34,10 @@ export {
   type StrapiResource,
   type MappedResource,
 } from './useResources'
+
+export {
+  useCareers,
+  useJobBySlug,
+  useRelatedJobs,
+  type MappedJob,
+} from './useCareers'

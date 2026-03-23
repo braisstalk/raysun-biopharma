@@ -41,3 +41,12 @@ export {
   useRelatedJobs,
   type MappedJob,
 } from './useCareers'
+
+export {
+  useContactPage,
+  useVerifyPage,
+  useOrderPage,
+  type ContactPageData,
+  type VerifyPageData,
+  type OrderPageData,
+} from './useFunctionalPages'

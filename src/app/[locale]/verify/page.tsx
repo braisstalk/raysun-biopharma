@@ -5,7 +5,7 @@ import { Shield, Search, AlertTriangle, CheckCircle, FileCheck, UserCheck, Packa
 import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import { usePageContent } from '@/lib/strapi'
+import { useVerifyPage } from '@/lib/strapi'
 
 const icons: Record<string, React.ElementType> = {
   product: Package,
@@ -16,13 +16,13 @@ const icons: Record<string, React.ElementType> = {
 export default function Verify() {
   const content = getVerifyContent()
   const { t } = useTranslation()
-  const cmsContent = usePageContent('verify') as any
+  const cmsData = useVerifyPage()
 
   const hero = content.hero
-  const types = cmsContent?.types || content.types
-  const mockResults = cmsContent?.mockResults || content.mockResults
-  const helpSection = cmsContent?.helpSection || content.helpSection
-  const reportSection = cmsContent?.reportSection || content.reportSection
+  const types = cmsData?.types || content.types
+  const mockResults = content.mockResults
+  const helpSection = cmsData?.helpTitle ? { title: cmsData.helpTitle, description: cmsData.helpDescription } : content.helpSection
+  const reportSection = cmsData?.reportTitle ? { title: cmsData.reportTitle, description: cmsData.reportDescription } : content.reportSection
   
   // Build mock results map for verification logic
   const mockResultsMap: Record<string, { status: 'success' | 'warning' | 'error'; title: string; message: string; details?: string[]; nextSteps?: { label: string; href: string }[] }> = {}

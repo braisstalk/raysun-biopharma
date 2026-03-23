@@ -28,7 +28,7 @@ export function useGlobalConfig(): GlobalConfig | null {
   const [config, setConfig] = useState<GlobalConfig | null>(null)
 
   useEffect(() => {
-    fetch(`${STRAPI_URL}/api/global?populate=whatsappQrCode,wecomQrCode`)
+    fetch(`${STRAPI_URL}/api/global?populate[0]=whatsappQrCode&populate[1]=wecomQrCode`)
       .then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()

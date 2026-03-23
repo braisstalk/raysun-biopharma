@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { Bot, ShoppingCart, MessageCircle, X } from 'lucide-react'
 import { useRfqCart } from '@/contexts/RfqCartContext'
+import RfqPanel from './RfqPanel'
 
 export default function FloatingActions() {
   const { itemCount } = useRfqCart()
   const [contactOpen, setContactOpen] = useState(false)
+  const [rfqOpen, setRfqOpen] = useState(false)
 
   return (
     <>
@@ -24,9 +26,9 @@ export default function FloatingActions() {
           </span>
         </a>
 
-        {/* RFQ Cart */}
-        <a
-          href="/order-now"
+        {/* RFQ Cart - opens side panel */}
+        <button
+          onClick={() => setRfqOpen(true)}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
           title="RFQ Cart"
         >
@@ -39,7 +41,7 @@ export default function FloatingActions() {
           <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
             RFQ Cart {itemCount > 0 ? `(${itemCount})` : ''}
           </span>
-        </a>
+        </button>
 
         {/* Contact Us */}
         <button
@@ -54,24 +56,20 @@ export default function FloatingActions() {
         </button>
       </div>
 
+      {/* RFQ Side Panel */}
+      <RfqPanel open={rfqOpen} onClose={() => setRfqOpen(false)} />
+
       {/* Contact Us QR Code Popup */}
       {contactOpen && (
         <>
-          <div
-            className="fixed inset-0 z-[55] bg-black/30 backdrop-blur-sm"
-            onClick={() => setContactOpen(false)}
-          />
+          <div className="fixed inset-0 z-[55] bg-black/30 backdrop-blur-sm" onClick={() => setContactOpen(false)} />
           <div className="fixed z-[60] bg-white rounded-2xl shadow-2xl p-6 w-[300px] max-w-[calc(100vw-2rem)] right-4 sm:right-20 top-1/2 -translate-y-1/2">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-slate-900">Contact Us</h3>
-              <button
-                onClick={() => setContactOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
-              >
+              <button onClick={() => setContactOpen(false)} className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200">
                 <X className="w-4 h-4 text-slate-500" />
               </button>
             </div>
-
             <div className="space-y-5">
               <div className="text-center">
                 <p className="text-sm font-medium text-slate-700 mb-2">WhatsApp Business</p>
@@ -83,7 +81,6 @@ export default function FloatingActions() {
                   </div>
                 </div>
               </div>
-
               <div className="text-center">
                 <p className="text-sm font-medium text-slate-700 mb-2">WeCom / Enterprise WeChat</p>
                 <div className="w-36 h-36 mx-auto bg-slate-100 rounded-xl flex items-center justify-center border-2 border-dashed border-slate-300">
@@ -95,7 +92,6 @@ export default function FloatingActions() {
                 </div>
               </div>
             </div>
-
             <p className="text-xs text-slate-400 text-center mt-4">Scan to connect with our team</p>
           </div>
         </>

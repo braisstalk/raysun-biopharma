@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Shield, ShoppingCart, Mail, FileText, ArrowRight, Check, Loader2 } from 'lucide-react'
+import { useRfqCart } from '@/contexts/RfqCartContext'
 import { useProductBySlug, useRelatedProducts, type MappedProduct } from '@/lib/strapi'
 import { productsPageConfig } from '@/config/products'
 import { useTranslation } from '@/i18n/useTranslation'
@@ -72,6 +73,9 @@ export default function ProductDetailPage() {
   
   // Get related products from CMS if available
   const { related: cmsRelated, loading: relatedLoading } = useRelatedProducts(cmsProduct, 4)
+
+  // RFQ Cart
+  const { addItem } = useRfqCart()
 
   // Fallback to local config
   const localProduct = !cmsProduct ? getLocalProductBySlug(slug) : null
@@ -189,6 +193,17 @@ export default function ProductDetailPage() {
                     </span>
                   ))}
                 </div>
+              )}
+
+              {/* Add to RFQ */}
+              {product && (
+                <button
+                  onClick={() => addItem({ productId: product.id, productName: product.name, slug: product.slug })}
+                  className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  Add to RFQ Cart
+                </button>
               )}
 
               {/* CTA Buttons */}

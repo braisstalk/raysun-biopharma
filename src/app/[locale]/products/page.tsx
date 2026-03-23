@@ -9,6 +9,7 @@ import { useTranslation } from '@/i18n/useTranslation'
 import { getContentTranslation } from '@/i18n/content'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import ProductsSearchBar from '@/components/products/ProductsSearchBar'
+import { useRfqCart } from '@/contexts/RfqCartContext'
 
 function generateSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -94,6 +95,7 @@ export default function Products() {
   } = useProductsWithFallback()
 
   const { t, locale } = useTranslation()
+  const { addItem } = useRfqCart()
   const contentTrans = getContentTranslation(locale || 'en')
   
   const { hero, tabs, categories, perPage } = localConfig
@@ -313,7 +315,16 @@ export default function Products() {
                           <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
                             {product.type === 'brand' ? t.products.brands : t.products.generics}
                           </span>
-                          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#1E6F5C] transition-colors" />
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              addItem({ productId: product.id, productName: product.name, slug: product.slug })
+                            }}
+                            className="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-medium hover:bg-emerald-100 transition-colors"
+                          >
+                            + RFQ
+                          </button>
                         </div>
                       </Link>
                     )

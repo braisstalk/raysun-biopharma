@@ -241,6 +241,10 @@ export const vi = {
     send: 'Gửi',
     quickPrompts: 'Câu hỏi nhanh',
     recommended: 'Đề xuất',
+    typing: 'đang nhập...',
+    minimize: 'Thu nhỏ',
+    close: 'Đóng',
+    disclaimer: 'Câu trả lời AI chỉ mang tính chất tham khảo. Hãy tham khảo ý kiến chuyên gia y tế để được tư vấn y khoa.',
   },
   // CTA
   cta: {
@@ -368,5 +372,6 @@ export const vi = {
     sustainabilityReport: 'Báo cáo bền vững',
   },
 }
+
 
 export type Translations = typeof vi

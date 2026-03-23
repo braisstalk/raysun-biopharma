@@ -272,6 +272,7 @@ export const en = {
     minimize: 'Minimize',
     close: 'Close',
     disclaimer: 'AI responses are for reference only. Consult healthcare professionals for medical advice.',
+    welcomeMessage: "Hello! I'm the Raysun Biopharma AI Assistant. I can help you with product information, verification, ordering, and more. How can I assist you today?",
   },
   // CTA
   cta: {

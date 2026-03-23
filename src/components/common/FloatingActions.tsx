@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { Bot, ShoppingCart, MessageCircle, X } from 'lucide-react'
 import { useRfqCart } from '@/contexts/RfqCartContext'
 import { useGlobalConfig } from '@/lib/strapi/useGlobalConfig'
+import { useTranslation } from '@/i18n/useTranslation'
 import AiChatPanel from './AiChatPanel'
 
 export default function FloatingActions() {
+  const { t } = useTranslation()
   const { itemCount } = useRfqCart()
   const globalConfig = useGlobalConfig()
   const [contactOpen, setContactOpen] = useState(false)
@@ -20,11 +22,11 @@ export default function FloatingActions() {
         <button
           onClick={() => { setAiOpen(!aiOpen); setContactOpen(false) }}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-          title="AI Assistant"
+          title={t.nav.aiAssistant}
         >
           {aiOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Bot className="w-4 h-4 sm:w-5 sm:h-5" />}
           <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
-            AI Assistant
+            {t.nav.aiAssistant}
           </span>
         </button>
 
@@ -32,7 +34,7 @@ export default function FloatingActions() {
         <Link
           href="/order-now"
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-          title="Order Now"
+          title={t.common.orderNow}
         >
           <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
           {itemCount > 0 && (
@@ -41,7 +43,7 @@ export default function FloatingActions() {
             </span>
           )}
           <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
-            Order Now {itemCount > 0 ? `(${itemCount})` : ''}
+            {t.common.orderNow} {itemCount > 0 ? `(${itemCount})` : ''}
           </span>
         </Link>
 
@@ -49,11 +51,11 @@ export default function FloatingActions() {
         <button
           onClick={() => { setContactOpen(!contactOpen); setAiOpen(false) }}
           className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-violet-500 to-violet-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-          title="Contact Us"
+          title={t.common.contactUs}
         >
           {contactOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />}
           <span className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
-            Contact Us
+            {t.common.contactUs}
           </span>
         </button>
       </div>
@@ -67,7 +69,7 @@ export default function FloatingActions() {
           <div className="fixed inset-0 z-[55] bg-black/30 backdrop-blur-sm" onClick={() => setContactOpen(false)} />
           <div className="fixed z-[60] bg-white rounded-2xl shadow-2xl p-6 w-[300px] max-w-[calc(100vw-2rem)] right-4 sm:right-20 top-1/2 -translate-y-1/2">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-slate-900">Contact Us</h3>
+              <h3 className="text-lg font-bold text-slate-900">{t.common.contactUs}</h3>
               <button onClick={() => setContactOpen(false)} className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200">
                 <X className="w-4 h-4 text-slate-500" />
               </button>
@@ -75,7 +77,7 @@ export default function FloatingActions() {
             <div className="space-y-5">
               {/* WhatsApp QR */}
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-700 mb-2">WhatsApp Business</p>
+                <p className="text-sm font-medium text-slate-700 mb-2">{t.cta.whatsappBusiness}</p>
                 {globalConfig?.whatsappQrCodeUrl ? (
                   <img src={globalConfig.whatsappQrCodeUrl} alt="WhatsApp QR Code" className="w-40 h-40 mx-auto rounded-xl object-contain border border-slate-200" />
                 ) : (
@@ -83,14 +85,14 @@ export default function FloatingActions() {
                     <div className="text-center text-slate-400">
                       <MessageCircle className="w-8 h-8 mx-auto mb-1" />
                       <p className="text-xs">QR Code</p>
-                      <p className="text-[10px]">Upload via CMS</p>
+                      <p className="text-[10px]">{t.cta.qrCodePlaceholder}</p>
                     </div>
                   </div>
                 )}
               </div>
               {/* WeCom QR */}
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-700 mb-2">WeCom / Enterprise WeChat</p>
+                <p className="text-sm font-medium text-slate-700 mb-2">{t.cta.wecomWeChat}</p>
                 {globalConfig?.wecomQrCodeUrl ? (
                   <img src={globalConfig.wecomQrCodeUrl} alt="WeCom QR Code" className="w-40 h-40 mx-auto rounded-xl object-contain border border-slate-200" />
                 ) : (
@@ -98,13 +100,13 @@ export default function FloatingActions() {
                     <div className="text-center text-slate-400">
                       <MessageCircle className="w-8 h-8 mx-auto mb-1" />
                       <p className="text-xs">QR Code</p>
-                      <p className="text-[10px]">Upload via CMS</p>
+                      <p className="text-[10px]">{t.cta.qrCodePlaceholder}</p>
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            <p className="text-xs text-slate-400 text-center mt-4">Scan to connect with our team</p>
+            <p className="text-xs text-slate-400 text-center mt-4">{t.cta.scanToConnect}</p>
           </div>
         </>
       )}

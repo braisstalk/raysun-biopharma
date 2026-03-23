@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Bot, X, Send, ExternalLink, Minimize2, Maximize2 } from 'lucide-react'
 import { usePageContent } from '@/lib/strapi/usePageContent'
 import { getAiAssistantContent } from '@/lib/content'
+import { useTranslation } from '@/i18n/useTranslation'
 
 interface ChatMessage {
   id: string
@@ -20,22 +21,24 @@ interface AiMockAnswer {
   relatedLinks: Array<{ label: string; href: string }>
 }
 
-const LOCAL_PROMPTS = [
-  'Tell me about your products',
-  'How can I verify a product?',
-  'How do I place an order?',
-  'Show me your certifications',
-  'How can I contact sales?',
-]
+
 
 export default function AiChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t, locale } = useTranslation()
+  
   // Try CMS first, fallback to local
   const cmsContent = usePageContent('ai-assistant') as any
   const localContent = getAiAssistantContent()
 
-  const quickPrompts: string[] = cmsContent?.quickPrompts || LOCAL_PROMPTS
-  const welcomeMessage: string = cmsContent?.welcomeMessage || "Hello! I'm the Raysun Biopharma AI Assistant. I can help you with product information, verification, ordering, and more. How can I assist you today?"
-  const disclaimer: string = cmsContent?.disclaimer || 'AI responses are for reference only. Consult healthcare professionals for medical advice.'
+  const quickPrompts: string[] = cmsContent?.quickPrompts || [
+    t.ai?.quickPrompts?.products || 'Tell me about your products',
+    t.ai?.quickPrompts?.verify || 'How can I verify a product?',
+    t.ai?.quickPrompts?.order || 'How do I place an order?',
+    t.ai?.quickPrompts?.certifications || 'Show me your certifications',
+    t.ai?.quickPrompts?.contact || 'How can I contact sales?',
+  ]
+  const welcomeMessage: string = cmsContent?.welcomeMessage || t.ai?.welcomeMessage || "Hello! I'm the Raysun Biopharma AI Assistant. I can help you with product information, verification, ordering, and more. How can I assist you today?"
+  const disclaimer: string = cmsContent?.disclaimer || t.ai?.disclaimer || 'AI responses are for reference only. Consult healthcare professionals for medical advice.'
   const defaultAnswer: string = cmsContent?.defaultAnswer || localContent.defaultAnswer
   const mockAnswers: AiMockAnswer[] = cmsContent?.mockAnswers || localContent.mockAnswers
 
@@ -65,14 +68,14 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
         role: 'assistant',
         content: welcomeMessage,
         links: [
-          { label: 'Browse Products', href: '/products' },
-          { label: 'Order Now', href: '/order-now' },
-          { label: 'Verify Product', href: '/verify' },
+          { label: t.common?.products || 'Browse Products', href: `/${locale}/products` },
+          { label: t.common?.orderNow || 'Order Now', href: `/${locale}/order-now` },
+          { label: t.common?.verify || 'Verify Product', href: `/${locale}/verify` },
         ],
         timestamp: new Date(),
       }])
     }
-  }, [open])
+  }, [open, welcomeMessage, t, locale])
 
   function findAnswer(question: string): { answer: string; links: Array<{ label: string; href: string }> } {
     const lowerQ = question.toLowerCase()
@@ -84,8 +87,8 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
     return {
       answer: defaultAnswer,
       links: [
-        { label: 'Browse Products', href: '/products' },
-        { label: 'Contact Us', href: '/contact' },
+        { label: t.common?.products || 'Browse Products', href: `/${locale}/products` },
+        { label: t.common?.contact || 'Contact Us', href: `/${locale}/contact` },
       ],
     }
   }
@@ -128,7 +131,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
           className="flex items-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-2xl shadow-xl hover:bg-blue-700 transition-colors"
         >
           <Bot className="w-5 h-5" />
-          <span className="text-sm font-medium">AI Assistant</span>
+          <span className="text-sm font-medium">{t.nav.aiAssistant}</span>
           <Maximize2 className="w-4 h-4 ml-1" />
         </button>
       </div>
@@ -147,15 +150,15 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
               <Bot className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold">AI Assistant</h3>
+              <h3 className="text-sm font-bold">{t.nav.aiAssistant}</h3>
               <p className="text-[10px] text-blue-200">Raysun Biopharma</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={() => setMinimized(true)} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center" title="Minimize">
+            <button onClick={() => setMinimized(true)} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center" title={t.ai?.minimize || 'Minimize'}>
               <Minimize2 className="w-4 h-4" />
             </button>
-            <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center" title="Close">
+            <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center" title={t.ai?.close || 'Close'}>
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -171,7 +174,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
                     <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
                       <Bot className="w-3 h-3 text-blue-600" />
                     </div>
-                    <span className="text-[10px] text-slate-400">AI Assistant</span>
+                    <span className="text-[10px] text-slate-400">{t.nav.aiAssistant}</span>
                   </div>
                 )}
                 <div className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
@@ -206,7 +209,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
                   <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
                     <Bot className="w-3 h-3 text-blue-600" />
                   </div>
-                  <span className="text-[10px] text-slate-400">typing...</span>
+                  <span className="text-[10px] text-slate-400">{t.ai?.typing || 'typing...'}</span>
                 </div>
                 <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex gap-1">
@@ -231,8 +234,9 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
                   key={idx}
                   onClick={() => handleSend(prompt)}
                   className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium whitespace-nowrap shrink-0 hover:bg-blue-100 transition-colors"
+                  title={prompt}
                 >
-                  {prompt}
+                  {prompt.length > 25 ? prompt.substring(0, 25) + '...' : prompt}
                 </button>
               ))}
             </div>
@@ -248,7 +252,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder="Ask anything..."
+              placeholder={t.ai?.placeholder || 'Ask anything...'}
               className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               disabled={isTyping}
             />

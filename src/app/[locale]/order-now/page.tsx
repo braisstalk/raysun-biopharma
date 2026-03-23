@@ -23,6 +23,19 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: 'Other',
 }
 
+// Translated category labels for each locale
+const getCategoryLabels = (t: any): Record<string, string> => ({
+  antibiotics: t.products?.categories?.antibiotics || 'Antibiotics',
+  cardiovascular: t.products?.categories?.cardiovascular || 'Cardiovascular',
+  pain: t.products?.categories?.pain || 'Pain & Inflammation',
+  dermatology: t.products?.categories?.dermatology || 'Dermatology',
+  vitamins: t.products?.categories?.vitamins || 'Vitamins & Supplements',
+  gastrointestinal: t.products?.categories?.gastrointestinal || 'Gastrointestinal',
+  respiratory: t.products?.categories?.respiratory || 'Respiratory',
+  traditional: t.products?.categories?.traditional || 'Traditional / Herbal',
+  other: t.products?.categories?.other || 'Other',
+})
+
 function mapLocalProducts(): MappedProduct[] {
   return productsPageConfig.products.map(p => ({
     id: p.id,
@@ -56,13 +69,14 @@ export default function OrderNow() {
   const [form, setForm] = useState({ name: '', email: '', company: '', country: '', message: '' })
 
   // 从产品数据动态生成分类列表
+  const categoryLabels = useMemo(() => getCategoryLabels(t), [t])
   const CATEGORIES = useMemo(() => {
     const cats = [...new Set(products.map(p => p.category))].filter(Boolean)
     return [
-      { id: 'all', label: 'All Products' },
-      ...cats.map(id => ({ id, label: CATEGORY_LABELS[id] || id })),
+      { id: 'all', label: t.order.allProducts },
+      ...cats.map(id => ({ id, label: categoryLabels[id] || id })),
     ]
-  }, [products])
+  }, [products, t, categoryLabels])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
@@ -162,7 +176,7 @@ export default function OrderNow() {
             {loading && products.length === 0 ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-                <span className="ml-3 text-slate-500">Loading products...</span>
+                <span className="ml-3 text-slate-500">{t.common.loading}</span>
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-16 text-slate-500">
@@ -194,14 +208,14 @@ export default function OrderNow() {
                               <Plus className="w-3 h-3" />
                             </button>
                           </div>
-                          <button onClick={() => removeItem(product.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                          <button onClick={() => removeItem(product.id)} className="text-xs text-red-400 hover:text-red-600">{t.order.remove}</button>
                         </div>
                       ) : (
                         <button
                           onClick={() => addItem({ productId: product.id, productName: product.name, slug: product.slug })}
                           className="w-full py-2 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium hover:bg-emerald-100 transition-colors flex items-center justify-center gap-1"
                         >
-                          <Plus className="w-3.5 h-3.5" /> Add to Order
+                          <Plus className="w-3.5 h-3.5" /> {t.order.addToOrder}
                         </button>
                       )}
                     </div>
@@ -233,10 +247,10 @@ export default function OrderNow() {
                 {submitStatus === 'success' ? (
                   <div className="p-8 text-center">
                     <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">Order Submitted!</h3>
-                    <p className="text-sm text-slate-600 mb-4">Our team will respond within 24-48 hours.</p>
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">{t.order.orderSubmitted}</h3>
+                    <p className="text-sm text-slate-600 mb-4">{t.order.orderResponse}</p>
                     <button onClick={() => { setSubmitStatus('idle'); setShowCheckout(false) }} className="px-5 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
-                      New Order
+                      {t.order.newOrder}
                     </button>
                   </div>
                 ) : items.length === 0 ? (
@@ -272,53 +286,53 @@ export default function OrderNow() {
                       onClick={() => setShowCheckout(true)}
                       className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 flex items-center justify-center gap-2"
                     >
-                      <Send className="w-4 h-4" /> Proceed to Submit ({itemCount})
+                      <Send className="w-4 h-4" /> {t.order.proceedSubmit} ({itemCount})
                     </button>
                   </div>
                 ) : (
                   <div className="p-4">
                     <button onClick={() => setShowCheckout(false)} className="text-xs text-slate-500 hover:text-slate-700 mb-3 flex items-center gap-1">
-                      <ArrowLeft className="w-3 h-3" /> Back to cart
+                      <ArrowLeft className="w-3 h-3" /> {t.order.backToCart}
                     </button>
 
                     {submitStatus === 'error' && (
                       <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 mb-3 flex items-center gap-2 text-xs text-red-700">
-                        <AlertCircle className="w-4 h-4 shrink-0" /> Something went wrong. Try again.
+                        <AlertCircle className="w-4 h-4 shrink-0" /> {t.order.somethingWrong}
                       </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-2.5">
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Full Name *</label>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">{t.order.fullName} *</label>
                         <input type="text" required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Email *</label>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">{t.order.email} *</label>
                         <input type="email" required value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Company</label>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">{t.order.company}</label>
                         <input type="text" value={form.company} onChange={e => setForm(p => ({ ...p, company: e.target.value }))}
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Country</label>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">{t.order.country}</label>
                         <input type="text" value={form.country} onChange={e => setForm(p => ({ ...p, country: e.target.value }))}
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Notes</label>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">{t.order.notes}</label>
                         <textarea rows={2} value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm resize-none" />
                       </div>
                       <button type="submit" disabled={submitStatus === 'submitting'}
                         className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 disabled:opacity-50 flex items-center justify-center gap-2">
                         {submitStatus === 'submitting' ? (
-                          <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Submitting...</>
+                          <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> {t.order.submitting}</>
                         ) : (
-                          <><Send className="w-4 h-4" /> Submit Order</>
+                          <><Send className="w-4 h-4" /> {t.order.submitOrder}</>
                         )}
                       </button>
                     </form>

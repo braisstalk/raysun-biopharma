@@ -214,6 +214,10 @@ export const fr = {
     send: 'Envoyer',
     quickPrompts: 'Questions fréquentes',
     recommended: 'Recommandé',
+    typing: 'en train d\'écrire...',
+    minimize: 'Minimiser',
+    close: 'Fermer',
+    disclaimer: 'Les réponses de l\'IA sont données à titre indicatif uniquement. Consultez des professionnels de santé pour des conseils médicaux.',
   },
   cta: {
     verify: 'Vérifier un produit',
@@ -331,7 +335,8 @@ export const fr = {
     downloadsDocuments: 'Téléchargements et documents',
     companyOverview: 'Présentation',
     productCatalog: 'Catalogue produits',
-    qualityCertifications: 'Certifications qualité',
-    sustainabilityReport: 'Rapport développement durable',
+
   },
 }
+
+export type Translations = typeof fr

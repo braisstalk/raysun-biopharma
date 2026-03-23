@@ -227,6 +227,10 @@ export const ar = {
     send: 'إرسال',
     quickPrompts: 'أسئلة سريعة',
     recommended: 'موصى به',
+    typing: 'يكتب...',
+    minimize: 'تصغير',
+    close: 'إغلاق',
+    disclaimer: 'ردود الذكاء الاصطناعي للمرجعية فقط. استشر المتخصصين في الرعاية الصحية للحصول على المشورة الطبية.',
   },
   // CTA
   cta: {
@@ -354,5 +358,7 @@ export const ar = {
     sustainabilityReport: 'تقرير الاستدامة',
   },
 }
+
+
 
 export type Translations = typeof ar

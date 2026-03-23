@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer'
 import FloatingActions from '@/components/common/FloatingActions'
 
 import { LocaleProvider } from '@/i18n/LocaleContext'
+import { RfqCartProvider } from '@/contexts/RfqCartContext'
 
 // Generate static params for all locales
 export function generateStaticParams() {
@@ -98,12 +99,14 @@ export default async function LocaleLayout({
 
   return (
     <LocaleProvider initialLocale={validLocale}>
-      <Navbar />
-      <main className="min-h-screen">
-        {children}
-      </main>
-      <Footer />
-      <FloatingActions />
+      <RfqCartProvider>
+        <Navbar />
+        <main className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
+        <FloatingActions />
+      </RfqCartProvider>
     </LocaleProvider>
   )
 }

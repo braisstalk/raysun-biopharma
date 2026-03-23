@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Bot, X, Send, ExternalLink, Minimize2, Maximize2 } from 'lucide-react'
+import { usePageContent } from '@/lib/strapi/usePageContent'
 import { getAiAssistantContent } from '@/lib/content'
 
 interface ChatMessage {
@@ -13,7 +14,13 @@ interface ChatMessage {
   timestamp: Date
 }
 
-const QUICK_PROMPTS = [
+interface AiMockAnswer {
+  keywords: string[]
+  answer: string
+  relatedLinks: Array<{ label: string; href: string }>
+}
+
+const LOCAL_PROMPTS = [
   'Tell me about your products',
   'How can I verify a product?',
   'How do I place an order?',
@@ -22,8 +29,15 @@ const QUICK_PROMPTS = [
 ]
 
 export default function AiChatPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const content = getAiAssistantContent()
-  const { mockAnswers, defaultAnswer } = content
+  // Try CMS first, fallback to local
+  const cmsContent = usePageContent('ai-assistant') as any
+  const localContent = getAiAssistantContent()
+
+  const quickPrompts: string[] = cmsContent?.quickPrompts || LOCAL_PROMPTS
+  const welcomeMessage: string = cmsContent?.welcomeMessage || "Hello! I'm the Raysun Biopharma AI Assistant. I can help you with product information, verification, ordering, and more. How can I assist you today?"
+  const disclaimer: string = cmsContent?.disclaimer || 'AI responses are for reference only. Consult healthcare professionals for medical advice.'
+  const defaultAnswer: string = cmsContent?.defaultAnswer || localContent.defaultAnswer
+  const mockAnswers: AiMockAnswer[] = cmsContent?.mockAnswers || localContent.mockAnswers
 
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
@@ -32,27 +46,24 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Auto scroll to bottom
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [messages, isTyping])
 
-  // Focus input when opened
   useEffect(() => {
     if (open && !minimized && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 300)
     }
   }, [open, minimized])
 
-  // Show welcome message on first open
   useEffect(() => {
     if (open && messages.length === 0) {
       setMessages([{
         id: 'welcome',
         role: 'assistant',
-        content: 'Hello! I\'m the Raysun Biopharma AI Assistant. I can help you with product information, verification, ordering, and more. How can I assist you today?',
+        content: welcomeMessage,
         links: [
           { label: 'Browse Products', href: '/products' },
           { label: 'Order Now', href: '/order-now' },
@@ -93,7 +104,6 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
     setInput('')
     setIsTyping(true)
 
-    // Simulate AI response delay
     setTimeout(() => {
       const { answer, links } = findAnswer(msg)
       const aiMsg: ChatMessage = {
@@ -110,7 +120,6 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
 
   if (!open) return null
 
-  // Minimized state
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 sm:right-20 z-[75]">
@@ -120,11 +129,6 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
         >
           <Bot className="w-5 h-5" />
           <span className="text-sm font-medium">AI Assistant</span>
-          {messages.length > 1 && (
-            <span className="w-5 h-5 rounded-full bg-white/20 text-[10px] font-bold flex items-center justify-center">
-              {messages.filter(m => m.role === 'assistant').length}
-            </span>
-          )}
           <Maximize2 className="w-4 h-4 ml-1" />
         </button>
       </div>
@@ -133,10 +137,8 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
 
   return (
     <>
-      {/* Backdrop on mobile */}
       <div className="fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm sm:hidden" onClick={onClose} />
 
-      {/* Chat Panel */}
       <div className="fixed right-0 sm:right-4 bottom-0 sm:bottom-4 z-[75] w-full sm:w-[400px] h-full sm:h-[600px] sm:max-h-[calc(100vh-2rem)] bg-white sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 flex items-center justify-between shrink-0">
@@ -163,7 +165,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map(msg => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] ${msg.role === 'user' ? 'order-1' : 'order-1'}`}>
+              <div className="max-w-[85%]">
                 {msg.role === 'assistant' && (
                   <div className="flex items-center gap-1.5 mb-1">
                     <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
@@ -197,7 +199,6 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
             </div>
           ))}
 
-          {/* Typing indicator */}
           {isTyping && (
             <div className="flex justify-start">
               <div>
@@ -221,11 +222,11 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Prompts (show only when few messages) */}
+        {/* Quick Prompts */}
         {messages.length <= 1 && (
           <div className="px-4 pb-2 shrink-0">
             <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-1">
-              {QUICK_PROMPTS.map((prompt, idx) => (
+              {quickPrompts.map((prompt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSend(prompt)}
@@ -260,7 +261,7 @@ export default function AiChatPanel({ open, onClose }: { open: boolean; onClose:
             </button>
           </div>
           <p className="text-[10px] text-slate-400 text-center mt-2">
-            AI responses are for reference only. Consult healthcare professionals for medical advice.
+            {disclaimer}
           </p>
         </div>
       </div>

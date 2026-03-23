@@ -1,85 +1,107 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, FileText, CheckCircle, CreditCard, Truck, Package, ArrowRight, Search, Clock, Shield, Users, Mail, Phone, ChevronRight } from 'lucide-react'
-import { getOrderContent } from '@/lib/content'
+import { ShoppingCart, Search, Plus, Minus, Trash2, Send, CheckCircle, AlertCircle, Package, ArrowLeft, Loader2, X } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
+import { useRfqCart } from '@/contexts/RfqCartContext'
+import { useProducts, type MappedProduct } from '@/lib/strapi/useProducts'
+import { productsPageConfig } from '@/config/products'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import { useOrderPage } from '@/lib/strapi'
 
-const icons: Record<string, React.ElementType> = {
-  quick: ShoppingCart,
-  bulk: Package,
-  rfq: FileText,
-}
+type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-const steps = [
-  { id: 1, title: 'Select', icon: ShoppingCart },
-  { id: 2, title: 'Quote', icon: FileText },
-  { id: 3, title: 'Confirm', icon: CheckCircle },
+const CATEGORIES = [
+  { id: 'all', label: 'All Products' },
+  { id: 'antibiotics', label: 'Antibiotics' },
+  { id: 'cardiovascular', label: 'Cardiovascular' },
+  { id: 'pain', label: 'Pain & Inflammation' },
+  { id: 'dermatology', label: 'Dermatology' },
+  { id: 'vitamins', label: 'Vitamins' },
+  { id: 'gastrointestinal', label: 'GI' },
+  { id: 'respiratory', label: 'Respiratory' },
+  { id: 'traditional', label: 'Traditional' },
+  { id: 'other', label: 'Other' },
 ]
 
+function mapLocalProducts(): MappedProduct[] {
+  return productsPageConfig.products.map(p => ({
+    id: p.id,
+    name: p.name,
+    slug: p.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+    category: p.category,
+    dosageForm: p.dosageForm,
+    description: p.description,
+    indication: p.indication || '',
+    type: (p.type as 'brand' | 'generic') || 'generic',
+    tags: p.tags || [],
+    strength: null,
+    packaging: null,
+    shelfLife: null,
+    storageConditions: null,
+    images: [],
+    documents: { dataSheet: null, coa: null },
+  }))
+}
 
 export default function OrderNow() {
   const { t } = useTranslation()
-  const content = getOrderContent()
-  const cmsData = useOrderPage()
+  const { items, itemCount, addItem, removeItem, updateQuantity, clearCart } = useRfqCart()
+  const { products: cmsProducts, loading } = useProducts()
+  const products = cmsProducts.length > 0 ? cmsProducts : (loading ? [] : mapLocalProducts())
 
-  const hero = content.hero
-  const orderTypes = cmsData?.orderTypes || content.orderTypes
-  const paymentMethods = cmsData?.paymentMethods || content.paymentMethods
-  const trackingPlaceholder = cmsData?.trackingPlaceholder || content.trackingPlaceholder
-  const helpText = cmsData?.helpText || content.helpText
-  
-  const [currentStep, setCurrentStep] = useState(1)
-  const [orderType, setOrderType] = useState('')
-  const [submitError, setSubmitError] = useState(false)
+  const [search, setSearch] = useState('')
+  const [activeCat, setActiveCat] = useState('all')
+  const [showCheckout, setShowCheckout] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
+  const [form, setForm] = useState({ name: '', email: '', company: '', country: '', message: '' })
 
-  // Form state
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    country: '',
-    products: '',
-    quantity: '',
-    message: ''
-  })
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim()
+    return products.filter(p => {
+      if (activeCat !== 'all' && p.category !== activeCat) return false
+      if (q) {
+        return p.name.toLowerCase().includes(q) || p.dosageForm.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+      }
+      return true
+    })
+  }, [products, activeCat, search])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  const isInCart = (productId: string) => items.some(i => i.productId === productId)
+  const getCartQty = (productId: string) => items.find(i => i.productId === productId)?.quantity || 0
 
-  const handleOrderTypeSelect = (type: string) => {
-    setOrderType(type)
-    setCurrentStep(2)
-  }
-
-  const handleSubmitQuote = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitError(false)
+    if (!form.name.trim() || !form.email.trim()) return
+    setSubmitStatus('submitting')
+
+    const productLines = items.map(i => `- ${i.productName} x ${i.quantity}`).join('\n')
+    const message = `Order Inquiry\n\nProducts:\n${productLines}\n\nTotal items: ${itemCount}\n\n${form.message ? `Notes:\n${form.message}` : ''}`
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          company: formData.company,
-          country: formData.country,
-          message: `Order Type: ${orderType}\n\nProducts:\n${formData.products}\n\nQuantity: ${formData.quantity || 'N/A'}\n\nNote:\n${formData.message || 'None'}`,
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          country: form.country,
+          message,
           formSource: 'order',
-          inquiryType: orderType === 'bulk' ? 'Bulk / B2B Order' : orderType === 'rfq' ? 'Request Quotation' : 'Quick Order',
+          inquiryType: 'Order Inquiry',
         }),
       })
       const data = await res.json()
       if (data.success) {
-        setCurrentStep(3)
+        setSubmitStatus('success')
+        clearCart()
+        setForm({ name: '', email: '', company: '', country: '', message: '' })
       } else {
-        setSubmitError(true)
+        setSubmitStatus('error')
       }
     } catch {
-      setSubmitError(true)
+      setSubmitStatus('error')
     }
   }
 
@@ -90,309 +112,215 @@ export default function OrderNow() {
         page="order-now"
         badge="ORDER CENTER"
         badgeColor="text-emerald-400"
-        heading={hero.title}
-        description={hero.subtitle}
+        heading="Order Now"
+        description="Browse our product catalog, add items to your cart, and submit your inquiry."
       />
 
-      {/* Progress Steps */}
-      <section className="py-8 bg-slate-50 border-b">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {steps.map((step, idx) => {
-              const Icon = step.icon
-              const isActive = currentStep === step.id
-              const isCompleted = currentStep > step.id
-              return (
-                <div key={step.id} className="flex items-center">
-                  <div className={`flex items-center gap-2 ${isActive || isCompleted ? 'text-[#1E6F5C]' : 'text-slate-400'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      isActive ? 'bg-[#1E6F5C] text-white' :
-                      isCompleted ? 'bg-[#1E6F5C]/20 text-[#1E6F5C]' :
-                      'bg-slate-200'
-                    }`}>
-                      {isCompleted ? <CheckCircle className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+
+          {/* LEFT: Product Catalog */}
+          <div className="flex-1 min-w-0">
+            {/* Search + Category Filter */}
+            <div className="bg-white rounded-xl border border-slate-200 p-4 mb-6 shadow-sm">
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm"
+                />
+              </div>
+              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-1">
+                {CATEGORIES.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCat(cat.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap shrink-0 transition-colors ${
+                      activeCat === cat.id
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Product Grid */}
+            {loading && products.length === 0 ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+                <span className="ml-3 text-slate-500">Loading products...</span>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="text-center py-16 text-slate-500">
+                <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                <p>No products found. Try a different search.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                {filtered.map(product => {
+                  const inCart = isInCart(product.id)
+                  const qty = getCartQty(product.id)
+                  return (
+                    <div key={product.id} className={`bg-white rounded-xl border p-4 transition-all ${inCart ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-200 hover:border-slate-300'}`}>
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <Link href={`/products/${product.slug}`} className="font-medium text-sm text-slate-900 hover:text-emerald-600 line-clamp-2 flex-1">
+                          {product.name}
+                        </Link>
+                      </div>
+                      <p className="text-xs text-slate-500 mb-3">{product.dosageForm}</p>
+
+                      {inCart ? (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <button onClick={() => updateQuantity(product.id, qty - 1)} className="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="w-8 text-center text-sm font-bold text-emerald-700">{qty}</span>
+                            <button onClick={() => updateQuantity(product.id, qty + 1)} className="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <button onClick={() => removeItem(product.id)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => addItem({ productId: product.id, productName: product.name, slug: product.slug })}
+                          className="w-full py-2 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium hover:bg-emerald-100 transition-colors flex items-center justify-center gap-1"
+                        >
+                          <Plus className="w-3.5 h-3.5" /> Add to Order
+                        </button>
+                      )}
                     </div>
-                    <span className="font-medium hidden sm:block">{step.title}</span>
-                  </div>
-                  {idx < steps.length - 1 && (
-                    <div className={`w-12 sm:w-24 h-0.5 mx-2 ${isCompleted ? 'bg-[#1E6F5C]' : 'bg-slate-200'}`} />
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT: Cart Sidebar */}
+          <div className="w-full lg:w-80 xl:w-96 shrink-0">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm sticky top-24">
+              {/* Cart Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5 text-emerald-600" />
+                  <h2 className="font-bold text-slate-900">Your Order</h2>
+                  {itemCount > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">{itemCount}</span>
                   )}
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+                {items.length > 0 && !showCheckout && (
+                  <button onClick={clearCart} className="text-xs text-slate-400 hover:text-red-500">Clear</button>
+                )}
+              </div>
 
-      {/* Step 1: Select Order Type */}
-      {currentStep === 1 && (
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">How would you like to order?</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {orderTypes.map((type) => {
-                const Icon = icons[type.id] || ShoppingCart
-                return (
-                  <button
-                    key={type.id}
-                    onClick={() => handleOrderTypeSelect(type.id)}
-                    className="bg-slate-50 rounded-2xl p-6 text-left hover:shadow-lg transition-shadow group"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#1E6F5C]/10 flex items-center justify-center mb-4 group-hover:bg-[#1E6F5C] transition-colors">
-                      <Icon className="w-6 h-6 text-[#1E6F5C] group-hover:text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">{type.title}</h3>
-                    <p className="text-slate-600 text-sm">{type.description}</p>
-                    <div className="mt-4 flex items-center text-[#1E6F5C] font-medium text-sm">
-                      Get Started <ArrowRight className="w-4 h-4 ml-1" />
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Step 2: Quote Form */}
-      {currentStep === 2 && (
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8">Request a Quote</h2>
-            <form onSubmit={handleSubmitQuote} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Email Address *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                  />
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Company Name</label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Country *</label>
-                  <select
-                    name="country"
-                    required
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                  >
-                    <option value="">Select Country</option>
-                    <option value="laos">Laos</option>
-                    <option value="thailand">Thailand</option>
-                    <option value="vietnam">Vietnam</option>
-                    <option value="cambodia">Cambodia</option>
-                    <option value="myanmar">Myanmar</option>
-                    <option value="malaysia">Malaysia</option>
-                    <option value="indonesia">Indonesia</option>
-                    <option value="philippines">Philippines</option>
-                    <option value="singapore">Singapore</option>
-                    <option value="uae">UAE</option>
-                    <option value="saudi">Saudi Arabia</option>
-                    <option value="egypt">Egypt</option>
-                    <option value="nigeria">Nigeria</option>
-                    <option value="kenya">Kenya</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Products Interested *</label>
-                <textarea
-                  name="products"
-                  required
-                  rows={3}
-                  placeholder="List the products you're interested in..."
-                  value={formData.products}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                />
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Estimated Quantity</label>
-                  <input
-                    type="text"
-                    name="quantity"
-                    placeholder="e.g., 10,000 units"
-                    value={formData.quantity}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
-                  <div className="px-4 py-3 bg-slate-50 rounded-xl text-slate-600">
-                    Bank Transfer (TT) - Available
+              {/* Cart Content */}
+              <div className="max-h-[60vh] overflow-y-auto">
+                {submitStatus === 'success' ? (
+                  <div className="p-8 text-center">
+                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">Order Submitted!</h3>
+                    <p className="text-sm text-slate-600 mb-4">Our team will respond within 24-48 hours.</p>
+                    <button onClick={() => { setSubmitStatus('idle'); setShowCheckout(false) }} className="px-5 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
+                      New Order
+                    </button>
                   </div>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Additional Message</label>
-                <textarea
-                  name="message"
-                  rows={3}
-                  placeholder="Any specific requirements or questions..."
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-                />
-              </div>
-              {submitError && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
-                  Something went wrong. Please try again or email us at{' '}
-                  <a href="mailto:info@raysunpharma.com" className="underline font-medium">info@raysunpharma.com</a>
-                </div>
-              )}
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(1)}
-                  className="px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-6 py-3 bg-[#1E6F5C] text-white rounded-xl font-medium hover:opacity-90"
-                >
-                  Submit Quote Request
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
-      )}
+                ) : items.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <ShoppingCart className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                    <p className="text-sm font-medium text-slate-900 mb-1">Cart is empty</p>
+                    <p className="text-xs text-slate-500">Add products from the catalog</p>
+                  </div>
+                ) : !showCheckout ? (
+                  <div className="p-4">
+                    <div className="space-y-2 mb-4">
+                      {items.map(item => (
+                        <div key={item.productId} className="flex items-center gap-2 bg-slate-50 rounded-lg p-2.5">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-slate-900 line-clamp-1">{item.productName}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button onClick={() => updateQuantity(item.productId, item.quantity - 1)} className="w-6 h-6 rounded bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="w-7 text-center text-xs font-bold">{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.productId, item.quantity + 1)} className="w-6 h-6 rounded bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100">
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <button onClick={() => removeItem(item.productId)} className="text-slate-400 hover:text-red-500 ml-1">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => setShowCheckout(true)}
+                      className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-4 h-4" /> Proceed to Submit ({itemCount})
+                    </button>
+                  </div>
+                ) : (
+                  <div className="p-4">
+                    <button onClick={() => setShowCheckout(false)} className="text-xs text-slate-500 hover:text-slate-700 mb-3 flex items-center gap-1">
+                      <ArrowLeft className="w-3 h-3" /> Back to cart
+                    </button>
 
-      {/* Step 3: Confirmation */}
-      {currentStep === 3 && (
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-8 h-8 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">Quote Request Submitted!</h2>
-            <p className="text-slate-600 mb-8">
-              Thank you for your inquiry. Our sales team will review your request and respond within 24-48 hours.
-            </p>
-            <div className="bg-slate-50 rounded-xl p-6 text-left mb-8">
-              <h3 className="font-semibold text-slate-900 mb-4">What happens next?</h3>
-              <ul className="space-y-3 text-sm text-slate-600">
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#1E6F5C]/20 text-[#1E6F5C] flex items-center justify-center shrink-0 text-xs">1</span>
-                  Our team will review your requirements
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#1E6F5C]/20 text-[#1E6F5C] flex items-center justify-center shrink-0 text-xs">2</span>
-                  We'll prepare a customized quote with pricing
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="w-6 h-6 rounded-full bg-[#1E6F5C]/20 text-[#1E6F5C] flex items-center justify-center shrink-0 text-xs">3</span>
-                  You'll receive an email with the quote details
-                </li>
-              </ul>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/products" className="px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50">
-                Continue Browsing
-              </Link>
-              <Link href="/" className="px-6 py-3 bg-[#1E6F5C] text-white rounded-xl font-medium hover:opacity-90">
-                Back to Home
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+                    {submitStatus === 'error' && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-2.5 mb-3 flex items-center gap-2 text-xs text-red-700">
+                        <AlertCircle className="w-4 h-4 shrink-0" /> Something went wrong. Try again.
+                      </div>
+                    )}
 
-      {/* Payment Methods */}
-      <section className="py-12 md:py-16 bg-slate-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Accepted Payment Methods</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {paymentMethods.map((method) => (
-              <div key={method.id} className={`bg-white rounded-xl p-6 ${method.status === 'coming' ? 'opacity-60' : ''}`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <CreditCard className="w-6 h-6 text-[#1E6F5C]" />
-                  <h3 className="font-semibold text-slate-900">{method.name}</h3>
-                </div>
-                <p className="text-sm text-slate-600 mb-3">
-                  {method.status === 'available' ? 'Ready to use' : `Coming ${method.status}`}
-                </p>
-                {method.status === 'available' && (
-                  <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Available</span>
-                )}
-                {method.status === 'coming' && (
-                  <span className="inline-block px-2 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">Coming Soon</span>
+                    <form onSubmit={handleSubmit} className="space-y-2.5">
+                      <div>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">Full Name *</label>
+                        <input type="text" required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">Email *</label>
+                        <input type="email" required value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">Company</label>
+                        <input type="text" value={form.company} onChange={e => setForm(p => ({ ...p, company: e.target.value }))}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">Country</label>
+                        <input type="text" value={form.country} onChange={e => setForm(p => ({ ...p, country: e.target.value }))}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-700 mb-1">Notes</label>
+                        <textarea rows={2} value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm resize-none" />
+                      </div>
+                      <button type="submit" disabled={submitStatus === 'submitting'}
+                        className="w-full py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 disabled:opacity-50 flex items-center justify-center gap-2">
+                        {submitStatus === 'submitting' ? (
+                          <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Submitting...</>
+                        ) : (
+                          <><Send className="w-4 h-4" /> Submit Order</>
+                        )}
+                      </button>
+                    </form>
+                  </div>
                 )}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Tracking */}
-      <section className="py-12 md:py-16 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white">
-            <Truck className="w-10 h-10 mb-4" />
-            <h2 className="text-xl font-bold mb-2">Track Your Order</h2>
-            <p className="text-slate-300 mb-4">Enter your order number to check the status of your order.</p>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder={trackingPlaceholder}
-                className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]"
-              />
-              <button className="px-6 py-3 bg-[#1E6F5C] rounded-lg font-medium hover:opacity-90">
-                Track
-              </button>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Help */}
-      <section className="py-12 md:py-16 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h2 className="text-2xl font-bold mb-4">Need Assistance?</h2>
-          <p className="mb-6 max-w-xl mx-auto">{helpText}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact" className="px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50">
-              Contact Sales Team
-            </Link>
-            <Link href="/products" className="px-6 py-3 border border-white/30 text-white rounded-lg font-medium hover:bg-white/10">
-              Browse Products
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
     </>
   )
 }

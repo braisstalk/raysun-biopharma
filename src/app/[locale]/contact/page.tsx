@@ -4,22 +4,28 @@ import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { usePageContent } from '@/lib/strapi'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 export default function Contact() {
   const { t } = useTranslation()
+  const cmsContent = usePageContent('contact') as any
 
   // Inquiry types with specific labels
-  const inquiryTypes = [
+  const inquiryTypes = (cmsContent?.inquiryTypes || [
     { id: 'business', label: t.contact.businessEnquiry, icon: Briefcase, description: 'Product inquiries, pricing, distribution' },
     { id: 'partnership', label: t.contact.partnership, icon: Handshake, description: 'Joint ventures, licensing, strategic alliances' },
     { id: 'supplier', label: t.contact.supplier, icon: Truck, description: 'Raw materials, packaging, services' },
-    { id: 'general', label: t.contact.generalContact, icon: Users, description: 'General inquiries, media, other' },
-  ]
+    { id: 'general', label: t.contact.generalContact, description: 'General inquiries, media, other' },
+  ]).map((item: any) => ({
+    ...item,
+    label: item.label || item.id,
+    icon: item.id === 'business' ? Briefcase : item.id === 'partnership' ? Handshake : item.id === 'supplier' ? Truck : Users,
+  }))
 
-  const countries = [
-    'Laos', 'Thailand', 'Vietnam', 'Cambodia', 'Myanmar', 'Malaysia', 'Singapore', 
+  const countries = cmsContent?.countries || [
+    'Laos', 'Thailand', 'Vietnam', 'Cambodia', 'Myanmar', 'Malaysia', 'Singapore',
     'Indonesia', 'Philippines', 'UAE', 'Saudi Arabia', 'Egypt', 'Other'
   ]
 

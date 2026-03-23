@@ -5,6 +5,7 @@ import { ShoppingCart, FileText, CheckCircle, CreditCard, Truck, Package, ArrowR
 import { getOrderContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import { usePageContent } from '@/lib/strapi'
 
 const icons: Record<string, React.ElementType> = {
   quick: ShoppingCart,
@@ -22,7 +23,13 @@ const steps = [
 export default function OrderNow() {
   const { t } = useTranslation()
   const content = getOrderContent()
-  const { hero, orderTypes, paymentMethods, trackingPlaceholder, helpText } = content
+  const cmsContent = usePageContent('order-now') as any
+
+  const hero = content.hero
+  const orderTypes = cmsContent?.orderTypes || content.orderTypes
+  const paymentMethods = cmsContent?.paymentMethods || content.paymentMethods
+  const trackingPlaceholder = cmsContent?.trackingPlaceholder || content.trackingPlaceholder
+  const helpText = cmsContent?.helpText || content.helpText
   
   const [currentStep, setCurrentStep] = useState(1)
   const [orderType, setOrderType] = useState('')

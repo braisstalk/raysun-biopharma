@@ -4,30 +4,24 @@ import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import { useContactPage } from '@/lib/strapi'
 import AutoText from '@/components/common/AutoText'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 export default function Contact() {
   const { t } = useTranslation()
-  const cmsData = useContactPage()
 
   // Inquiry types with specific labels
-  const inquiryTypes = (cmsData?.inquiryTypes || [
-    { id: 'business', label: t.contact.businessEnquiry, description: <AutoText text="Product inquiries, pricing, distribution" as="span" /> },
-    { id: 'partnership', label: t.contact.partnership, description: <AutoText text="Joint ventures, licensing, strategic alliances" as="span" /> },
-    { id: 'supplier', label: t.contact.supplier, description: <AutoText text="Raw materials, packaging, services" as="span" /> },
-    { id: 'general', label: t.contact.generalContact, description: <AutoText text="General inquiries, media, other" as="span" /> },
-  ]).map((item: any) => ({
-    ...item,
-    label: item.label || item.id,
-    icon: item.id === 'business' ? Briefcase : item.id === 'partnership' ? Handshake : item.id === 'supplier' ? Truck : Users,
-  }))
+  const inquiryTypes = [
+    { id: 'business', label: t.contact.businessEnquiry, icon: Briefcase, description: <AutoText>Product inquiries, pricing, distribution</AutoText> },
+    { id: 'partnership', label: t.contact.partnership, icon: Handshake, description: <AutoText>Joint ventures, licensing, strategic alliances</AutoText> },
+    { id: 'supplier', label: t.contact.supplier, icon: Truck, description: <AutoText>Raw materials, packaging, services</AutoText> },
+    { id: 'general', label: t.contact.generalContact, icon: Users, description: <AutoText>General inquiries, media, other</AutoText> },
+  ]
 
-  const countries = cmsData?.countries || [
-    <AutoText text="Laos" as="span" />, <AutoText text="Thailand" as="span" />, <AutoText text="Vietnam" as="span" />, <AutoText text="Cambodia" as="span" />, <AutoText text="Myanmar" as="span" />, <AutoText text="Malaysia" as="span" />, <AutoText text="Singapore" as="span" />,
-    <AutoText text="Indonesia" as="span" />, <AutoText text="Philippines" as="span" />, <AutoText text="UAE" as="span" />, <AutoText text="Saudi Arabia" as="span" />, <AutoText text="Egypt" as="span" />, <AutoText text="Other" as="span" />
+  const countries = [
+    'Laos', 'Thailand', 'Vietnam', 'Cambodia', 'Myanmar', 'Malaysia', 'Singapore', 
+    'Indonesia', 'Philippines', 'UAE', 'Saudi Arabia', 'Egypt', 'Other'
   ]
 
   const [form, setForm] = useState({ 
@@ -48,7 +42,7 @@ export default function Contact() {
     const newErrors: Record<string, string> = {}
     if (!form.name.trim()) newErrors.name = t.common.required
     if (!form.email.trim()) newErrors.email = t.common.required
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = <AutoText text="Invalid email" as="span" />
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = 'Invalid email'
     if (!form.country) newErrors.country = t.common.required
     if (!form.message.trim()) newErrors.message = t.common.required
     if (!consent) newErrors.consent = t.common.required
@@ -110,7 +104,7 @@ export default function Contact() {
       {/* Hero Carousel */}
       <StrapiHeroCarousel
         page="contact"
-        badge={<AutoText text="CONTACT" as="span" />}
+        badge="CONTACT"
         badgeColor="text-emerald-400"
         heading={t.hero.contactTitle}
         description={t.hero.contactSubtitle}
@@ -121,15 +115,15 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Briefcase, title: t.contact.businessEnquiry, desc: <AutoText text="Product information, pricing, distribution partnerships" as="span" /> },
-              { icon: Handshake, title: t.contact.partnership, desc: <AutoText text="Joint ventures, licensing, technology transfer" as="span" /> },
+              { icon: Briefcase, title: t.contact.businessEnquiry, desc: 'Product information, pricing, distribution partnerships' },
+              { icon: Handshake, title: t.contact.partnership, desc: 'Joint ventures, licensing, technology transfer' },
               { icon: Globe, title: t.contact.globalOperations, desc: t.contact.globalOperationsDesc },
             ].map((item, idx) => (
               <div key={idx} className="flex items-start gap-3 p-4">
                 <item.icon className="w-6 h-6 text-[#1E6F5C] flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-slate-900">{item.title}</h3>
-                  <p className="text-sm text-slate-600">{item.desc}</p>
+                  <h3 className="font-semibold text-slate-900"><AutoText>{item.title}</AutoText></h3>
+                  <p className="text-sm text-slate-600"><AutoText>{item.desc}</AutoText></p>
                 </div>
               </div>
             ))}
@@ -142,43 +136,43 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">{t.contact.contactInfo}</h2>
-              
+              <h2 className="text-2xl font-bold text-slate-900 mb-6"><AutoText>{t.contact.contactInfo}</AutoText></h2>
+
               {/* Office Info */}
               <div className="space-y-6 mb-8">
                 <div className="flex items-start gap-4">
                   <MapPin className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">{t.contact.headquarters}</h3>
-                    <p className="text-slate-600">{t.contact.address}</p>
+                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.headquarters}</AutoText></h3>
+                    <p className="text-slate-600"><AutoText>{t.contact.address}</AutoText></p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">{t.contact.email}</h3>
-                    <p className="text-slate-600">{t.contact.emailAddresses}</p>
+                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.email}</AutoText></h3>
+                    <p className="text-slate-600"><AutoText>{t.contact.emailAddresses}</AutoText></p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Phone className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">{t.contact.phone}</h3>
-                    <p className="text-slate-600">{t.contact.phoneAvailable}</p>
+                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.phone}</AutoText></h3>
+                    <p className="text-slate-600"><AutoText>{t.contact.phoneAvailable}</AutoText></p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Clock className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900">{t.contact.businessHours}</h3>
-                    <p className="text-slate-600">{t.contact.businessHoursTime}</p>
+                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.businessHours}</AutoText></h3>
+                    <p className="text-slate-600"><AutoText>{t.contact.businessHoursTime}</AutoText></p>
                   </div>
                 </div>
               </div>
 
               {/* Related Links */}
               <div className="bg-slate-50 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">{t.contact.quickLinks}</h3>
+                <h3 className="font-semibold text-slate-900 mb-4"><AutoText>{t.contact.quickLinks}</AutoText></h3>
                 <div className="space-y-2">
                   {[
                     { label: t.pages.products, href: '/products' },
@@ -187,7 +181,7 @@ export default function Contact() {
                     { label: t.pages.careers, href: '/careers' },
                   ].map((link, idx) => (
                     <Link key={idx} href={link.href} className="flex items-center gap-2 text-[#1E6F5C] hover:underline">
-                      <ArrowRight className="w-4 h-4" /> {link.label}
+                      <ArrowRight className="w-4 h-4" /> <AutoText>{link.label}</AutoText>
                     </Link>
                   ))}
                 </div>
@@ -325,7 +319,7 @@ export default function Contact() {
                       value={form.message}
                       onChange={handleChange}
                       rows={5}
-                      placeholder={typeof selectedInquiry?.label === 'string' ? `Tell us about your ${selectedInquiry?.label.toLowerCase()}...` : 'Tell us about your inquiry...'}
+                      placeholder={`Tell us about your ${selectedInquiry?.label.toLowerCase()}...`}
                       className={`w-full px-4 py-2.5 rounded-lg border ${errors.message ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors resize-none`}
                     />
                     {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
@@ -374,7 +368,7 @@ export default function Contact() {
           <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl h-64 flex items-center justify-center">
             <div className="text-center text-slate-400">
               <MapPin className="w-12 h-12 mx-auto mb-2" />
-              <p><AutoText text={t.contact.mapLocation} as="span" /></p>
+              <p><AutoText>{t.contact.mapLocation}</AutoText></p>
             </div>
           </div>
         </div>

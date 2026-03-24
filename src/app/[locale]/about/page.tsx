@@ -6,6 +6,7 @@ import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { usePageContent } from '@/lib/strapi'
 import type { PageContent } from '@/lib/strapi'
+import AutoText from '@/components/common/AutoText'
 
 // Icon mapping
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -55,16 +56,16 @@ export default function About() {
   ]
 
   const milestones = content?.milestones ?? [
-    { year: '2014', title: 'Company Founded', desc: 'Raysun Biopharma established in Vientiane, Laos' },
-    { year: '2016', title: 'Factory Completed', desc: '12,000 sqm state-of-the-art manufacturing facility completed' },
-    { year: '2017', title: 'GMP Certification', desc: 'Achieved WHO GMP certification for all production lines' },
-    { year: '2019', title: 'Product Expansion', desc: 'Expanded softgel and tablet production capabilities' },
-    { year: '2021', title: 'ISO Certification', desc: 'Quality Management System certified to ISO 9001:2015' },
-    { year: '2023', title: 'Regional Expansion', desc: 'Expanded distribution to Thailand, Cambodia, and Myanmar' },
-    { year: '2025', title: 'Global Presence', desc: 'Serving patients across multiple countries worldwide' },
+    { year: '2014', title: <AutoText text="Company Founded" as="span" />, desc: <AutoText text="Raysun Biopharma established in Vientiane, Laos" as="span" /> },
+    { year: '2016', title: <AutoText text="Factory Completed" as="span" />, desc: <AutoText text="12,000 sqm state-of-the-art manufacturing facility completed" as="span" /> },
+    { year: '2017', title: <AutoText text="GMP Certification" as="span" />, desc: <AutoText text="Achieved WHO GMP certification for all production lines" as="span" /> },
+    { year: '2019', title: <AutoText text="Product Expansion" as="span" />, desc: <AutoText text="Expanded softgel and tablet production capabilities" as="span" /> },
+    { year: '2021', title: <AutoText text="ISO Certification" as="span" />, desc: <AutoText text="Quality Management System certified to ISO 9001:2015" as="span" /> },
+    { year: '2023', title: <AutoText text="Regional Expansion" as="span" />, desc: <AutoText text="Expanded distribution to Thailand, Cambodia, and Myanmar" as="span" /> },
+    { year: '2025', title: <AutoText text="Global Presence" as="span" />, desc: <AutoText text="Serving patients across multiple countries worldwide" as="span" /> },
   ]
 
-  const regions = content?.regions ?? ['Laos', 'Thailand', 'Cambodia', 'Vietnam', 'Myanmar', 'Middle East', 'Africa']
+  const regions = content?.regions ?? [<AutoText text="Laos" as="span" />, <AutoText text="Thailand" as="span" />, <AutoText text="Cambodia" as="span" />, <AutoText text="Vietnam" as="span" />, <AutoText text="Myanmar" as="span" />, <AutoText text="Middle East" as="span" />, <AutoText text="Africa" as="span" />]
 
   const ctaLinks = content?.ctaLinks ?? [
     { href: '/manufacturing', labelKey: 'nav.manufacturing' },
@@ -81,7 +82,7 @@ export default function About() {
       {/* Hero Carousel */}
       <StrapiHeroCarousel
         page="about"
-        badge="ABOUT US"
+        badge={<AutoText text="ABOUT US" as="span" />}
         badgeColor="text-blue-300"
         heading={t.hero.aboutTitle}
         description={t.hero.aboutSubtitle}
@@ -96,7 +97,7 @@ export default function About() {
               return (
                 <div key={idx} className="text-center">
                   <Icon className="w-8 h-8 text-[#1E6F5C] mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-slate-900">{h.value}</div>
+                  <div className="text-3xl font-bold text-slate-900"><AutoText text={h.value} as="span" /></div>
                   <div className="text-sm text-slate-600">{(t as unknown as Record<string, string>)[h.labelKey] || h.labelKey}</div>
                 </div>
               )
@@ -170,8 +171,8 @@ export default function About() {
                   <div className="absolute left-16 top-5 w-0.5 h-full bg-slate-200" />
                 )}
                 <div className="pt-1 pb-8">
-                  <h3 className="font-semibold text-slate-900">{m.title}</h3>
-                  <p className="text-sm text-slate-600">{m.desc}</p>
+                  <h3 className="font-semibold text-slate-900"><AutoText text={m.title} as="span" /></h3>
+                  <p className="text-sm text-slate-600"><AutoText text={m.desc} as="span" /></p>
                 </div>
               </div>
             ))}
@@ -212,7 +213,7 @@ export default function About() {
                 {regions.map((region, idx) => (
                   <div key={idx} className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#1E6F5C]" />
-                    <span className="text-sm text-slate-700">{region}</span>
+                    <span className="text-sm text-slate-700"><AutoText text={region} as="span" /></span>
                   </div>
                 ))}
               </div>
@@ -220,7 +221,7 @@ export default function About() {
             <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
               <div className="text-center text-slate-400">
                 <Globe className="w-16 h-16 mx-auto mb-3" />
-                <p className="text-lg font-medium">Global Distribution Network</p>
+                <p className="text-lg font-medium"><AutoText text="Global Distribution Network" as="span" /></p>
               </div>
             </div>
           </div>

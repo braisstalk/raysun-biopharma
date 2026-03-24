@@ -8,6 +8,7 @@ import { useRfqCart } from '@/contexts/RfqCartContext'
 import { useProducts, type MappedProduct } from '@/lib/strapi/useProducts'
 import { productsPageConfig } from '@/config/products'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
+import AutoText from '@/components/common/AutoText'
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -132,7 +133,7 @@ export default function OrderNow() {
       {/* Hero */}
       <StrapiHeroCarousel
         page="order-now"
-        badge="ORDER CENTER"
+        badge={<AutoText text="ORDER CENTER" as="span" />}
         badgeColor="text-emerald-400"
         heading={t.order.orderNow}
         description={t.order.browseCatalog}

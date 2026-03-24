@@ -164,7 +164,7 @@ export default function Products() {
     <>
       <StrapiHeroCarousel
         page="products"
-        badge="200+ Products Available"
+        badge={<AutoText text="200+ Products Available" as="span" />}
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
@@ -255,7 +255,7 @@ export default function Products() {
                   </span>
                 )}
                 {!useCMS && (
-                  <span className="ml-2 text-xs text-amber-600">(Using local data)</span>
+                  <span className="ml-2 text-xs text-amber-600"><AutoText text="(Using local data)" as="span" /></span>
                 )}
               </p>
             </div>
@@ -264,7 +264,7 @@ export default function Products() {
             {isLoading && (
               <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
                 <div className="animate-spin w-8 h-8 border-2 border-[#1E6F5C] border-t-transparent rounded-full mx-auto mb-4" />
-                <p className="text-slate-600">Loading products...</p>
+                <p className="text-slate-600"><AutoText text="Loading products..." as="span" /></p>
               </div>
             )}
 
@@ -273,12 +273,12 @@ export default function Products() {
               <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
                 <SearchX className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">{t.common.noResults}</h3>
-                <p className="text-slate-600 mb-4">Try adjusting your search or filters</p>
+                <p className="text-slate-600 mb-4"><AutoText text="Try adjusting your search or filters" as="span" /></p>
                 <button
                   onClick={() => { setSearch(''); setActiveTab('all'); setActiveCategory('all') }}
                   className="text-[#1E6F5C] font-medium hover:underline"
                 >
-                  Clear all filters
+                  <AutoText text="Clear all filters" as="span" />
                 </button>
               </div>
             ) : (
@@ -324,7 +324,7 @@ export default function Products() {
                             }}
                             className="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-medium hover:bg-emerald-100 transition-colors"
                           >
-                            + RFQ
+                            <AutoText text="+ RFQ" as="span" />
                           </button>
                         </div>
                       </Link>

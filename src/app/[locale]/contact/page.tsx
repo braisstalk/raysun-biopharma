@@ -5,6 +5,7 @@ import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, 
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useContactPage } from '@/lib/strapi'
+import AutoText from '@/components/common/AutoText'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -14,10 +15,10 @@ export default function Contact() {
 
   // Inquiry types with specific labels
   const inquiryTypes = (cmsData?.inquiryTypes || [
-    { id: 'business', label: t.contact.businessEnquiry, description: 'Product inquiries, pricing, distribution' },
-    { id: 'partnership', label: t.contact.partnership, description: 'Joint ventures, licensing, strategic alliances' },
-    { id: 'supplier', label: t.contact.supplier, description: 'Raw materials, packaging, services' },
-    { id: 'general', label: t.contact.generalContact, description: 'General inquiries, media, other' },
+    { id: 'business', label: t.contact.businessEnquiry, description: <AutoText text="Product inquiries, pricing, distribution" as="span" /> },
+    { id: 'partnership', label: t.contact.partnership, description: <AutoText text="Joint ventures, licensing, strategic alliances" as="span" /> },
+    { id: 'supplier', label: t.contact.supplier, description: <AutoText text="Raw materials, packaging, services" as="span" /> },
+    { id: 'general', label: t.contact.generalContact, description: <AutoText text="General inquiries, media, other" as="span" /> },
   ]).map((item: any) => ({
     ...item,
     label: item.label || item.id,
@@ -25,8 +26,8 @@ export default function Contact() {
   }))
 
   const countries = cmsData?.countries || [
-    'Laos', 'Thailand', 'Vietnam', 'Cambodia', 'Myanmar', 'Malaysia', 'Singapore',
-    'Indonesia', 'Philippines', 'UAE', 'Saudi Arabia', 'Egypt', 'Other'
+    <AutoText text="Laos" as="span" />, <AutoText text="Thailand" as="span" />, <AutoText text="Vietnam" as="span" />, <AutoText text="Cambodia" as="span" />, <AutoText text="Myanmar" as="span" />, <AutoText text="Malaysia" as="span" />, <AutoText text="Singapore" as="span" />,
+    <AutoText text="Indonesia" as="span" />, <AutoText text="Philippines" as="span" />, <AutoText text="UAE" as="span" />, <AutoText text="Saudi Arabia" as="span" />, <AutoText text="Egypt" as="span" />, <AutoText text="Other" as="span" />
   ]
 
   const [form, setForm] = useState({ 
@@ -47,7 +48,7 @@ export default function Contact() {
     const newErrors: Record<string, string> = {}
     if (!form.name.trim()) newErrors.name = t.common.required
     if (!form.email.trim()) newErrors.email = t.common.required
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = 'Invalid email'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = <AutoText text="Invalid email" as="span" />
     if (!form.country) newErrors.country = t.common.required
     if (!form.message.trim()) newErrors.message = t.common.required
     if (!consent) newErrors.consent = t.common.required
@@ -109,7 +110,7 @@ export default function Contact() {
       {/* Hero Carousel */}
       <StrapiHeroCarousel
         page="contact"
-        badge="CONTACT"
+        badge={<AutoText text="CONTACT" as="span" />}
         badgeColor="text-emerald-400"
         heading={t.hero.contactTitle}
         description={t.hero.contactSubtitle}
@@ -120,8 +121,8 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Briefcase, title: t.contact.businessEnquiry, desc: 'Product information, pricing, distribution partnerships' },
-              { icon: Handshake, title: t.contact.partnership, desc: 'Joint ventures, licensing, technology transfer' },
+              { icon: Briefcase, title: t.contact.businessEnquiry, desc: <AutoText text="Product information, pricing, distribution partnerships" as="span" /> },
+              { icon: Handshake, title: t.contact.partnership, desc: <AutoText text="Joint ventures, licensing, technology transfer" as="span" /> },
               { icon: Globe, title: t.contact.globalOperations, desc: t.contact.globalOperationsDesc },
             ].map((item, idx) => (
               <div key={idx} className="flex items-start gap-3 p-4">
@@ -324,7 +325,7 @@ export default function Contact() {
                       value={form.message}
                       onChange={handleChange}
                       rows={5}
-                      placeholder={`Tell us about your ${selectedInquiry?.label.toLowerCase()}...`}
+                      placeholder={typeof selectedInquiry?.label === 'string' ? `Tell us about your ${selectedInquiry?.label.toLowerCase()}...` : 'Tell us about your inquiry...'}
                       className={`w-full px-4 py-2.5 rounded-lg border ${errors.message ? 'border-red-300 focus:border-red-500' : 'border-slate-200 focus:border-[#1E6F5C]'} focus:outline-none focus:ring-2 focus:ring-[#1E6F5C]/20 transition-colors resize-none`}
                     />
                     {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
@@ -373,7 +374,7 @@ export default function Contact() {
           <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl h-64 flex items-center justify-center">
             <div className="text-center text-slate-400">
               <MapPin className="w-12 h-12 mx-auto mb-2" />
-              <p>{t.contact.mapLocation}</p>
+              <p><AutoText text={t.contact.mapLocation} as="span" /></p>
             </div>
           </div>
         </div>

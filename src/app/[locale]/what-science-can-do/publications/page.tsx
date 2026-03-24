@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowLeft, FileText, Download, ExternalLink, Calendar, BookOpen, Search, Filter } from 'lucide-react'
+import AutoText from '@/components/common/AutoText'
 
 const publications = [
   {
@@ -76,7 +77,7 @@ const publications = [
   }
 ]
 
-const categories = ['All', 'Research Paper', 'Technical Review', 'Sustainability Report', 'Guide', 'Technical Report', 'Perspective']
+const categories = [<AutoText text="All" as="span" />, <AutoText text="Research Paper" as="span" />, <AutoText text="Technical Review" as="span" />, <AutoText text="Sustainability Report" as="span" />, <AutoText text="Guide" as="span" />, <AutoText text="Technical Report" as="span" />, <AutoText text="Perspective" as="span" />]
 
 export default function Publications() {
   return (
@@ -90,14 +91,14 @@ export default function Publications() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <Link href="/what-science-can-do" className="text-blue-300 hover:text-blue-200 mb-4 inline-flex items-center">
-              ← Back to What Science Can Do
+              ← <AutoText text="Back to What Science Can Do" as="span" />
             </Link>
-            <p className="text-blue-300 font-medium mb-2">PUBLICATIONS</p>
+            <p className="text-blue-300 font-medium mb-2"><AutoText text="PUBLICATIONS" as="span" /></p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Scientific Publications & Research
+              <AutoText text="Scientific Publications & Research" as="span" />
             </h1>
             <p className="text-lg text-slate-300 mb-8 max-w-2xl">
-              Explore our contributions to pharmaceutical science through peer-reviewed publications, technical reviews, and research papers. Our team is committed to advancing knowledge in pharmaceutical manufacturing and healthcare.
+              <AutoText text="Explore our contributions to pharmaceutical science through peer-reviewed publications, technical reviews, and research papers. Our team is committed to advancing knowledge in pharmaceutical manufacturing and healthcare." as="span" />
             </p>
           </div>
         </div>
@@ -177,11 +178,11 @@ export default function Publications() {
                     <div className="flex items-center gap-4">
                       <button className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
                         <Download className="w-4 h-4" />
-                        PDF ({pub.downloads})
+                        <AutoText text="PDF" as="span" /> ({pub.downloads})
                       </button>
                       <button className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
                         <ExternalLink className="w-4 h-4" />
-                        View Online
+                        <AutoText text="View Online" as="span" />
                       </button>
                     </div>
                   </div>
@@ -195,12 +196,12 @@ export default function Publications() {
       {/* More Publications CTA */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Stay Informed</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4"><AutoText text="Stay Informed" as="span" /></h2>
           <p className="text-slate-600 mb-8 max-w-xl mx-auto">
-            Subscribe to our newsletter to receive updates on new publications and research breakthroughs.
+            <AutoText text="Subscribe to our newsletter to receive updates on new publications and research breakthroughs." as="span" />
           </p>
           <Link href="/contact" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            Contact for Subscriptions <ExternalLink className="w-4 h-4" />
+            <AutoText text="Contact for Subscriptions" as="span" /> <ExternalLink className="w-4 h-4" />
           </Link>
         </div>
       </section>

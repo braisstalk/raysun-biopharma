@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Heart, Users, Globe, Award, MapPin, Calendar } from 'lucide-react'
+import AutoText from '@/components/common/AutoText'
 
 const stories = [
   {
@@ -58,7 +59,7 @@ const stories = [
   }
 ]
 
-const categories = ['All', 'Healthcare Access', 'Quality & Safety', 'Innovation', 'Capacity Building', 'Sustainability', 'People & Culture']
+const categories = [<AutoText text="All" as="span" />, <AutoText text="Healthcare Access" as="span" />, <AutoText text="Quality & Safety" as="span" />, <AutoText text="Innovation" as="span" />, <AutoText text="Capacity Building" as="span" />, <AutoText text="Sustainability" as="span" />, <AutoText text="People & Culture" as="span" />]
 
 export default function StoriesOfImpact() {
   return (
@@ -72,14 +73,14 @@ export default function StoriesOfImpact() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <Link href="/what-science-can-do" className="text-blue-300 hover:text-blue-200 mb-4 inline-flex items-center">
-              ← Back to What Science Can Do
+              ← <AutoText text="Back to What Science Can Do" as="span" />
             </Link>
-            <p className="text-blue-300 font-medium mb-2">STORIES OF IMPACT</p>
+            <p className="text-blue-300 font-medium mb-2"><AutoText text="STORIES OF IMPACT" as="span" /></p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Real Stories, Real Impact
+              <AutoText text="Real Stories, Real Impact" as="span" />
             </h1>
             <p className="text-lg text-slate-300 mb-8 max-w-2xl">
-              Discover how Raysun Biopharma is transforming healthcare across Southeast Asia and beyond. Each story represents our commitment to improving lives through pharmaceutical science.
+              <AutoText text="Discover how Raysun Biopharma is transforming healthcare across Southeast Asia and beyond. Each story represents our commitment to improving lives through pharmaceutical science." as="span" />
             </p>
           </div>
         </div>
@@ -131,7 +132,7 @@ export default function StoriesOfImpact() {
                       href="#" 
                       className="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
                     >
-                      Read more <ArrowRight className="w-3 h-3" />
+                      <AutoText text="Read more" as="span" /> <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
                 </div>
@@ -144,12 +145,12 @@ export default function StoriesOfImpact() {
       {/* CTA */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Share Your Story</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4"><AutoText text="Share Your Story" as="span" /></h2>
           <p className="text-slate-600 mb-8 max-w-xl mx-auto">
-            Are you a patient, healthcare provider, or partner who wants to share how our medicines have made a difference? We'd love to hear from you.
+            <AutoText text="Are you a patient, healthcare provider, or partner who wants to share how our medicines have made a difference? We'd love to hear from you." as="span" />
           </p>
           <Link href="/contact" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            Contact Us <ArrowRight className="w-4 h-4" />
+            <AutoText text="Contact Us" as="span" /> <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

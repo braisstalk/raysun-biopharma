@@ -5,6 +5,7 @@ import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { usePageContent } from '@/lib/strapi/usePageContent'
+import AutoText from '@/components/common/AutoText'
 
 const iconMap: Record<string, React.ElementType> = {
   Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, Thermometer, Wind, Eye,
@@ -15,53 +16,53 @@ export default function Manufacturing() {
   const cms = usePageContent('manufacturing')
 
   const facilityStats = cms?.facilityStats || [
-    { value: '12,000', unit: 'm²', label: 'Total Facility Area' },
-    { value: '6', unit: '', label: 'Production Lines' },
-    { value: '50+', unit: '', label: 'Products Manufactured' },
-    { value: '24/7', unit: '', label: 'Operational Capability' },
+    { value: '12,000', unit: 'm²', label: <AutoText text="Total Facility Area" as="span" /> },
+    { value: '6', unit: '', label: <AutoText text="Production Lines" as="span" /> },
+    { value: '50+', unit: '', label: <AutoText text="Products Manufactured" as="span" /> },
+    { value: '24/7', unit: '', label: <AutoText text="Operational Capability" as="span" /> },
   ]
 
   const productionLines = cms?.productionLines || [
-    { icon: 'Pill', title: 'Tablets & Film-Coated Tablets', description: 'High-speed tablet compression and film-coating lines.', specs: ['Capacity: 200 million tablets/year', 'Compression: rotary press technology', 'Coating: fully automated film-coating system'] },
-    { icon: 'Droplets', title: 'Softgel Capsules', description: 'State-of-the-art rotary die softgel encapsulation.', specs: ['Capacity: 100 million capsules/year', 'Fill range: 100mg - 1500mg', 'Gelatin and vegetarian options'] },
-    { icon: 'Package', title: 'Hard Capsules', description: 'Automatic capsule filling lines for powder and pellet formulations.', specs: ['Capacity: 150 million capsules/year', 'Sizes: 00 to 4', 'Powder and pellet filling'] },
-    { icon: 'Syringe', title: 'Sterile Injectables', description: 'Dedicated sterile manufacturing area with laminar flow isolators.', specs: ['ISO Class 5 cleanroom', 'Ampoules and vials', 'Terminal sterilization & aseptic fill'] },
-    { icon: 'Droplets', title: 'Creams & Ointments', description: 'Semi-solid manufacturing with vacuum homogenizers.', specs: ['Batch size: 50-500 kg', 'Vacuum homogenization', 'Automated tube/jar filling'] },
-    { icon: 'FlaskConical', title: 'Oral Liquids & Syrups', description: 'Liquid manufacturing and filling lines for oral solutions.', specs: ['Batch size: 500-5000 L', 'In-line filtration', 'Automatic bottle filling & capping'] },
+    { icon: 'Pill', title: <AutoText text="Tablets & Film-Coated Tablets" as="span" />, description: <AutoText text="High-speed tablet compression and film-coating lines." as="span" />, specs: [<AutoText text="Capacity: 200 million tablets/year" as="span" />, <AutoText text="Compression: rotary press technology" as="span" />, <AutoText text="Coating: fully automated film-coating system" as="span" />] },
+    { icon: 'Droplets', title: <AutoText text="Softgel Capsules" as="span" />, description: <AutoText text="State-of-the-art rotary die softgel encapsulation." as="span" />, specs: [<AutoText text="Capacity: 100 million capsules/year" as="span" />, <AutoText text="Fill range: 100mg - 1500mg" as="span" />, <AutoText text="Gelatin and vegetarian options" as="span" />] },
+    { icon: 'Package', title: <AutoText text="Hard Capsules" as="span" />, description: <AutoText text="Automatic capsule filling lines for powder and pellet formulations." as="span" />, specs: [<AutoText text="Capacity: 150 million capsules/year" as="span" />, <AutoText text="Sizes: 00 to 4" as="span" />, <AutoText text="Powder and pellet filling" as="span" />] },
+    { icon: 'Syringe', title: <AutoText text="Sterile Injectables" as="span" />, description: <AutoText text="Dedicated sterile manufacturing area with laminar flow isolators." as="span" />, specs: [<AutoText text="ISO Class 5 cleanroom" as="span" />, <AutoText text="Ampoules and vials" as="span" />, <AutoText text="Terminal sterilization & aseptic fill" as="span" />] },
+    { icon: 'Droplets', title: <AutoText text="Creams & Ointments" as="span" />, description: <AutoText text="Semi-solid manufacturing with vacuum homogenizers." as="span" />, specs: [<AutoText text="Batch size: 50-500 kg" as="span" />, <AutoText text="Vacuum homogenization" as="span" />, <AutoText text="Automated tube/jar filling" as="span" />] },
+    { icon: 'FlaskConical', title: <AutoText text="Oral Liquids & Syrups" as="span" />, description: <AutoText text="Liquid manufacturing and filling lines for oral solutions." as="span" />, specs: [<AutoText text="Batch size: 500-5000 L" as="span" />, <AutoText text="In-line filtration" as="span" />, <AutoText text="Automatic bottle filling & capping" as="span" />] },
   ]
 
   const facilityFeatures = cms?.facilityFeatures || [
-    { icon: 'Wind', title: 'HVAC Systems', description: 'Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments.' },
-    { icon: 'Thermometer', title: 'Environmental Monitoring', description: 'Continuous temperature, humidity, and differential pressure monitoring.' },
-    { icon: 'Eye', title: 'Water Systems', description: 'Purified Water and Water for Injection generation systems.' },
-    { icon: 'Gauge', title: 'Utilities Infrastructure', description: 'Dedicated pharmaceutical-grade utilities including compressed air and steam systems.' },
+    { icon: 'Wind', title: <AutoText text="HVAC Systems" as="span" />, description: <AutoText text="Centralized HVAC with HEPA filtration maintaining ISO Class 7/8 cleanroom environments." as="span" /> },
+    { icon: 'Thermometer', title: <AutoText text="Environmental Monitoring" as="span" />, description: <AutoText text="Continuous temperature, humidity, and differential pressure monitoring." as="span" /> },
+    { icon: 'Eye', title: <AutoText text="Water Systems" as="span" />, description: <AutoText text="Purified Water and Water for Injection generation systems." as="span" /> },
+    { icon: 'Gauge', title: <AutoText text="Utilities Infrastructure" as="span" />, description: <AutoText text="Dedicated pharmaceutical-grade utilities including compressed air and steam systems." as="span" /> },
   ]
 
   const certifications = cms?.certifications || [
-    { title: 'WHO GMP', description: 'World Health Organization Good Manufacturing Practice certification for all production lines', year: '2017' },
-    { title: 'ISO 9001:2015', description: 'Quality Management System certification ensuring consistent quality standards', year: '2021' },
-    { title: 'ISO 14001', description: 'Environmental Management System certification for sustainable manufacturing', year: '2024' },
+    { title: <AutoText text="WHO GMP" as="span" />, description: <AutoText text="World Health Organization Good Manufacturing Practice certification for all production lines" as="span" />, year: '2017' },
+    { title: <AutoText text="ISO 9001:2015" as="span" />, description: <AutoText text="Quality Management System certification ensuring consistent quality standards" as="span" />, year: '2021' },
+    { title: <AutoText text="ISO 14001" as="span" />, description: <AutoText text="Environmental Management System certification for sustainable manufacturing" as="span" />, year: '2024' },
   ]
 
   const qcSteps = cms?.qcSteps || [
-    { step: '01', title: 'Raw Material Testing', description: 'Identity, purity, and potency testing of all incoming materials' },
-    { step: '02', title: 'In-Process Controls', description: 'Real-time monitoring of critical process parameters during production' },
-    { step: '03', title: 'Finished Product Testing', description: 'Comprehensive testing including dissolution, assay, and stability' },
-    { step: '04', title: 'Packaging & Labeling', description: 'Automated inspection systems for packaging integrity and label accuracy' },
-    { step: '05', title: 'Batch Release', description: 'QA review and batch release by qualified persons before distribution' },
+    { step: '01', title: <AutoText text="Raw Material Testing" as="span" />, description: <AutoText text="Identity, purity, and potency testing of all incoming materials" as="span" /> },
+    { step: '02', title: <AutoText text="In-Process Controls" as="span" />, description: <AutoText text="Real-time monitoring of critical process parameters during production" as="span" /> },
+    { step: '03', title: <AutoText text="Finished Product Testing" as="span" />, description: <AutoText text="Comprehensive testing including dissolution, assay, and stability" as="span" /> },
+    { step: '04', title: <AutoText text="Packaging & Labeling" as="span" />, description: <AutoText text="Automated inspection systems for packaging integrity and label accuracy" as="span" /> },
+    { step: '05', title: <AutoText text="Batch Release" as="span" />, description: <AutoText text="QA review and batch release by qualified persons before distribution" as="span" /> },
   ]
 
   const facilityOverview = cms?.facilityOverview || {
-    title: 'World-Class Manufacturing Facility',
-    description: 'Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure.',
-    tags: ['WHO GMP Certified', 'ISO 9001:2015', 'ISO Class 7/8 Cleanrooms'],
+    title: <AutoText text="World-Class Manufacturing Facility" as="span" />,
+    description: <AutoText text="Our 12,000 m² manufacturing facility in Vientiane, Laos is designed and built to international pharmaceutical standards. The facility houses multiple production lines for diverse dosage forms, supported by comprehensive quality control laboratories and warehousing infrastructure." as="span" />,
+    tags: [<AutoText text="WHO GMP Certified" as="span" />, <AutoText text="ISO 9001:2015" as="span" />, <AutoText text="ISO Class 7/8 Cleanrooms" as="span" />],
   }
 
   return (
     <>
       <StrapiHeroCarousel
         page="manufacturing"
-        badge="MANUFACTURING"
+        badge={<AutoText text="MANUFACTURING" as="span" />}
         badgeColor="text-blue-300"
         heading={t.hero.manufacturingTitle}
         description={t.hero.manufacturingSubtitle}
@@ -74,7 +75,7 @@ export default function Manufacturing() {
             {facilityStats.map((stat: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}<span className="text-lg font-normal text-slate-500">{stat.unit}</span></div>
-                <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
+                <div className="text-sm text-slate-600 mt-1"><AutoText text={stat.label} as="span" /></div>
               </div>
             ))}
           </div>
@@ -86,13 +87,13 @@ export default function Manufacturing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2">OUR FACILITY</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{facilityOverview.title}</h2>
-              <p className="text-slate-600 mb-6">{facilityOverview.description}</p>
+              <p className="text-[#1E6F5C] font-medium mb-2"><AutoText text="OUR FACILITY" as="span" /></p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6"><AutoText text={facilityOverview.title} as="span" /></h2>
+              <p className="text-slate-600 mb-6"><AutoText text={facilityOverview.description} as="span" /></p>
               <div className="flex flex-wrap gap-3">
-                {facilityOverview.tags.map((tag: string) => (
-                  <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1E6F5C]/10 text-[#1E6F5C] rounded-full text-sm font-medium">
-                    <CheckCircle className="w-3.5 h-3.5" /> {tag}
+                {facilityOverview.tags.map((tag: string, idx: number) => (
+                  <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1E6F5C]/10 text-[#1E6F5C] rounded-full text-sm font-medium">
+                    <CheckCircle className="w-3.5 h-3.5" /> <AutoText text={tag} as="span" />
                   </span>
                 ))}
               </div>
@@ -100,7 +101,7 @@ export default function Manufacturing() {
             <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
               <div className="text-center">
                 <Factory className="w-16 h-16 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm text-slate-400 font-medium">Manufacturing Facility</p>
+                <p className="text-sm text-slate-400 font-medium"><AutoText text="Manufacturing Facility" as="span" /></p>
               </div>
             </div>
           </div>
@@ -111,8 +112,8 @@ export default function Manufacturing() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">PRODUCTION CAPABILITIES</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Production Lines</h2>
+            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText text="PRODUCTION CAPABILITIES" as="span" /></p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText text="Our Production Lines" as="span" /></h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {productionLines.map((line: any, idx: number) => {
@@ -120,12 +121,12 @@ export default function Manufacturing() {
               return (
                 <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <LineIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                  <h3 className="font-bold text-slate-900 mb-2">{line.title}</h3>
-                  <p className="text-sm text-slate-600 mb-4">{line.description}</p>
+                  <h3 className="font-bold text-slate-900 mb-2"><AutoText text={line.title} as="span" /></h3>
+                  <p className="text-sm text-slate-600 mb-4"><AutoText text={line.description} as="span" /></p>
                   <ul className="space-y-1.5">
                     {(line.specs || []).map((spec: string, sIdx: number) => (
                       <li key={sIdx} className="flex items-start gap-2 text-xs text-slate-500">
-                        <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> {spec}
+                        <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> <AutoText text={spec} as="span" />
                       </li>
                     ))}
                   </ul>
@@ -140,8 +141,8 @@ export default function Manufacturing() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">INFRASTRUCTURE</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Pharmaceutical-Grade Infrastructure</h2>
+            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText text="INFRASTRUCTURE" as="span" /></p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText text="Pharmaceutical-Grade Infrastructure" as="span" /></h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {facilityFeatures.map((feature: any, idx: number) => {
@@ -149,8 +150,8 @@ export default function Manufacturing() {
               return (
                 <div key={idx} className="bg-slate-50 rounded-xl p-6">
                   <FIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                  <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
-                  <p className="text-sm text-slate-600">{feature.description}</p>
+                  <h3 className="font-semibold text-slate-900 mb-2"><AutoText text={feature.title} as="span" /></h3>
+                  <p className="text-sm text-slate-600"><AutoText text={feature.description} as="span" /></p>
                 </div>
               )
             })}
@@ -162,16 +163,16 @@ export default function Manufacturing() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">CERTIFICATIONS</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Manufacturing Certifications</h2>
+            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText text="CERTIFICATIONS" as="span" /></p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText text="Manufacturing Certifications" as="span" /></h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {certifications.map((cert: any, idx: number) => (
               <div key={idx} className="bg-white rounded-xl p-8 shadow-sm text-center">
                 <Award className="w-12 h-12 text-[#1E6F5C] mx-auto mb-4" />
-                <h3 className="font-bold text-xl text-slate-900 mb-2">{cert.title}</h3>
-                <p className="text-sm text-slate-600 mb-3">{cert.description}</p>
-                <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full">Since {cert.year}</span>
+                <h3 className="font-bold text-xl text-slate-900 mb-2"><AutoText text={cert.title} as="span" /></h3>
+                <p className="text-sm text-slate-600 mb-3"><AutoText text={cert.description} as="span" /></p>
+                <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full"><AutoText text="Since " as="span" />{cert.year}</span>
               </div>
             ))}
           </div>
@@ -182,15 +183,15 @@ export default function Manufacturing() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2">QUALITY CONTROL</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">From Raw Material to Finished Product</h2>
+            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText text="QUALITY CONTROL" as="span" /></p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText text="From Raw Material to Finished Product" as="span" /></h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {qcSteps.map((item: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="w-12 h-12 bg-[#1E6F5C] text-white rounded-full flex items-center justify-center font-bold text-sm mx-auto mb-3">{item.step}</div>
-                <h3 className="font-semibold text-slate-900 text-sm mb-1">{item.title}</h3>
-                <p className="text-xs text-slate-500">{item.description || item.desc}</p>
+                <h3 className="font-semibold text-slate-900 text-sm mb-1"><AutoText text={item.title} as="span" /></h3>
+                <p className="text-xs text-slate-500"><AutoText text={item.description || item.desc} as="span" /></p>
               </div>
             ))}
           </div>
@@ -200,8 +201,8 @@ export default function Manufacturing() {
       {/* CTA */}
       <section className="py-16 bg-gradient-to-br from-[#1E6F5C] to-[#165B46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Partner With Us</h2>
-          <p className="text-white/80 max-w-2xl mx-auto mb-8">Leverage our manufacturing capabilities for your pharmaceutical products.</p>
+          <h2 className="text-3xl font-bold text-white mb-4"><AutoText text="Partner With Us" as="span" /></h2>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8"><AutoText text="Leverage our manufacturing capabilities for your pharmaceutical products." as="span" /></p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors">{t.cta.contact} <ArrowRight className="w-4 h-4" /></Link>
             <Link href="/products" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">{t.cta.viewProducts}</Link>

@@ -7,6 +7,7 @@ import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useNews, type MappedNewsArticle } from '@/lib/strapi/useNews'
 import { getNewsContent } from '@/lib/content'
+import AutoText from '@/components/common/AutoText'
 
 const CATEGORIES = [
   { id: 'All', label: 'All' },
@@ -124,8 +125,8 @@ export default function News() {
                       <span>•</span>
                       <span>{item.category}</span>
                     </div>
-                    <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2">{item.title}</h3>
-                    <p className="text-sm text-slate-600 mb-4 line-clamp-3">{item.excerpt}</p>
+                    <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2"><AutoText text={item.title} /></h3>
+                    <p className="text-sm text-slate-600 mb-4 line-clamp-3"><AutoText text={item.excerpt} /></p>
                     <Link href={`/news/${item.slug}`} className="inline-flex items-center gap-1 text-blue-600 text-sm font-medium hover:gap-2 transition-all">
                       {t.news.readMore} <ArrowRight className="w-4 h-4" />
                     </Link>

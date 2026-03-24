@@ -10,6 +10,7 @@ import { getContentTranslation } from '@/i18n/content'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import ProductsSearchBar from '@/components/products/ProductsSearchBar'
 import { useRfqCart } from '@/contexts/RfqCartContext'
+import AutoText from '@/components/common/AutoText'
 
 function generateSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -307,10 +308,10 @@ export default function Products() {
                         </div>
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] line-clamp-2 text-sm">
-                            {product.name}
+                            <AutoText text={product.name} />
                           </h3>
                         </div>
-                        <p className="text-xs text-slate-500 mb-2">{product.dosageForm}</p>
+                        <p className="text-xs text-slate-500 mb-2"><AutoText text={product.dosageForm} /></p>
                         <div className="flex items-center justify-between">
                           <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
                             {product.type === 'brand' ? t.products.brands : t.products.generics}

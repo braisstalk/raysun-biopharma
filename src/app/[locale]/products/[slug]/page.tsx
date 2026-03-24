@@ -8,6 +8,7 @@ import { useProductBySlug, useRelatedProducts, type MappedProduct } from '@/lib/
 import { useGlobalConfig } from '@/lib/strapi/useGlobalConfig'
 import { productsPageConfig } from '@/config/products'
 import { useTranslation } from '@/i18n/useTranslation'
+import AutoText from '@/components/common/AutoText'
 
 // Generate slug from product name (for fallback)
 function generateSlug(name: string): string {
@@ -182,11 +183,11 @@ export default function ProductDetailPage() {
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">{product.name}</h1>
-                <p className="text-lg text-slate-500 mt-1">{product.dosageForm}</p>
+                <h1 className="text-2xl lg:text-3xl font-bold text-slate-900"><AutoText text={product.name} /></h1>
+                <p className="text-lg text-slate-500 mt-1"><AutoText text={product.dosageForm} /></p>
               </div>
 
-              <p className="text-slate-600 leading-relaxed">{product.description}</p>
+              <p className="text-slate-600 leading-relaxed"><AutoText text={product.description} /></p>
 
               {/* Tags */}
               {product.tags && product.tags.length > 0 && (
@@ -251,7 +252,7 @@ export default function ProductDetailPage() {
                 {product.indication ? (
                   <li className="flex items-start gap-2 text-slate-600">
                     <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    {product.indication}
+                    <AutoText text={product.indication} />
                   </li>
                 ) : (
                   <li className="text-slate-500 italic">Indications information available upon request</li>

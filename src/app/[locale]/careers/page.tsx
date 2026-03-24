@@ -7,6 +7,7 @@ import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useTranslation } from '@/i18n/useTranslation'
 import { useCareers, type MappedJob } from '@/lib/strapi/useCareers'
 import { getCareersPageContent } from '@/lib/content'
+import AutoText from '@/components/common/AutoText'
 
 const DEPARTMENTS = ['All', 'Manufacturing', 'Quality', 'R&D', 'Compliance', 'Sales', 'Operations']
 
@@ -105,13 +106,13 @@ export default function Careers() {
               filteredPositions.map((pos) => (
                 <div key={pos.id} className="bg-slate-50 rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-md transition-shadow">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 text-lg">{pos.title}</h3>
+                    <h3 className="font-semibold text-slate-900 text-lg"><AutoText text={pos.title} /></h3>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-600 mt-2">
-                      <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{pos.department}</span>
+                      <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" /><AutoText text={pos.department} /></span>
                       <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{pos.location}</span>
                       <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{pos.type}</span>
                     </div>
-                    <p className="text-sm text-slate-500 mt-2 line-clamp-2">{pos.summary}</p>
+                    <p className="text-sm text-slate-500 mt-2 line-clamp-2"><AutoText text={pos.summary} /></p>
                   </div>
                   <Link
                     href={`/careers/${pos.slug}`}

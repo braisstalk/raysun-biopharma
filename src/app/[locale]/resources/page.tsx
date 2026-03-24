@@ -7,6 +7,7 @@ import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useResources, MappedResource } from '@/lib/strapi/useResources'
 import { getResourcesContent } from '@/lib/content'
+import AutoText from '@/components/common/AutoText'
 
 const icons: Record<string, React.ElementType> = {
   document: FileText,
@@ -167,10 +168,10 @@ export default function Resources() {
                         </span>
                       </div>
                       <h3 className="font-semibold text-slate-900 group-hover:text-blue-600">
-                        {res.title}
+                        <AutoText text={res.title} />
                       </h3>
                       <p className="text-sm text-slate-500 mt-2 line-clamp-2">
-                        {res.description}
+                        <AutoText text={res.description} />
                       </p>
                       <div className="flex items-center justify-between mt-4">
                           <div className="flex items-center gap-2">

@@ -109,10 +109,10 @@ export default function Home() {
       >
         <div className="flex flex-wrap gap-4">
           <Link href={heroConfig.primaryCta.href} className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium text-white transition-colors">
-            {heroConfig.primaryCta.label} <ArrowRight className="w-4 h-4" />
+            <AutoText>{heroConfig.primaryCta.label}</AutoText> <ArrowRight className="w-4 h-4" />
           </Link>
           <Link href={heroConfig.secondaryCta.href} className="inline-flex items-center gap-2 border-2 border-white/30 hover:border-white px-6 py-3 rounded-lg font-medium text-white transition-colors">
-            {heroConfig.secondaryCta.label}
+            <AutoText>{heroConfig.secondaryCta.label}</AutoText>
           </Link>
         </div>
       </StrapiHeroCarousel>
@@ -144,10 +144,10 @@ export default function Home() {
                 {t.hero.aboutTitle}
               </h2>
               <p className="text-slate-600 mb-4">
-                {cmsHome?.aboutDesc1 || t.content?.aboutDesc1 || 'Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.'}
+                <AutoText>{cmsHome?.aboutDesc1 || t.content?.aboutDesc1 || 'Headquartered in Vientiane, Laos, Raysun Biopharma is a leading GMP-certified pharmaceutical manufacturer with a commitment to quality, innovation, and accessibility.'}</AutoText>
               </p>
               <p className="text-slate-600 mb-8">
-                {cmsHome?.aboutDesc2 || t.content?.aboutDesc2 || 'Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.'}
+                <AutoText>{cmsHome?.aboutDesc2 || t.content?.aboutDesc2 || 'Our state-of-the-art manufacturing facility produces a wide range of pharmaceutical products, serving healthcare needs across Southeast Asia, the Middle East, and Africa.'}</AutoText>
               </p>
               <Link href="/about" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
                 {t.common.learnMore} <ArrowRight className="w-4 h-4" />

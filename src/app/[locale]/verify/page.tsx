@@ -6,6 +6,7 @@ import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useVerifyPage } from '@/lib/strapi'
+import AutoText from '@/components/common/AutoText'
 
 const icons: Record<string, React.ElementType> = {
   product: Package,
@@ -29,15 +30,15 @@ export default function Verify() {
   mockResults.forEach(r => {
     mockResultsMap[r.code] = {
       status: r.status,
-      title: r.status === 'success' ? 'Verified Authentic' : r.status === 'warning' ? 'Expired Product' : 'Not Found',
+      title: r.status === 'success' ? <AutoText text="Verified Authentic" as="span" /> : r.status === 'warning' ? <AutoText text="Expired Product" as="span" /> : <AutoText text="Not Found" as="span" />,
       message: r.message,
       details: r.details ? r.details.split(' | ') : [],
       nextSteps: r.status === 'success' ? [
-        { label: 'View Product Details', href: '/products' },
-        { label: 'Contact Sales', href: '/contact' },
+        { label: <AutoText text="View Product Details" as="span" />, href: '/products' },
+        { label: <AutoText text="Contact Sales" as="span" />, href: '/contact' },
       ] : [
-        { label: 'Contact Support', href: '/contact' },
-        { label: 'Report Concern', href: '/contact' },
+        { label: <AutoText text="Contact Support" as="span" />, href: '/contact' },
+        { label: <AutoText text="Report Concern" as="span" />, href: '/contact' },
       ]
     }
   })
@@ -63,19 +64,19 @@ export default function Verify() {
       } else if (upper.includes('RS-2025') || upper.includes('RS-')) {
         setResult({
           status: 'error',
-          title: 'Not Found',
-          message: 'The entered information does not match our records.',
-          details: ['Please verify the batch number is correct', 'Check for any typing errors', 'Ensure you have the full batch number'],
+          title: <AutoText text="Not Found" as="span" />,
+          message: <AutoText text="The entered information does not match our records." as="span" />,
+          details: [<AutoText text="Please verify the batch number is correct" as="span" />, <AutoText text="Check for any typing errors" as="span" />, <AutoText text="Ensure you have the full batch number" as="span" />],
           nextSteps: [
-            { label: 'Contact Support', href: '/contact' },
-            { label: 'Report Suspicious Product', href: '/contact' },
+            { label: <AutoText text="Contact Support" as="span" />, href: '/contact' },
+            { label: <AutoText text="Report Suspicious Product" as="span" />, href: '/contact' },
           ]
         })
       } else {
         setResult({
           status: 'error',
-          title: 'Invalid Format',
-          message: 'Please enter a valid batch number starting with RS-.',
+          title: <AutoText text="Invalid Format" as="span" />,
+          message: <AutoText text="Please enter a valid batch number starting with RS-." as="span" />,
           details: [],
           nextSteps: []
         })
@@ -96,7 +97,7 @@ export default function Verify() {
       {/* Hero */}
       <StrapiHeroCarousel
         page="verify"
-        badge="VERIFICATION CENTER"
+        badge={<AutoText text="VERIFICATION CENTER" as="span" />}
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
@@ -125,7 +126,7 @@ export default function Verify() {
                   </div>
                   <div className="text-left">
                     <p className={`font-semibold text-sm md:text-base ${activeTab === type.id ? 'text-[#1E6F5C]' : 'text-slate-900'}`}>{type.label}</p>
-                    <p className="text-xs text-slate-500 hidden sm:block">Batch number verification</p>
+                    <p className="text-xs text-slate-500 hidden sm:block"><AutoText text="Batch number verification" as="span" /></p>
                   </div>
                 </button>
               )
@@ -140,7 +141,7 @@ export default function Verify() {
           <form onSubmit={handleVerify} className="space-y-4">
             <div>
               <label htmlFor="verify-input" className="block text-sm font-medium text-slate-700 mb-2">
-                Enter {currentType?.label} Code
+                <AutoText text="Enter " as="span" />{currentType?.label}<AutoText text=" Code" as="span" />
               </label>
               <div className="flex gap-3">
                 <div className="relative flex-1">
@@ -159,7 +160,7 @@ export default function Verify() {
                   disabled={loading}
                   className="px-6 py-3 bg-[#1E6F5C] text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  {loading ? 'Verifying...' : 'Verify'}
+                  {loading ? <AutoText text="Verifying..." as="span" /> : <AutoText text="Verify" as="span" />}
                 </button>
               </div>
             </div>
@@ -167,7 +168,7 @@ export default function Verify() {
 
           {/* Sample Codes */}
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
-            <p className="text-sm text-slate-600 mb-2">Sample codes for testing:</p>
+            <p className="text-sm text-slate-600 mb-2"><AutoText text="Sample codes for testing:" as="span" /></p>
             <div className="flex flex-wrap gap-2">
               <button onClick={() => setSearchValue('RS-2025-001234')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-001234</button>
               <button onClick={() => setSearchValue('RS-2025-005678')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-005678</button>
@@ -211,7 +212,7 @@ export default function Verify() {
                           href={step.href}
                           className="inline-flex items-center gap-1 text-sm font-medium text-[#1E6F5C] hover:underline"
                         >
-                          {step.label} <ExternalLink className="w-3 h-3" />
+                          <AutoText text={step.label} as="span" /> <ExternalLink className="w-3 h-3" />
                         </Link>
                       ))}
                     </div>
@@ -232,7 +233,7 @@ export default function Verify() {
               <h3 className="text-xl font-bold text-slate-900 mb-2">{helpSection.title}</h3>
               <p className="text-slate-600 mb-4">{helpSection.description}</p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                Contact Support <ExternalLink className="w-4 h-4" />
+                <AutoText text="Contact Support" as="span" /> <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
             <div className="bg-white rounded-2xl p-6 md:p-8">
@@ -240,7 +241,7 @@ export default function Verify() {
               <h3 className="text-xl font-bold text-slate-900 mb-2">{reportSection.title}</h3>
               <p className="text-slate-600 mb-4">{reportSection.description}</p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                Report Counterfeit <ExternalLink className="w-4 h-4" />
+                <AutoText text="Report Counterfeit" as="span" /> <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
           </div>

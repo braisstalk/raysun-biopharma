@@ -104,7 +104,7 @@ export default function HeroCarousel({
  <div className={`mt-6 h-5 flex items-center ${isCenter ? 'justify-center' : ''}`}>
  <div key={slides[current]?.id} className="animate-fade-up">
  <p className="text-[11px] font-medium text-white/35 tracking-wide">
- {slides[current]?.title}
+ <AutoText>{slides[current]?.title}</AutoText>
  </p>
  </div>
  </div>

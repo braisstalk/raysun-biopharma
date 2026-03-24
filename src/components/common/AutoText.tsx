@@ -1,33 +1,41 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import { useTranslation } from '@/i18n/useTranslation'
 import { translateText } from '@/lib/translate'
+import { useLocale } from '@/i18n/LocaleContext'
 
 interface AutoTextProps {
-  text: string
+  children?: ReactNode
+  text?: string
   as?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   className?: string
-  children?: never
 }
 
 // Component that auto-translates CMS text based on current locale
-export default function AutoText({ text, as: Tag = 'span', className }: AutoTextProps) {
+export default function AutoText({ children, text, as: Tag = 'span', className }: AutoTextProps) {
   const { locale } = useTranslation()
-  const [translated, setTranslated] = useState(text)
+  const { isRtl } = useLocale()
+  const [translated, setTranslated] = useState('')
+  
+  // Get the text content from either text prop or children
+  const sourceText = text || (typeof children === 'string' ? children : '')
 
   useEffect(() => {
-    if (!text || locale === 'en') {
-      setTranslated(text)
+    if (!sourceText || locale === 'en') {
+      setTranslated(sourceText)
       return
     }
 
     let cancelled = false
-    translateText(text, locale).then(result => {
+    translateText(sourceText, locale).then(result => {
       if (!cancelled) setTranslated(result)
     })
     return () => { cancelled = true }
-  }, [text, locale])
+  }, [sourceText, locale])
 
-  return <Tag className={className}>{translated}</Tag>
+  const rtlClass = isRtl ? 'rtl-text' : ''
+  const combinedClassName = `${rtlClass} ${className || ''}`.trim()
+
+  return <Tag className={combinedClassName}>{translated || sourceText}</Tag>
 }

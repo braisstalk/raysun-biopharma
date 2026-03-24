@@ -5,7 +5,6 @@ import { Shield, Search, AlertTriangle, CheckCircle, FileCheck, UserCheck, Packa
 import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import { useVerifyPage } from '@/lib/strapi'
 import AutoText from '@/components/common/AutoText'
 
 const icons: Record<string, React.ElementType> = {
@@ -17,28 +16,22 @@ const icons: Record<string, React.ElementType> = {
 export default function Verify() {
   const content = getVerifyContent()
   const { t } = useTranslation()
-  const cmsData = useVerifyPage()
-
-  const hero = content.hero
-  const types = cmsData?.types || content.types
-  const mockResults = content.mockResults
-  const helpSection = cmsData?.helpTitle ? { title: cmsData.helpTitle, description: cmsData.helpDescription } : content.helpSection
-  const reportSection = cmsData?.reportTitle ? { title: cmsData.reportTitle, description: cmsData.reportDescription } : content.reportSection
+  const { hero, types, mockResults, helpSection, reportSection } = content
   
   // Build mock results map for verification logic
   const mockResultsMap: Record<string, { status: 'success' | 'warning' | 'error'; title: string; message: string; details?: string[]; nextSteps?: { label: string; href: string }[] }> = {}
   mockResults.forEach(r => {
     mockResultsMap[r.code] = {
       status: r.status,
-      title: r.status === 'success' ? <AutoText text="Verified Authentic" as="span" /> : r.status === 'warning' ? <AutoText text="Expired Product" as="span" /> : <AutoText text="Not Found" as="span" />,
+      title: r.status === 'success' ? 'Verified Authentic' : r.status === 'warning' ? 'Expired Product' : 'Not Found',
       message: r.message,
       details: r.details ? r.details.split(' | ') : [],
       nextSteps: r.status === 'success' ? [
-        { label: <AutoText text="View Product Details" as="span" />, href: '/products' },
-        { label: <AutoText text="Contact Sales" as="span" />, href: '/contact' },
+        { label: 'View Product Details', href: '/products' },
+        { label: 'Contact Sales', href: '/contact' },
       ] : [
-        { label: <AutoText text="Contact Support" as="span" />, href: '/contact' },
-        { label: <AutoText text="Report Concern" as="span" />, href: '/contact' },
+        { label: 'Contact Support', href: '/contact' },
+        { label: 'Report Concern', href: '/contact' },
       ]
     }
   })
@@ -64,19 +57,19 @@ export default function Verify() {
       } else if (upper.includes('RS-2025') || upper.includes('RS-')) {
         setResult({
           status: 'error',
-          title: <AutoText text="Not Found" as="span" />,
-          message: <AutoText text="The entered information does not match our records." as="span" />,
-          details: [<AutoText text="Please verify the batch number is correct" as="span" />, <AutoText text="Check for any typing errors" as="span" />, <AutoText text="Ensure you have the full batch number" as="span" />],
+          title: 'Not Found',
+          message: 'The entered information does not match our records.',
+          details: ['Please verify the batch number is correct', 'Check for any typing errors', 'Ensure you have the full batch number'],
           nextSteps: [
-            { label: <AutoText text="Contact Support" as="span" />, href: '/contact' },
-            { label: <AutoText text="Report Suspicious Product" as="span" />, href: '/contact' },
+            { label: 'Contact Support', href: '/contact' },
+            { label: 'Report Suspicious Product', href: '/contact' },
           ]
         })
       } else {
         setResult({
           status: 'error',
-          title: <AutoText text="Invalid Format" as="span" />,
-          message: <AutoText text="Please enter a valid batch number starting with RS-." as="span" />,
+          title: 'Invalid Format',
+          message: 'Please enter a valid batch number starting with RS-.',
           details: [],
           nextSteps: []
         })
@@ -97,7 +90,7 @@ export default function Verify() {
       {/* Hero */}
       <StrapiHeroCarousel
         page="verify"
-        badge={<AutoText text="VERIFICATION CENTER" as="span" />}
+        badge="VERIFICATION CENTER"
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
@@ -125,8 +118,8 @@ export default function Verify() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <p className={`font-semibold text-sm md:text-base ${activeTab === type.id ? 'text-[#1E6F5C]' : 'text-slate-900'}`}>{type.label}</p>
-                    <p className="text-xs text-slate-500 hidden sm:block"><AutoText text="Batch number verification" as="span" /></p>
+                    <p className={`font-semibold text-sm md:text-base ${activeTab === type.id ? 'text-[#1E6F5C]' : 'text-slate-900'}`}><AutoText>{type.label}</AutoText></p>
+                    <p className="text-xs text-slate-500 hidden sm:block"><AutoText>Batch number verification</AutoText></p>
                   </div>
                 </button>
               )
@@ -141,7 +134,7 @@ export default function Verify() {
           <form onSubmit={handleVerify} className="space-y-4">
             <div>
               <label htmlFor="verify-input" className="block text-sm font-medium text-slate-700 mb-2">
-                <AutoText text="Enter " as="span" />{currentType?.label}<AutoText text=" Code" as="span" />
+                <AutoText>Enter {currentType?.label} Code</AutoText>
               </label>
               <div className="flex gap-3">
                 <div className="relative flex-1">
@@ -160,7 +153,7 @@ export default function Verify() {
                   disabled={loading}
                   className="px-6 py-3 bg-[#1E6F5C] text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  {loading ? <AutoText text="Verifying..." as="span" /> : <AutoText text="Verify" as="span" />}
+                  <AutoText>{loading ? 'Verifying...' : 'Verify'}</AutoText>
                 </button>
               </div>
             </div>
@@ -168,7 +161,7 @@ export default function Verify() {
 
           {/* Sample Codes */}
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
-            <p className="text-sm text-slate-600 mb-2"><AutoText text="Sample codes for testing:" as="span" /></p>
+            <p className="text-sm text-slate-600 mb-2"><AutoText>Sample codes for testing:</AutoText></p>
             <div className="flex flex-wrap gap-2">
               <button onClick={() => setSearchValue('RS-2025-001234')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-001234</button>
               <button onClick={() => setSearchValue('RS-2025-005678')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-005678</button>
@@ -192,14 +185,14 @@ export default function Verify() {
                     result.status === 'success' ? 'text-green-800' :
                     result.status === 'warning' ? 'text-amber-800' :
                     'text-red-800'
-                  }`}>{result.title}</h3>
-                  <p className="mt-2 text-slate-700">{result.message}</p>
+                  }`}><AutoText>{result.title}</AutoText></h3>
+                  <p className="mt-2 text-slate-700"><AutoText>{result.message}</AutoText></p>
                   {result.details && result.details.length > 0 && (
                     <ul className="mt-4 space-y-1">
                       {result.details.map((detail, idx) => (
                         <li key={idx} className="text-sm text-slate-600 flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                          {detail}
+                          <AutoText>{detail}</AutoText>
                         </li>
                       ))}
                     </ul>
@@ -212,7 +205,7 @@ export default function Verify() {
                           href={step.href}
                           className="inline-flex items-center gap-1 text-sm font-medium text-[#1E6F5C] hover:underline"
                         >
-                          <AutoText text={step.label} as="span" /> <ExternalLink className="w-3 h-3" />
+                          <AutoText>{step.label}</AutoText> <ExternalLink className="w-3 h-3" />
                         </Link>
                       ))}
                     </div>
@@ -230,18 +223,18 @@ export default function Verify() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white rounded-2xl p-6 md:p-8">
               <Phone className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2">{helpSection.title}</h3>
-              <p className="text-slate-600 mb-4">{helpSection.description}</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2"><AutoText>{helpSection.title}</AutoText></h3>
+              <p className="text-slate-600 mb-4"><AutoText>{helpSection.description}</AutoText></p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                <AutoText text="Contact Support" as="span" /> <ExternalLink className="w-4 h-4" />
+                <AutoText>Contact Support</AutoText> <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
             <div className="bg-white rounded-2xl p-6 md:p-8">
               <Shield className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2">{reportSection.title}</h3>
-              <p className="text-slate-600 mb-4">{reportSection.description}</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2"><AutoText>{reportSection.title}</AutoText></h3>
+              <p className="text-slate-600 mb-4"><AutoText>{reportSection.description}</AutoText></p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                <AutoText text="Report Counterfeit" as="span" /> <ExternalLink className="w-4 h-4" />
+                <AutoText>Report Counterfeit</AutoText> <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
           </div>

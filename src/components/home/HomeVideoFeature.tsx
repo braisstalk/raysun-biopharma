@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Play, Pause } from 'lucide-react'
 import { VideoSectionConfig } from '@/types/home'
+import AutoText from '@/components/common/AutoText'
 
 interface HomeVideoFeatureProps {
   config: VideoSectionConfig
@@ -37,16 +38,16 @@ export default function HomeVideoFeature({ config }: HomeVideoFeatureProps) {
           {/* Left: Content */}
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-              {config.title}
+              <AutoText>{config.title}</AutoText>
             </h2>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              {config.description}
+              <AutoText>{config.description}</AutoText>
             </p>
-            <Link 
+            <Link
               href={config.cta.href}
               className="inline-flex items-center gap-2 text-blue-600 font-medium hover:gap-3 transition-all group"
             >
-              {config.cta.label} <ArrowRight className="w-4 h-4 group-hover:translate-x-1" />
+              <AutoText>{config.cta.label}</AutoText> <ArrowRight className="w-4 h-4 group-hover:translate-x-1" />
             </Link>
           </div>
 
@@ -74,7 +75,7 @@ export default function HomeVideoFeature({ config }: HomeVideoFeatureProps) {
                     
                     {/* Label */}
                     <div className="absolute bottom-6 right-6 flex items-center gap-2 text-xs text-slate-400 font-medium uppercase tracking-wider">
-                      Featured Video
+                      <AutoText>Featured Video</AutoText>
                     </div>
                   </div>
                 </>

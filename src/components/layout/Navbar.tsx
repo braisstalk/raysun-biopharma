@@ -7,6 +7,7 @@ import { navigationConfig, getNavLabel } from '@/config/navigation'
 import { Locale } from '@/i18n/config'
 import { useTranslation } from '@/i18n/useTranslation'
 import { STRAPI_URL } from '@/lib/strapi/client'
+import AutoText from '@/components/common/AutoText'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -65,14 +66,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
-            <img 
-              src="/images/raysun-logo.png" 
-              alt="Raysun Biopharma" 
+            <img
+              src="/images/raysun-logo.png"
+              alt={<AutoText text="Raysun Biopharma" as="span" />}
               className="hidden lg:block h-11 w-auto max-w-[240px] object-contain"
             />
-            <img 
-              src="/images/raysun-logo.png" 
-              alt="Raysun Biopharma" 
+            <img
+              src="/images/raysun-logo.png"
+              alt={<AutoText text="Raysun Biopharma" as="span" />}
               className="block lg:hidden h-9 w-auto max-w-[160px] object-contain"
             />
           </Link>
@@ -138,7 +139,7 @@ export default function Navbar() {
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
             >
               <Shield className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">{ctaButtons.verify.label}</span>
+              <span className="hidden lg:inline"><AutoText text={ctaButtons.verify.label} as="span" /></span>
             </Link>
 
             {/* Language Switcher */}
@@ -237,7 +238,7 @@ export default function Navbar() {
               className="flex items-center gap-2 px-3 py-3 text-sm font-medium text-slate-600 hover:bg-blue-50 rounded-lg"
             >
               <Shield className="w-4 h-4" />
-              {ctaButtons.verify.label}
+              <AutoText text={ctaButtons.verify.label} as="span" />
             </Link>
           </div>
         </div>

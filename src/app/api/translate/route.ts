@@ -11,6 +11,46 @@ const langMap: Record<string, string> = {
   fr: 'fr',
 }
 
+// Brand name protection - replace incorrect translations with official names
+const brandReplacements: Record<string, Array<{ wrong: RegExp; correct: string }>> = {
+  zh: [
+    { wrong: /瑞(盛|升|森|生|声|胜|圣)生物制药/g, correct: '雷神生物制药' },
+    { wrong: /Raysun\s*Biopharma/gi, correct: '雷神生物制药' },
+    { wrong: /Raysun\s*生物制药/gi, correct: '雷神生物制药' },
+    { wrong: /瑞(盛|升|森|生|声|胜|圣)制药/g, correct: '雷神制药' },
+    { wrong: /雷(森|声|胜|圣|升|盛)生物制药/g, correct: '雷神生物制药' },
+    { wrong: /雷(森|声|胜|圣|升|盛)制药/g, correct: '雷神制药' },
+  ],
+  th: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+  lo: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+  vi: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+  ar: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+  es: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+  fr: [
+    { wrong: /Raysun\s*Biopharma/gi, correct: 'Raysun Biopharma' },
+  ],
+}
+
+function fixBrandNames(text: string, targetLang: string): string {
+  const replacements = brandReplacements[targetLang]
+  if (!replacements) return text
+  let result = text
+  for (const { wrong, correct } of replacements) {
+    result = result.replace(wrong, correct)
+  }
+  return result
+}
+
 async function doTranslate(text: string, targetLang: string): Promise<string> {
   if (!text || !targetLang || targetLang === 'en') return text
 
@@ -24,11 +64,14 @@ async function doTranslate(text: string, targetLang: string): Promise<string> {
   }
 
   const data = await res.json()
-  const translated = data?.[0]?.map((item: any) => item[0]).join('') || text
+  let translated = data?.[0]?.map((item: any) => item[0]).join('') || text
+
+  // Fix brand names after translation
+  translated = fixBrandNames(translated, targetLang)
+
   return translated
 }
 
-// GET handler - for testing: /api/translate?text=hello&lang=zh
 export async function GET(request: NextRequest) {
   const text = request.nextUrl.searchParams.get('text') || ''
   const lang = request.nextUrl.searchParams.get('lang') || 'zh'
@@ -46,7 +89,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST handler - for production use
 export async function POST(request: NextRequest) {
   try {
     const { text, targetLang } = await request.json()

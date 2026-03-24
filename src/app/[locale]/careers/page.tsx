@@ -9,7 +9,7 @@ import { useCareers, type MappedJob } from '@/lib/strapi/useCareers'
 import { getCareersPageContent } from '@/lib/content'
 import AutoText from '@/components/common/AutoText'
 
-const DEPARTMENTS = ['All', 'Manufacturing', 'Quality', 'R&D', 'Compliance', 'Sales', 'Operations']
+const DEPARTMENTS = [<AutoText text="All" as="span" />, <AutoText text="Manufacturing" as="span" />, <AutoText text="Quality" as="span" />, <AutoText text="R&D" as="span" />, <AutoText text="Compliance" as="span" />, <AutoText text="Sales" as="span" />, <AutoText text="Operations" as="span" />]
 
 function mapLocalJobs(): MappedJob[] {
   const content = getCareersPageContent()
@@ -50,7 +50,7 @@ export default function Careers() {
     <>
       <StrapiHeroCarousel
         page="careers"
-        badge="CAREERS"
+        badge={<AutoText text="CAREERS" as="span" />}
         badgeColor="text-blue-300"
         heading={hero.title}
         description={hero.subtitle}
@@ -68,8 +68,8 @@ export default function Careers() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900">Open Positions</h2>
-            <p className="text-slate-600 mt-2">Find your next opportunity at Raysun Biopharma</p>
+            <h2 className="text-3xl font-bold text-slate-900"><AutoText text="Open Positions" as="span" /></h2>
+            <p className="text-slate-600 mt-2"><AutoText text="Find your next opportunity at Raysun Biopharma" as="span" /></p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 mb-8">
@@ -91,7 +91,7 @@ export default function Careers() {
           {loading && jobs.length === 0 && (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-[#1E6F5C] animate-spin" />
-              <span className="ml-3 text-slate-500">Loading positions...</span>
+              <span className="ml-3 text-slate-500"><AutoText text="Loading positions..." as="span" /></span>
             </div>
           )}
 
@@ -99,8 +99,8 @@ export default function Careers() {
             {!loading && filteredPositions.length === 0 ? (
               <div className="text-center py-12 text-slate-500">
                 <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                <p>No positions currently available in this department.</p>
-                <p className="text-sm mt-2">Check back later or submit your CV for future opportunities.</p>
+                <p><AutoText text="No positions currently available in this department." as="span" /></p>
+                <p className="text-sm mt-2"><AutoText text="Check back later or submit your CV for future opportunities." as="span" /></p>
               </div>
             ) : (
               filteredPositions.map((pos) => (
@@ -118,7 +118,7 @@ export default function Careers() {
                     href={`/careers/${pos.slug}`}
                     className="px-4 py-2 bg-[#1E6F5C] text-white rounded-lg text-sm font-medium hover:bg-[#165a4a] flex items-center gap-2 whitespace-nowrap"
                   >
-                    View Details <ArrowRight className="w-4 h-4" />
+                    <AutoText text="View Details" as="span" /> <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               ))
@@ -126,7 +126,7 @@ export default function Careers() {
           </div>
 
           {error && !loading && (
-            <p className="text-center text-xs text-amber-500 mt-4">(using offline data)</p>
+            <p className="text-center text-xs text-amber-500 mt-4"><AutoText text="(using offline data)" as="span" /></p>
           )}
         </div>
       </section>
@@ -149,12 +149,12 @@ export default function Careers() {
 
       <section className="py-20 bg-gradient-to-r from-[#1E6F5C] to-[#289c76]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Don&apos;t See the Right Role?</h2>
+          <h2 className="text-3xl font-bold mb-4"><AutoText text="Don't See the Right Role?" as="span" /></h2>
           <p className="text-blue-100 max-w-2xl mx-auto mb-6">
-            Send us your CV and we&apos;ll keep you informed about future opportunities that match your skills and experience.
+            <AutoText text="Send us your CV and we'll keep you informed about future opportunities that match your skills and experience." as="span" />
           </p>
           <a href="mailto:info@raysunpharma.com" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-blue-50">
-            <Mail className="w-4 h-4" /> Email Your CV
+            <Mail className="w-4 h-4" /> <AutoText text="Email Your CV" as="span" />
           </a>
         </div>
       </section>

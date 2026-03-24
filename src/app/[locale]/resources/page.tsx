@@ -193,8 +193,8 @@ export default function Resources() {
 
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h2 className="text-2xl font-bold mb-4">Can't Find What You Need?</h2>
-          <p className="mb-6">Contact us for specific documents or additional information.</p>
+          <h2 className="text-2xl font-bold mb-4"><AutoText text="Can't Find What You Need?" /></h2>
+          <p className="mb-6"><AutoText text="Contact us for specific documents or additional information." /></p>
           <Link
             href="/contact"
             className="inline-block bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50"

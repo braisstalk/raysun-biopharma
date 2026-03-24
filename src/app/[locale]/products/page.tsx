@@ -197,7 +197,7 @@ export default function Products() {
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
-                {tab.label}
+                <AutoText text={tab.label} />
               </button>
             ))}
           </div>
@@ -234,7 +234,7 @@ export default function Products() {
                           : 'text-slate-600 hover:bg-slate-100'
                       }`}
                     >
-                      {getCategoryName(cat.id, cat.name)}
+                      <AutoText text={getCategoryName(cat.id, cat.name)} />
                       <span className="float-right text-xs opacity-70">{count}</span>
                     </button>
                   )

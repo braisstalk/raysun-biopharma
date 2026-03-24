@@ -9,6 +9,7 @@ import { getContentTranslation } from '@/i18n/content'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { useHomeData } from '@/lib/strapi/useHomeData'
 import HomeVideoFeature from '@/components/home/HomeVideoFeature'
+import AutoText from '@/components/common/AutoText'
 
 export default function Home() {
   const [content, setContent] = useState<any>(null)
@@ -126,7 +127,7 @@ export default function Home() {
             {(cmsHome?.stats || statsData).map((stat: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}</div>
-                <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
+                <div className="text-sm text-slate-600 mt-1"><AutoText text={stat.label} /></div>
               </div>
             ))}
           </div>
@@ -170,7 +171,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.capabilities || 'OUR CAPABILITIES'}</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{capabilitiesData.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900"><AutoText text={capabilitiesData.title} /></h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {capabilitiesData.items.map((cap: any, idx: number) => (
@@ -179,8 +180,8 @@ export default function Home() {
                   {cap.icon === 'FlaskConical' && <FlaskConical className="w-10 h-10 text-[#1E6F5C] mb-4" />}
                   {cap.icon === 'Shield' && <Shield className="w-10 h-10 text-[#1E6F5C] mb-4" />}
                   {cap.icon === 'Award' && <Award className="w-10 h-10 text-[#1E6F5C] mb-4" />}
-                  <h3 className="font-semibold text-slate-900 mb-2">{cap.title}</h3>
-                  <p className="text-sm text-slate-600">{cap.description}</p>
+                  <h3 className="font-semibold text-slate-900 mb-2"><AutoText text={cap.title} /></h3>
+                  <p className="text-sm text-slate-600"><AutoText text={cap.description} /></p>
                 </div>
               ))}
             </div>
@@ -195,7 +196,7 @@ export default function Home() {
             <div className="flex justify-between items-end mb-12">
               <div>
                 <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.products.toUpperCase()}</p>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{productsData.title}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900"><AutoText text={productsData.title} /></h2>
               </div>
               <Link href="/products" className="hidden md:inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
                 {contentTrans.home.products.viewAll} <ArrowRight className="w-4 h-4" />
@@ -205,8 +206,8 @@ export default function Home() {
               {productsData.categories.slice(0, 4).map((cat: any, idx: number) => (
                 <Link key={idx} href={cat.href || '/products'} className="group">
                   <div className="bg-slate-50 rounded-xl p-6 hover:bg-blue-50 transition-colors h-full">
-                    <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-[#1E6F5C]">{cat.name}</h3>
-                    <p className="text-sm text-slate-600 mb-4">{cat.description}</p>
+                    <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-[#1E6F5C]"><AutoText text={cat.name} /></h3>
+                    <p className="text-sm text-slate-600 mb-4"><AutoText text={cat.description} /></p>
                     <p className="text-xs text-[#1E6F5C] font-medium">{cat.count || '0'}+ Products</p>
                   </div>
                 </Link>
@@ -223,16 +224,16 @@ export default function Home() {
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">{t.pages.qualityCompliance.toUpperCase()}</p>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                {qualityData.title}
+                <AutoText text={qualityData.title} />
               </h2>
               <p className="text-slate-600 mb-6">
-                {qualityData.description}
+                <AutoText text={qualityData.description} />
               </p>
               <div className="space-y-3 mb-8">
                 {qualityData.features?.map((feature: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-[#1E6F5C]" />
-                    <span className="text-slate-700">{feature.title}</span>
+                    <span className="text-slate-700"><AutoText text={feature.title} /></span>
                   </div>
                 ))}
               </div>
@@ -272,10 +273,10 @@ export default function Home() {
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">{contentTrans.home.global.title.toUpperCase()}</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              {globalMarketsData.title}
+              <AutoText text={globalMarketsData.title} />
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              {globalMarketsData.subtitle}
+              <AutoText text={globalMarketsData.subtitle} />
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -284,8 +285,8 @@ export default function Home() {
                 {market.icon === 'Globe' && <Globe className="w-10 h-10 text-[#1E6F5C] mb-4" />}
                 {market.icon === 'MapPin' && <MapPin className="w-10 h-10 text-[#1E6F5C] mb-4" />}
                 {market.icon === 'Users' && <Users className="w-10 h-10 text-[#1E6F5C] mb-4" />}
-                <h3 className="font-semibold text-slate-900 mb-2">{market.name}</h3>
-                <p className="text-sm text-slate-600 mb-4">{market.description}</p>
+                <h3 className="font-semibold text-slate-900 mb-2"><AutoText text={market.name} /></h3>
+                <p className="text-sm text-slate-600 mb-4"><AutoText text={market.description} /></p>
                 <div className="flex items-center gap-2 text-xs text-[#1E6F5C] font-medium">
                   <ArrowUpRight className="w-3 h-3" /> {t.common.learnMore}
                 </div>
@@ -301,7 +302,7 @@ export default function Home() {
           <div className="flex justify-between items-end mb-12">
             <div>
               <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.latestNews || 'LATEST NEWS'}</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{newsData.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900"><AutoText text={newsData.title} /></h2>
             </div>
             <Link href="/news" className="hidden md:inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
               {contentTrans.home.products.viewAll} <ArrowRight className="w-4 h-4" />
@@ -318,7 +319,7 @@ export default function Home() {
                       <span>•</span>
                       <span>{item.category}</span>
                     </div>
-                    <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]">{item.title}</h3>
+                    <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C]"><AutoText text={item.title} /></h3>
                   </div>
                 </div>
               </Link>
@@ -332,13 +333,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-[#1E6F5C] font-medium mb-2">{t.content?.resources || 'RESOURCES'}</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">{resourcesData.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900"><AutoText text={resourcesData.title} /></h2>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             {resourcesData.items?.map((item: any, idx: number) => (
               <Link key={idx} href={item.href || '#'} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow text-left">
                 <FileText className="w-8 h-8 text-[#1E6F5C] mb-4" />
-                <h3 className="font-medium text-slate-900 mb-1">{item.title}</h3>
+                <h3 className="font-medium text-slate-900 mb-1"><AutoText text={item.title} /></h3>
                 <p className="text-xs text-slate-500">{item.type} • {item.size}</p>
               </Link>
             ))}

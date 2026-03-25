@@ -63,7 +63,9 @@ export default function Footer() {
   const quickLinksTitle = global?.footerQuickLinksTitle || 'Quick Links'
   const productsTitle = global?.footerProductsTitle || 'Products'
   const contactTitle = global?.footerContactTitle || 'Contact'
-  const copyright = global?.footerCopyright || `© ${new Date().getFullYear()} Raysun Biopharma. All rights reserved`
+  const rawCopyright = global?.footerCopyright || `© ${new Date().getFullYear()} Raysun Biopharma. All rights reserved`
+  // Fix brand name for Chinese
+  const copyright = rawCopyright.replace(/Raysun Biopharma/g, '雷神生物制药').replace(/All rights reserved/g, '版权所有')
 
   return (
     <footer className="bg-slate-900 text-white">

@@ -14,11 +14,12 @@ const langMap: Record<string, string> = {
 // Fix brand name after translation - Raysun Biopharma = 雷神生物制药
 function fixBrandNames(text: string, lang: string): string {
   if (lang === 'zh') {
+    // 匹配任何以"瑞"或"雷"开头，后面跟着任意字符，然后是"生物制药"或"制药"的模式
     return text
-      .replace(/瑞[盛升森生声胜圣舜]生物制药/g, '雷神生物制药')
-      .replace(/瑞[盛升森生声胜圣舜]制药/g, '雷神制药')
-      .replace(/雷[森声胜圣升盛舜]生物制药/g, '雷神生物制药')
-      .replace(/雷[森声胜圣升盛舜]制药/g, '雷神制药')
+      .replace(/瑞.{0,2}生物制药/g, '雷神生物制药')
+      .replace(/瑞.{0,2}制药/g, '雷神制药')
+      .replace(/雷[^神].{0,2}生物制药/g, '雷神生物制药')
+      .replace(/雷[^神].{0,2}制药/g, '雷神制药')
       .replace(/Raysun\s*Biopharma/gi, '雷神生物制药')
       .replace(/Raysun\s*生物制药/gi, '雷神生物制药')
   }

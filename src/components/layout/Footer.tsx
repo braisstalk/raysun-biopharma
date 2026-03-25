@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin } from 'lucide-react'
 import { STRAPI_URL } from '@/lib/strapi/client'
 import type { StrapiGlobal } from '@/lib/strapi/api'
 import AutoText from '@/components/common/AutoText'
+import { useTranslation } from '@/i18n/useTranslation'
 
 // Fallback data in case CMS is unavailable
 const fallbackData = {
@@ -45,6 +46,7 @@ const fallbackBottomLinks = [
 ]
 
 export default function Footer() {
+  const { locale } = useTranslation()
   const [global, setGlobal] = useState<StrapiGlobal | null>(null)
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="text-xl font-bold mb-4">
-              <span className="text-blue-400">Raysun</span>Biopharma
+              <span className="text-blue-400">{locale === 'zh' ? '雷神' : 'Raysun'}</span>{locale === 'zh' ? '生物制药' : 'Biopharma'}
             </h3>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
               <AutoText text={data.siteDescription || fallbackData.siteDescription} />

@@ -5,7 +5,6 @@ import { Shield, Award, CheckCircle, ArrowRight, FileText, FlaskConical, Eye, Cl
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { usePageContent } from '@/lib/strapi/usePageContent'
-import AutoText from '@/components/common/AutoText'
 
 const iconMap: Record<string, React.ElementType> = {
   Shield, Award, FileText, FlaskConical, Eye, ClipboardCheck, BarChart3, RefreshCw, Lock, Globe, BookOpen, Microscope, Leaf,
@@ -73,14 +72,14 @@ export default function QualityCompliance() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>QUALITY PHILOSOPHY</AutoText></p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6"><AutoText>{philosophy.title}</AutoText></h2>
-              <p className="text-slate-600 mb-6"><AutoText>{philosophy.description}</AutoText></p>
+              <p className="text-[#1E6F5C] font-medium mb-2">QUALITY PHILOSOPHY</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{philosophy.title}</h2>
+              <p className="text-slate-600 mb-6">{philosophy.description}</p>
               <div className="space-y-3">
                 {(philosophy.checklist || ['Zero tolerance for quality deviations', 'Continuous improvement culture', 'Data-driven decision making', 'Regulatory-first mindset']).map((item: string) => (
                   <div key={item} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-[#1E6F5C] shrink-0" />
-                    <span className="text-slate-700"><AutoText>{item}</AutoText></span>
+                    <span className="text-slate-700">{item}</span>
                   </div>
                 ))}
               </div>
@@ -88,7 +87,7 @@ export default function QualityCompliance() {
             <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
               <div className="text-center">
                 <Shield className="w-16 h-16 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm text-slate-400 font-medium"><AutoText>Quality Control Laboratory</AutoText></p>
+                <p className="text-sm text-slate-400 font-medium">Quality Control Laboratory</p>
               </div>
             </div>
           </div>
@@ -99,8 +98,8 @@ export default function QualityCompliance() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>CERTIFICATIONS & ACCREDITATIONS</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Internationally Recognized Standards</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">CERTIFICATIONS & ACCREDITATIONS</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Internationally Recognized Standards</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {certifications.map((cert: any, idx: number) => {
@@ -108,10 +107,10 @@ export default function QualityCompliance() {
               return (
                 <div key={idx} className="bg-white rounded-xl p-8 shadow-sm">
                   <CertIcon className="w-12 h-12 text-[#1E6F5C] mb-4" />
-                  <h3 className="font-bold text-xl text-slate-900 mb-1"><AutoText>{cert.title}</AutoText></h3>
-                  <p className="text-sm text-[#1E6F5C] font-medium mb-3"><AutoText>{cert.subtitle}</AutoText></p>
-                  <p className="text-sm text-slate-600 mb-4"><AutoText>{cert.description}</AutoText></p>
-                  <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full"><AutoText>Since {cert.year}</AutoText></span>
+                  <h3 className="font-bold text-xl text-slate-900 mb-1">{cert.title}</h3>
+                  <p className="text-sm text-[#1E6F5C] font-medium mb-3">{cert.subtitle}</p>
+                  <p className="text-sm text-slate-600 mb-4">{cert.description}</p>
+                  <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full">Since {cert.year}</span>
                 </div>
               )
             })}
@@ -123,15 +122,15 @@ export default function QualityCompliance() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>QUALITY MANAGEMENT SYSTEM</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Comprehensive QA Framework</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">QUALITY MANAGEMENT SYSTEM</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Comprehensive QA Framework</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {qmsFramework.map((item: any, idx: number) => (
               <div key={idx} className="bg-slate-50 rounded-xl p-6">
                 <CheckCircle className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                <h3 className="font-semibold text-slate-900 mb-2"><AutoText>{item.title}</AutoText></h3>
-                <p className="text-sm text-slate-600"><AutoText>{item.description}</AutoText></p>
+                <h3 className="font-semibold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-600">{item.description}</p>
               </div>
             ))}
           </div>
@@ -142,18 +141,18 @@ export default function QualityCompliance() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>QUALITY CONTROL LABORATORY</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Advanced Analytical Capabilities</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">QUALITY CONTROL LABORATORY</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Advanced Analytical Capabilities</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {(qcCapabilities as any[]).map((cap: any, idx: number) => (
               <div key={idx} className="bg-white rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4"><AutoText>{cap.title}</AutoText></h3>
+                <h3 className="font-semibold text-slate-900 mb-4">{cap.title}</h3>
                 <ul className="space-y-2">
                   {(cap.items || []).map((item: string, itemIdx: number) => (
                     <li key={itemIdx} className="flex items-start gap-2 text-sm text-slate-600">
                       <CheckCircle className="w-4 h-4 text-[#1E6F5C] shrink-0 mt-0.5" />
-                      <span><AutoText>{item}</AutoText></span>
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -167,15 +166,15 @@ export default function QualityCompliance() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>REGULATORY AFFAIRS</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Multi-Market Registration</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">REGULATORY AFFAIRS</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Multi-Market Registration</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
             {regulatoryMarkets.map((market: any, idx: number) => (
               <div key={idx} className="bg-slate-50 rounded-xl p-6 text-center">
                 <Globe className="w-8 h-8 text-[#1E6F5C] mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 text-sm mb-1"><AutoText>{market.region}</AutoText></h3>
-                <span className="text-xs text-[#1E6F5C] font-medium"><AutoText>{market.status}</AutoText></span>
+                <h3 className="font-bold text-slate-900 text-sm mb-1">{market.region}</h3>
+                <span className="text-xs text-[#1E6F5C] font-medium">{market.status}</span>
               </div>
             ))}
           </div>
@@ -185,14 +184,14 @@ export default function QualityCompliance() {
       {/* CTA */}
       <section className="py-16 bg-gradient-to-br from-[#1E6F5C] to-[#165B46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4"><AutoText>Quality You Can Trust</AutoText></h2>
-          <p className="text-white/80 max-w-2xl mx-auto mb-8"><AutoText>Download our quality certifications or contact our regulatory affairs team.</AutoText></p>
+          <h2 className="text-3xl font-bold text-white mb-4">Quality You Can Trust</h2>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8">Download our quality certifications or contact our regulatory affairs team.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/resources" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors">
-              <FileText className="w-4 h-4" /> <AutoText>Download Certifications</AutoText>
+              <FileText className="w-4 h-4" /> Download Certifications
             </Link>
             <Link href="/contact" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">
-              <AutoText>{t.cta.contact}</AutoText> <ArrowRight className="w-4 h-4" />
+              {t.cta.contact} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

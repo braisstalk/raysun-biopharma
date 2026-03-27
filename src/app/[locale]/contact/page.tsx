@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { MapPin, Mail, Phone, Clock, Send, CheckCircle, AlertCircle, Briefcase, Handshake, Truck, Users, Globe, ArrowRight } from 'lucide-react'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import AutoText from '@/components/common/AutoText'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -13,10 +12,10 @@ export default function Contact() {
 
   // Inquiry types with specific labels
   const inquiryTypes = [
-    { id: 'business', label: t.contact.businessEnquiry, icon: Briefcase, description: <AutoText>Product inquiries, pricing, distribution</AutoText> },
-    { id: 'partnership', label: t.contact.partnership, icon: Handshake, description: <AutoText>Joint ventures, licensing, strategic alliances</AutoText> },
-    { id: 'supplier', label: t.contact.supplier, icon: Truck, description: <AutoText>Raw materials, packaging, services</AutoText> },
-    { id: 'general', label: t.contact.generalContact, icon: Users, description: <AutoText>General inquiries, media, other</AutoText> },
+    { id: 'business', label: t.contact.businessEnquiry, icon: Briefcase, description: 'Product inquiries, pricing, distribution' },
+    { id: 'partnership', label: t.contact.partnership, icon: Handshake, description: 'Joint ventures, licensing, strategic alliances' },
+    { id: 'supplier', label: t.contact.supplier, icon: Truck, description: 'Raw materials, packaging, services' },
+    { id: 'general', label: t.contact.generalContact, icon: Users, description: 'General inquiries, media, other' },
   ]
 
   const countries = [
@@ -122,8 +121,8 @@ export default function Contact() {
               <div key={idx} className="flex items-start gap-3 p-4">
                 <item.icon className="w-6 h-6 text-[#1E6F5C] flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-slate-900"><AutoText>{item.title}</AutoText></h3>
-                  <p className="text-sm text-slate-600"><AutoText>{item.desc}</AutoText></p>
+                  <h3 className="font-semibold text-slate-900">{item.title}</h3>
+                  <p className="text-sm text-slate-600">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -136,43 +135,43 @@ export default function Contact() {
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Info Sidebar */}
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6"><AutoText>{t.contact.contactInfo}</AutoText></h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">{t.contact.contactInfo}</h2>
 
               {/* Office Info */}
               <div className="space-y-6 mb-8">
                 <div className="flex items-start gap-4">
                   <MapPin className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.headquarters}</AutoText></h3>
-                    <p className="text-slate-600"><AutoText>{t.contact.address}</AutoText></p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.headquarters}</h3>
+                    <p className="text-slate-600">{t.contact.address}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.email}</AutoText></h3>
-                    <p className="text-slate-600"><AutoText>{t.contact.emailAddresses}</AutoText></p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.email}</h3>
+                    <p className="text-slate-600">{t.contact.emailAddresses}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Phone className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.phone}</AutoText></h3>
-                    <p className="text-slate-600"><AutoText>{t.contact.phoneAvailable}</AutoText></p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.phone}</h3>
+                    <p className="text-slate-600">{t.contact.phoneAvailable}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Clock className="w-6 h-6 text-[#1E6F5C] mt-1" />
                   <div>
-                    <h3 className="font-semibold text-slate-900"><AutoText>{t.contact.businessHours}</AutoText></h3>
-                    <p className="text-slate-600"><AutoText>{t.contact.businessHoursTime}</AutoText></p>
+                    <h3 className="font-semibold text-slate-900">{t.contact.businessHours}</h3>
+                    <p className="text-slate-600">{t.contact.businessHoursTime}</p>
                   </div>
                 </div>
               </div>
 
               {/* Related Links */}
               <div className="bg-slate-50 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4"><AutoText>{t.contact.quickLinks}</AutoText></h3>
+                <h3 className="font-semibold text-slate-900 mb-4">{t.contact.quickLinks}</h3>
                 <div className="space-y-2">
                   {[
                     { label: t.pages.products, href: '/products' },
@@ -181,7 +180,7 @@ export default function Contact() {
                     { label: t.pages.careers, href: '/careers' },
                   ].map((link, idx) => (
                     <Link key={idx} href={link.href} className="flex items-center gap-2 text-[#1E6F5C] hover:underline">
-                      <ArrowRight className="w-4 h-4" /> <AutoText>{link.label}</AutoText>
+                      <ArrowRight className="w-4 h-4" /> {link.label}
                     </Link>
                   ))}
                 </div>
@@ -368,7 +367,7 @@ export default function Contact() {
           <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl h-64 flex items-center justify-center">
             <div className="text-center text-slate-400">
               <MapPin className="w-12 h-12 mx-auto mb-2" />
-              <p><AutoText>{t.contact.mapLocation}</AutoText></p>
+              <p>{t.contact.mapLocation}</p>
             </div>
           </div>
         </div>

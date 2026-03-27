@@ -13,17 +13,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // If already has /en prefix, continue
+  // If has /en prefix, rewrite to remove it (URL stays clean)
   if (pathname.startsWith('/en')) {
-    return NextResponse.next()
+    const newPath = pathname.replace(/^\/en/, '') || '/'
+    const newUrl = new URL(newPath, request.url)
+    newUrl.search = request.nextUrl.search
+    return NextResponse.rewrite(newUrl)
   }
 
-  // Redirect everything to /en
-  const newUrl = new URL(`/en${pathname === '/' ? '' : pathname}`, request.url)
-  newUrl.search = request.nextUrl.search
-  return NextResponse.redirect(newUrl)
+  // Continue for all other paths
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|favicon\\.ico|images|.*\\..*).*)'],
+  matcher: ['/((?!_next|api|favicon\.ico|images|.*\..*).*)'],
 }

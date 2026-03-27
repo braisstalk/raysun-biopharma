@@ -5,7 +5,6 @@ import { Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import { usePageContent } from '@/lib/strapi/usePageContent'
-import AutoText from '@/components/common/AutoText'
 
 const iconMap: Record<string, React.ElementType> = {
   Factory, Shield, Award, Gauge, FlaskConical, Package, Droplets, Syringe, Pill, Thermometer, Wind, Eye,
@@ -75,7 +74,7 @@ export default function Manufacturing() {
             {facilityStats.map((stat: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="text-3xl md:text-4xl font-bold text-[#1E6F5C]">{stat.value}<span className="text-lg font-normal text-slate-500">{stat.unit}</span></div>
-                <div className="text-sm text-slate-600 mt-1"><AutoText>{stat.label}</AutoText></div>
+                <div className="text-sm text-slate-600 mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -87,13 +86,13 @@ export default function Manufacturing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>OUR FACILITY</AutoText></p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6"><AutoText>{facilityOverview.title}</AutoText></h2>
-              <p className="text-slate-600 mb-6"><AutoText>{facilityOverview.description}</AutoText></p>
+              <p className="text-[#1E6F5C] font-medium mb-2">OUR FACILITY</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">{facilityOverview.title}</h2>
+              <p className="text-slate-600 mb-6">{facilityOverview.description}</p>
               <div className="flex flex-wrap gap-3">
                 {facilityOverview.tags.map((tag: string) => (
                   <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#1E6F5C]/10 text-[#1E6F5C] rounded-full text-sm font-medium">
-                    <CheckCircle className="w-3.5 h-3.5" /> <AutoText>{tag}</AutoText>
+                    <CheckCircle className="w-3.5 h-3.5" /> {tag}
                   </span>
                 ))}
               </div>
@@ -101,7 +100,7 @@ export default function Manufacturing() {
             <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl h-80 flex items-center justify-center">
               <div className="text-center">
                 <Factory className="w-16 h-16 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm text-slate-400 font-medium"><AutoText>Manufacturing Facility</AutoText></p>
+                <p className="text-sm text-slate-400 font-medium">Manufacturing Facility</p>
               </div>
             </div>
           </div>
@@ -112,8 +111,8 @@ export default function Manufacturing() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>PRODUCTION CAPABILITIES</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Our Production Lines</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">PRODUCTION CAPABILITIES</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Production Lines</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {productionLines.map((line: any, idx: number) => {
@@ -121,12 +120,12 @@ export default function Manufacturing() {
               return (
                 <div key={idx} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <LineIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                  <h3 className="font-bold text-slate-900 mb-2"><AutoText>{line.title}</AutoText></h3>
-                  <p className="text-sm text-slate-600 mb-4"><AutoText>{line.description}</AutoText></p>
+                  <h3 className="font-bold text-slate-900 mb-2">{line.title}</h3>
+                  <p className="text-sm text-slate-600 mb-4">{line.description}</p>
                   <ul className="space-y-1.5">
                     {(line.specs || []).map((spec: string, sIdx: number) => (
                       <li key={sIdx} className="flex items-start gap-2 text-xs text-slate-500">
-                        <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> <AutoText>{spec}</AutoText>
+                        <CheckCircle className="w-3.5 h-3.5 text-[#1E6F5C] mt-0.5 shrink-0" /> {spec}
                       </li>
                     ))}
                   </ul>
@@ -141,8 +140,8 @@ export default function Manufacturing() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>INFRASTRUCTURE</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Pharmaceutical-Grade Infrastructure</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">INFRASTRUCTURE</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Pharmaceutical-Grade Infrastructure</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {facilityFeatures.map((feature: any, idx: number) => {
@@ -150,8 +149,8 @@ export default function Manufacturing() {
               return (
                 <div key={idx} className="bg-slate-50 rounded-xl p-6">
                   <FIcon className="w-10 h-10 text-[#1E6F5C] mb-4" />
-                  <h3 className="font-semibold text-slate-900 mb-2"><AutoText>{feature.title}</AutoText></h3>
-                  <p className="text-sm text-slate-600"><AutoText>{feature.description}</AutoText></p>
+                  <h3 className="font-semibold text-slate-900 mb-2">{feature.title}</h3>
+                  <p className="text-sm text-slate-600">{feature.description}</p>
                 </div>
               )
             })}
@@ -163,16 +162,16 @@ export default function Manufacturing() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>CERTIFICATIONS</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>Manufacturing Certifications</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">CERTIFICATIONS</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Manufacturing Certifications</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {certifications.map((cert: any, idx: number) => (
               <div key={idx} className="bg-white rounded-xl p-8 shadow-sm text-center">
                 <Award className="w-12 h-12 text-[#1E6F5C] mx-auto mb-4" />
-                <h3 className="font-bold text-xl text-slate-900 mb-2"><AutoText>{cert.title}</AutoText></h3>
-                <p className="text-sm text-slate-600 mb-3"><AutoText>{cert.description}</AutoText></p>
-                <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full"><AutoText>Since {cert.year}</AutoText></span>
+                <h3 className="font-bold text-xl text-slate-900 mb-2">{cert.title}</h3>
+                <p className="text-sm text-slate-600 mb-3">{cert.description}</p>
+                <span className="text-xs text-[#1E6F5C] font-medium bg-[#1E6F5C]/10 px-3 py-1 rounded-full">Since {cert.year}</span>
               </div>
             ))}
           </div>
@@ -183,15 +182,15 @@ export default function Manufacturing() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-[#1E6F5C] font-medium mb-2"><AutoText>QUALITY CONTROL</AutoText></p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"><AutoText>From Raw Material to Finished Product</AutoText></h2>
+            <p className="text-[#1E6F5C] font-medium mb-2">QUALITY CONTROL</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">From Raw Material to Finished Product</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {qcSteps.map((item: any, idx: number) => (
               <div key={idx} className="text-center">
                 <div className="w-12 h-12 bg-[#1E6F5C] text-white rounded-full flex items-center justify-center font-bold text-sm mx-auto mb-3">{item.step}</div>
-                <h3 className="font-semibold text-slate-900 text-sm mb-1"><AutoText>{item.title}</AutoText></h3>
-                <p className="text-xs text-slate-500"><AutoText>{item.description || item.desc}</AutoText></p>
+                <h3 className="font-semibold text-slate-900 text-sm mb-1">{item.title}</h3>
+                <p className="text-xs text-slate-500">{item.description || item.desc}</p>
               </div>
             ))}
           </div>
@@ -201,11 +200,11 @@ export default function Manufacturing() {
       {/* CTA */}
       <section className="py-16 bg-gradient-to-br from-[#1E6F5C] to-[#165B46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4"><AutoText>Partner With Us</AutoText></h2>
-          <p className="text-white/80 max-w-2xl mx-auto mb-8"><AutoText>Leverage our manufacturing capabilities for your pharmaceutical products.</AutoText></p>
+          <h2 className="text-3xl font-bold text-white mb-4">Partner With Us</h2>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8">Leverage our manufacturing capabilities for your pharmaceutical products.</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors"><AutoText>{t.cta.contact}</AutoText> <ArrowRight className="w-4 h-4" /></Link>
-            <Link href="/products" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors"><AutoText>{t.cta.viewProducts}</AutoText></Link>
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#1E6F5C] px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors">{t.cta.contact} <ArrowRight className="w-4 h-4" /></Link>
+            <Link href="/products" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">{t.cta.viewProducts}</Link>
           </div>
         </div>
       </section>

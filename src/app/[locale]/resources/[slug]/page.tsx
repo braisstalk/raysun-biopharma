@@ -7,7 +7,6 @@ import { ArrowLeft, FileText, Video, Link as LinkIcon, Download, Mail, Eye, Lock
 import { getResourceBySlug, getRelatedResources } from '@/lib/content'
 import { useResourceBySlug, useRelatedResources, MappedResource } from '@/lib/strapi/useResources'
 import type { ResourceStatus } from '@/lib/content/types/content-resources'
-import AutoText from '@/components/common/AutoText'
 
 const statusConfig: Record<ResourceStatus, { label: string; description: string; color: string; icon: React.ElementType }> = {
   public: {
@@ -86,7 +85,7 @@ export default function ResourceDetail() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-[#1E6F5C] animate-spin mx-auto mb-4" />
-          <p className="text-slate-600"><AutoText text="Loading resource..." as="span" /></p>
+          <p className="text-slate-600">Loading resource...</p>
         </div>
       </div>
     )
@@ -96,10 +95,10 @@ export default function ResourceDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4"><AutoText text="Resource Not Found" as="span" /></h1>
-          <p className="text-slate-600 mb-6"><AutoText text="The resource you're looking for doesn't exist." as="span" /></p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-4">Resource Not Found</h1>
+          <p className="text-slate-600 mb-6">The resource you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/resources" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-            <ArrowLeft className="w-4 h-4" /> <AutoText text="Back to Resources" as="span" />
+            <ArrowLeft className="w-4 h-4" /> Back to Resources
           </Link>
         </div>
       </div>
@@ -116,11 +115,11 @@ export default function ResourceDetail() {
       <div className="bg-slate-50 py-4">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-slate-500 hover:text-[#1E6F5C]"><AutoText text="Home" as="span" /></Link>
+            <Link href="/" className="text-slate-500 hover:text-[#1E6F5C]">Home</Link>
             <span className="text-slate-400">/</span>
-            <Link href="/resources" className="text-slate-500 hover:text-[#1E6F5C]"><AutoText text="Resources" as="span" /></Link>
+            <Link href="/resources" className="text-slate-500 hover:text-[#1E6F5C]">Resources</Link>
             <span className="text-slate-400">/</span>
-            <span className="text-slate-900 truncate max-w-[200px]"><AutoText text={resource.title} as="span" /></span>
+            <span className="text-slate-900 truncate max-w-[200px]">{resource.title}</span>
           </nav>
         </div>
       </div>
@@ -149,20 +148,20 @@ export default function ResourceDetail() {
               <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl h-64 md:h-80 flex items-center justify-center mb-8">
                 <div className="text-center text-slate-400">
                   <TypeIcon className="w-16 h-16 mx-auto mb-2" />
-                  <p><AutoText text="Document Preview" as="span" /></p>
+                  <p>Document Preview</p>
                 </div>
               </div>
 
               {/* Description */}
               <div className="mb-8">
-                <h2 className="text-xl font-bold text-slate-900 mb-4"><AutoText text="Description" as="span" /></h2>
-                <p className="text-slate-700"><AutoText text={resource.description} as="span" /></p>
+                <h2 className="text-xl font-bold text-slate-900 mb-4">Description</h2>
+                <p className="text-slate-700">{resource.description}</p>
               </div>
 
               {/* Back Link */}
               <div className="pt-8 border-t">
                 <Link href="/resources" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-                  <ArrowLeft className="w-4 h-4" /> <AutoText text="Back to Resources" as="span" />
+                  <ArrowLeft className="w-4 h-4" /> Back to Resources
                 </Link>
               </div>
             </div>
@@ -171,26 +170,26 @@ export default function ResourceDetail() {
             <div>
               {/* Details Card */}
               <div className="bg-slate-50 rounded-xl p-6 mb-6">
-                <h3 className="font-semibold text-slate-900 mb-4"><AutoText text="Details" as="span" /></h3>
+                <h3 className="font-semibold text-slate-900 mb-4">Details</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500"><AutoText text="Type" as="span" /></span>
+                    <span className="text-sm text-slate-500">Type</span>
                     <span className="text-sm font-medium text-slate-900 capitalize">{resource.resourceType}</span>
                   </div>
                   {resource.fileSize && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-500"><AutoText text="File Size" as="span" /></span>
+                      <span className="text-sm text-slate-500">File Size</span>
                       <span className="text-sm font-medium text-slate-900">{resource.fileSize}</span>
                     </div>
                   )}
                   {resource.updatedDate && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-500"><AutoText text="Updated" as="span" /></span>
+                      <span className="text-sm text-slate-500">Updated</span>
                       <span className="text-sm font-medium text-slate-900">{resource.updatedDate}</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-slate-500"><AutoText text="Status" as="span" /></span>
+                    <span className="text-sm text-slate-500">Status</span>
                     <span className={`text-sm font-medium ${status.color.split(' ')[1]}`}>{status.label}</span>
                   </div>
                 </div>
@@ -198,11 +197,11 @@ export default function ResourceDetail() {
 
               {/* Actions Card */}
               <div className="bg-slate-50 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4"><AutoText text="Actions" as="span" /></h3>
+                <h3 className="font-semibold text-slate-900 mb-4">Actions</h3>
 
                 {resource.status === 'public' && (
                   <button className="w-full bg-[#1E6F5C] text-white py-3 rounded-lg font-medium hover:opacity-90 flex items-center justify-center gap-2 mb-3">
-                    <Download className="w-4 h-4" /> <AutoText text="Download PDF" as="span" />
+                    <Download className="w-4 h-4" /> Download PDF
                   </button>
                 )}
 
@@ -211,15 +210,15 @@ export default function ResourceDetail() {
                     {requestStatus === 'requested' ? (
                       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                         <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                        <p className="text-sm font-medium text-green-800"><AutoText text="Request Submitted" as="span" /></p>
-                        <p className="text-xs text-green-600"><AutoText text="We'll review and respond within 24-48 hours." as="span" /></p>
+                        <p className="text-sm font-medium text-green-800">Request Submitted</p>
+                        <p className="text-xs text-green-600">We&apos;ll review and respond within 24-48 hours.</p>
                       </div>
                     ) : (
                       <button
                         onClick={handleRequestAccess}
                         className="w-full bg-[#1E6F5C] text-white py-3 rounded-lg font-medium hover:opacity-90 flex items-center justify-center gap-2 mb-3"
                       >
-                        <Mail className="w-4 h-4" /> <AutoText text="Request Access" as="span" />
+                        <Mail className="w-4 h-4" /> Request Access
                       </button>
                     )}
                   </>
@@ -228,16 +227,16 @@ export default function ResourceDetail() {
                 {resource.status === 'restricted' && (
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
                     <Lock className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-amber-800"><AutoText text="Restricted Access" as="span" /></p>
-                    <p className="text-xs text-amber-600 mb-3"><AutoText text="Contact our team for authorization." as="span" /></p>
+                    <p className="text-sm font-medium text-amber-800">Restricted Access</p>
+                    <p className="text-xs text-amber-600 mb-3">Contact our team for authorization.</p>
                     <Link href="/contact" className="text-sm text-[#1E6F5C] hover:underline">
-                      <AutoText text="Contact Sales" as="span" />
+                      Contact Sales
                     </Link>
                   </div>
                 )}
 
                 <button className="w-full border border-slate-200 text-slate-700 py-3 rounded-lg font-medium hover:bg-slate-100 flex items-center justify-center gap-2">
-                  <Eye className="w-4 h-4" /> <AutoText text="Preview" as="span" />
+                  <Eye className="w-4 h-4" /> Preview
                 </button>
               </div>
             </div>
@@ -249,7 +248,7 @@ export default function ResourceDetail() {
       {relatedResources.length > 0 && (
         <section className="py-12 md:py-16 bg-slate-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8"><AutoText text="Related Resources" as="span" /></h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Related Resources</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedResources.map((related) => {
                 const RelatedIcon = typeIcons[related.resourceType] || FileText
@@ -269,7 +268,7 @@ export default function ResourceDetail() {
                     <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] mb-2">{related.title}</h3>
                     <p className="text-xs text-slate-500 line-clamp-2 mb-3">{related.description}</p>
                     <div className="flex items-center text-xs text-[#1E6F5C] font-medium">
-                      <AutoText text="View" as="span" /> <ArrowRight className="w-3 h-3 ml-1" />
+                      View <ArrowRight className="w-3 h-3 ml-1" />
                     </div>
                   </Link>
                 )

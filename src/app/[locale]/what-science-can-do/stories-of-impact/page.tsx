@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ArrowRight, Heart, Users, Globe, Award, MapPin, Calendar } from 'lucide-react'
-import AutoText from '@/components/common/AutoText'
 
 const stories = [
   {
@@ -73,14 +72,14 @@ export default function StoriesOfImpact() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <Link href="/what-science-can-do" className="text-blue-300 hover:text-blue-200 mb-4 inline-flex items-center">
-              <AutoText>← Back to What Science Can Do</AutoText>
+              ← Back to What Science Can Do
             </Link>
-            <p className="text-blue-300 font-medium mb-2"><AutoText>STORIES OF IMPACT</AutoText></p>
+            <p className="text-blue-300 font-medium mb-2">STORIES OF IMPACT</p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              <AutoText>Real Stories, Real Impact</AutoText>
+              Real Stories, Real Impact
             </h1>
             <p className="text-lg text-slate-300 mb-8 max-w-2xl">
-              <AutoText>Discover how Raysun Biopharma is transforming healthcare across Southeast Asia and beyond. Each story represents our commitment to improving lives through pharmaceutical science.</AutoText>
+              Discover how Raysun Biopharma is transforming healthcare across Southeast Asia and beyond. Each story represents our commitment to improving lives through pharmaceutical science.
             </p>
           </div>
         </div>
@@ -97,7 +96,7 @@ export default function StoriesOfImpact() {
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                   <div className="absolute bottom-4 left-4">
                     <span className="bg-white/20 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
-                      <AutoText>{story.category}</AutoText>
+                      {story.category}
                     </span>
                   </div>
                 </div>
@@ -107,32 +106,32 @@ export default function StoriesOfImpact() {
                   <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      <AutoText>{story.date}</AutoText>
+                      {story.date}
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
-                      <AutoText>{story.location}</AutoText>
+                      {story.location}
                     </span>
                   </div>
 
                   <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    <AutoText>{story.title}</AutoText>
+                    {story.title}
                   </h3>
 
                   <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                    <AutoText>{story.excerpt}</AutoText>
+                    {story.excerpt}
                   </p>
 
                   <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                     <div className="flex items-center gap-2">
                       <Heart className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm font-medium text-blue-600"><AutoText>{story.impact}</AutoText></span>
+                      <span className="text-sm font-medium text-blue-600">{story.impact}</span>
                     </div>
                     <Link
                       href="#"
                       className="text-sm text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
                     >
-                      <AutoText>Read more</AutoText> <ArrowRight className="w-3 h-3" />
+                      Read more <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
                 </div>
@@ -145,12 +144,12 @@ export default function StoriesOfImpact() {
       {/* CTA */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4"><AutoText>Share Your Story</AutoText></h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Share Your Story</h2>
           <p className="text-slate-600 mb-8 max-w-xl mx-auto">
-            <AutoText>Are you a patient, healthcare provider, or partner who wants to share how our medicines have made a difference? We&apos;d love to hear from you.</AutoText>
+            Are you a patient, healthcare provider, or partner who wants to share how our medicines have made a difference? We&apos;d love to hear from you.
           </p>
           <Link href="/contact" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            <AutoText>Contact Us</AutoText> <ArrowRight className="w-4 h-4" />
+            Contact Us <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

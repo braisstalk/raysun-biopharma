@@ -5,7 +5,6 @@ import { Shield, Search, AlertTriangle, CheckCircle, FileCheck, UserCheck, Packa
 import { getVerifyContent } from '@/lib/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
-import AutoText from '@/components/common/AutoText'
 
 const icons: Record<string, React.ElementType> = {
   product: Package,
@@ -118,8 +117,8 @@ export default function Verify() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                    <p className={`font-semibold text-sm md:text-base ${activeTab === type.id ? 'text-[#1E6F5C]' : 'text-slate-900'}`}><AutoText>{type.label}</AutoText></p>
-                    <p className="text-xs text-slate-500 hidden sm:block"><AutoText>Batch number verification</AutoText></p>
+                    <p className={`font-semibold text-sm md:text-base ${activeTab === type.id ? 'text-[#1E6F5C]' : 'text-slate-900'}`}>{type.label}</p>
+                    <p className="text-xs text-slate-500 hidden sm:block">Batch number verification</p>
                   </div>
                 </button>
               )
@@ -134,7 +133,7 @@ export default function Verify() {
           <form onSubmit={handleVerify} className="space-y-4">
             <div>
               <label htmlFor="verify-input" className="block text-sm font-medium text-slate-700 mb-2">
-                <AutoText>Enter {currentType?.label} Code</AutoText>
+                Enter {currentType?.label} Code
               </label>
               <div className="flex gap-3">
                 <div className="relative flex-1">
@@ -153,7 +152,7 @@ export default function Verify() {
                   disabled={loading}
                   className="px-6 py-3 bg-[#1E6F5C] text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  <AutoText>{loading ? 'Verifying...' : 'Verify'}</AutoText>
+                  {loading ? 'Verifying...' : 'Verify'}
                 </button>
               </div>
             </div>
@@ -161,7 +160,7 @@ export default function Verify() {
 
           {/* Sample Codes */}
           <div className="mt-6 p-4 bg-slate-50 rounded-xl">
-            <p className="text-sm text-slate-600 mb-2"><AutoText>Sample codes for testing:</AutoText></p>
+            <p className="text-sm text-slate-600 mb-2">Sample codes for testing:</p>
             <div className="flex flex-wrap gap-2">
               <button onClick={() => setSearchValue('RS-2025-001234')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-001234</button>
               <button onClick={() => setSearchValue('RS-2025-005678')} className="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-100">RS-2025-005678</button>
@@ -185,14 +184,14 @@ export default function Verify() {
                     result.status === 'success' ? 'text-green-800' :
                     result.status === 'warning' ? 'text-amber-800' :
                     'text-red-800'
-                  }`}><AutoText>{result.title}</AutoText></h3>
-                  <p className="mt-2 text-slate-700"><AutoText>{result.message}</AutoText></p>
+                  }`}>{result.title}</h3>
+                  <p className="mt-2 text-slate-700">{result.message}</p>
                   {result.details && result.details.length > 0 && (
                     <ul className="mt-4 space-y-1">
                       {result.details.map((detail, idx) => (
                         <li key={idx} className="text-sm text-slate-600 flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                          <AutoText>{detail}</AutoText>
+                          {detail}
                         </li>
                       ))}
                     </ul>
@@ -205,7 +204,7 @@ export default function Verify() {
                           href={step.href}
                           className="inline-flex items-center gap-1 text-sm font-medium text-[#1E6F5C] hover:underline"
                         >
-                          <AutoText>{step.label}</AutoText> <ExternalLink className="w-3 h-3" />
+                          {step.label} <ExternalLink className="w-3 h-3" />
                         </Link>
                       ))}
                     </div>
@@ -223,18 +222,18 @@ export default function Verify() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white rounded-2xl p-6 md:p-8">
               <Phone className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2"><AutoText>{helpSection.title}</AutoText></h3>
-              <p className="text-slate-600 mb-4"><AutoText>{helpSection.description}</AutoText></p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">{helpSection.title}</h3>
+              <p className="text-slate-600 mb-4">{helpSection.description}</p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                <AutoText>Contact Support</AutoText> <ExternalLink className="w-4 h-4" />
+                Contact Support <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
             <div className="bg-white rounded-2xl p-6 md:p-8">
               <Shield className="w-10 h-10 text-[#1E6F5C] mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2"><AutoText>{reportSection.title}</AutoText></h3>
-              <p className="text-slate-600 mb-4"><AutoText>{reportSection.description}</AutoText></p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">{reportSection.title}</h3>
+              <p className="text-slate-600 mb-4">{reportSection.description}</p>
               <Link href="/contact" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-                <AutoText>Report Counterfeit</AutoText> <ExternalLink className="w-4 h-4" />
+                Report Counterfeit <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
           </div>

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ArrowLeft, FileText, Download, ExternalLink, Calendar, BookOpen, Search, Filter } from 'lucide-react'
-import AutoText from '@/components/common/AutoText'
 
 const publications = [
   {
@@ -91,14 +90,14 @@ export default function Publications() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <Link href="/what-science-can-do" className="text-blue-300 hover:text-blue-200 mb-4 inline-flex items-center">
-              <AutoText>← Back to What Science Can Do</AutoText>
+              ← Back to What Science Can Do
             </Link>
-            <p className="text-blue-300 font-medium mb-2"><AutoText>PUBLICATIONS</AutoText></p>
+            <p className="text-blue-300 font-medium mb-2">PUBLICATIONS</p>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              <AutoText>Scientific Publications & Research</AutoText>
+              Scientific Publications & Research
             </h1>
             <p className="text-lg text-slate-300 mb-8 max-w-2xl">
-              <AutoText>Explore our contributions to pharmaceutical science through peer-reviewed publications, technical reviews, and research papers. Our team is committed to advancing knowledge in pharmaceutical manufacturing and healthcare.</AutoText>
+              Explore our contributions to pharmaceutical science through peer-reviewed publications, technical reviews, and research papers. Our team is committed to advancing knowledge in pharmaceutical manufacturing and healthcare.
             </p>
           </div>
         </div>
@@ -126,7 +125,7 @@ export default function Publications() {
                       : 'bg-white text-slate-600 hover:bg-slate-100'
                   }`}
                 >
-                  <AutoText>{cat}</AutoText>
+                  {cat}
                 </button>
               ))}
             </div>
@@ -152,37 +151,37 @@ export default function Publications() {
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-3 mb-2">
                       <span className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-medium">
-                        <AutoText>{pub.type}</AutoText>
+                        {pub.type}
                       </span>
                       <span className="flex items-center gap-1 text-xs text-slate-500">
                         <Calendar className="w-3 h-3" />
-                        <AutoText>{pub.date}</AutoText>
+                        {pub.date}
                       </span>
                       <span className="text-xs text-slate-500">
-                        <AutoText>{pub.journal}</AutoText>
+                        {pub.journal}
                       </span>
                     </div>
 
                     <h3 className="text-lg font-bold text-slate-900 mb-2 hover:text-blue-600 transition-colors">
-                      <AutoText>{pub.title}</AutoText>
+                      {pub.title}
                     </h3>
 
                     <p className="text-sm text-slate-600 mb-3">
-                      <span className="font-medium"><AutoText>{pub.authors}</AutoText></span>
+                      <span className="font-medium">{pub.authors}</span>
                     </p>
 
                     <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                      <AutoText>{pub.abstract}</AutoText>
+                      {pub.abstract}
                     </p>
 
                     <div className="flex items-center gap-4">
                       <button className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium">
                         <Download className="w-4 h-4" />
-                        <AutoText>PDF ({pub.downloads})</AutoText>
+                        PDF ({pub.downloads})
                       </button>
                       <button className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
                         <ExternalLink className="w-4 h-4" />
-                        <AutoText>View Online</AutoText>
+                        View Online
                       </button>
                     </div>
                   </div>
@@ -196,12 +195,12 @@ export default function Publications() {
       {/* More Publications CTA */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4"><AutoText>Stay Informed</AutoText></h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Stay Informed</h2>
           <p className="text-slate-600 mb-8 max-w-xl mx-auto">
-            <AutoText>Subscribe to our newsletter to receive updates on new publications and research breakthroughs.</AutoText>
+            Subscribe to our newsletter to receive updates on new publications and research breakthroughs.
           </p>
           <Link href="/contact" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            <AutoText>Contact for Subscriptions</AutoText> <ExternalLink className="w-4 h-4" />
+            Contact for Subscriptions <ExternalLink className="w-4 h-4" />
           </Link>
         </div>
       </section>

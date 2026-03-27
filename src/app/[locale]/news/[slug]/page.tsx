@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation'
 import { ArrowLeft, Calendar, User, ArrowRight, FileText, Loader2 } from 'lucide-react'
 import { useNewsBySlug, useRelatedNews, type MappedNewsArticle } from '@/lib/strapi/useNews'
 import { getNewsArticleBySlug, getRelatedNews as getLocalRelatedNews } from '@/lib/content'
-import AutoText from '@/components/common/AutoText'
 
 function getLocalArticle(slug: string): MappedNewsArticle | null {
   const a = getNewsArticleBySlug(slug)
@@ -53,7 +52,7 @@ export default function NewsDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#1E6F5C] animate-spin" />
-        <span className="ml-3 text-slate-500"><AutoText text="Loading article..." as="span" /></span>
+        <span className="ml-3 text-slate-500">Loading article...</span>
       </div>
     )
   }
@@ -62,10 +61,10 @@ export default function NewsDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center px-4">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4"><AutoText text="Article Not Found" as="span" /></h1>
-          <p className="text-slate-600 mb-6"><AutoText text="The article you are looking for does not exist." as="span" /></p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-4">Article Not Found</h1>
+          <p className="text-slate-600 mb-6">The article you are looking for does not exist.</p>
           <Link href="/news" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:underline">
-            <ArrowLeft className="w-4 h-4" /> <AutoText text="Back to News" as="span" />
+            <ArrowLeft className="w-4 h-4" /> Back to News
           </Link>
         </div>
       </div>
@@ -78,11 +77,11 @@ export default function NewsDetail() {
       <div className="bg-slate-50 py-4">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-slate-500 hover:text-[#1E6F5C]"><AutoText text="Home" as="span" /></Link>
+            <Link href="/" className="text-slate-500 hover:text-[#1E6F5C]">Home</Link>
             <span className="text-slate-400">/</span>
-            <Link href="/news" className="text-slate-500 hover:text-[#1E6F5C]"><AutoText text="News" as="span" /></Link>
+            <Link href="/news" className="text-slate-500 hover:text-[#1E6F5C]">News</Link>
             <span className="text-slate-400">/</span>
-            <span className="text-slate-900 truncate max-w-[200px]"><AutoText text={article.title} as="span" /></span>
+            <span className="text-slate-900 truncate max-w-[200px]">{article.title}</span>
           </nav>
         </div>
       </div>
@@ -119,7 +118,7 @@ export default function NewsDetail() {
           <div className="bg-gradient-to-br from-slate-200 to-slate-300 rounded-xl h-64 md:h-96 flex items-center justify-center">
             <div className="text-center text-slate-400">
               <FileText className="w-16 h-16 mx-auto mb-2" />
-              <p><AutoText text="Article Image" as="span" /></p>
+              <p>Article Image</p>
             </div>
           </div>
         )}
@@ -157,7 +156,7 @@ export default function NewsDetail() {
 
           <div className="mt-12 pt-8 border-t">
             <Link href="/news" className="inline-flex items-center gap-2 text-[#1E6F5C] font-medium hover:gap-3 transition-all">
-              <ArrowLeft className="w-4 h-4" /> <AutoText text="Back to News" as="span" />
+              <ArrowLeft className="w-4 h-4" /> Back to News
             </Link>
           </div>
         </div>
@@ -167,7 +166,7 @@ export default function NewsDetail() {
       {relatedArticles.length > 0 && (
         <section className="py-12 md:py-16 bg-slate-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8"><AutoText text="Related News" as="span" /></h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-8">Related News</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedArticles.map((related) => (
                 <Link

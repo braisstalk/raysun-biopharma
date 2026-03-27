@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { STRAPI_URL } from '@/lib/strapi/client'
 import type { StrapiGlobal } from '@/lib/strapi/api'
-import AutoText from '@/components/common/AutoText'
 import { useTranslation } from '@/i18n/useTranslation'
 
 // Fallback data in case CMS is unavailable
@@ -79,7 +78,7 @@ export default function Footer() {
               <span className="text-blue-400">{locale === 'zh' ? '雷神' : 'Raysun'}</span>{locale === 'zh' ? '生物制药' : 'Biopharma'}
             </h3>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              <AutoText text={data.siteDescription || fallbackData.siteDescription} />
+              {data.siteDescription || fallbackData.siteDescription}
             </p>
             <div className="flex gap-3">
               {data.socialLinkedin && (
@@ -102,12 +101,12 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4"><AutoText text={quickLinksTitle} /></h4>
+            <h4 className="font-semibold mb-4">{quickLinksTitle}</h4>
             <ul className="space-y-2">
               {quickLinks.map((link, idx) => (
                 <li key={idx}>
                   <Link href={link.href} className="text-slate-400 hover:text-white text-sm transition-colors">
-                    <AutoText text={link.label} />
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -116,12 +115,12 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold mb-4"><AutoText text={productsTitle} /></h4>
+            <h4 className="font-semibold mb-4">{productsTitle}</h4>
             <ul className="space-y-2">
               {productLinks.map((link, idx) => (
                 <li key={idx}>
                   <Link href={link.href} className="text-slate-400 hover:text-white text-sm transition-colors">
-                    <AutoText text={link.label} />
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -130,7 +129,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4"><AutoText text={contactTitle} /></h4>
+            <h4 className="font-semibold mb-4">{contactTitle}</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-slate-400 text-sm">
                 <Mail className="w-4 h-4 flex-shrink-0" />
@@ -153,12 +152,12 @@ export default function Footer() {
       <div className="border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-slate-500">
-            <AutoText text={copyright} />
+            {copyright}
           </p>
           <div className="flex gap-6 text-sm text-slate-500">
             {bottomLinks.map((link, idx) => (
               <Link key={idx} href={link.href} className="hover:text-white transition-colors">
-                <AutoText text={link.label} />
+                {link.label}
               </Link>
             ))}
           </div>

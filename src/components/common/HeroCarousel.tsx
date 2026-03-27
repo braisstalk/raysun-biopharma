@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import AutoText from './AutoText'
+
 
 export interface HeroCarouselSlide {
  id: string
@@ -85,17 +85,17 @@ export default function HeroCarousel({
  {icon}
  {badge && (
  <p className={`${badgeColor} font-medium text-sm tracking-widest uppercase`}>
- <AutoText text={badge} />
+ {badge}
  </p>
  )}
  </div>
  )}
 
  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight">
- <AutoText text={heading} />
+ {heading}
  </h1>
  <p className="text-base md:text-lg text-slate-300 max-w-2xl mb-6">
- <AutoText text={description} />
+ {description}
  </p>
 
  {children}
@@ -104,7 +104,7 @@ export default function HeroCarousel({
  <div className={`mt-6 h-5 flex items-center ${isCenter ? 'justify-center' : ''}`}>
  <div key={slides[current]?.id} className="animate-fade-up">
  <p className="text-[11px] font-medium text-white/35 tracking-wide">
- <AutoText>{slides[current]?.title}</AutoText>
+ {slides[current]?.title}
  </p>
  </div>
  </div>

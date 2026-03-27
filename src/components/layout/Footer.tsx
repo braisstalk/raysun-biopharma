@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { Mail, Phone, MapPin } from 'lucide-react'
 import { STRAPI_URL } from '@/lib/strapi/client'
 import type { StrapiGlobal } from '@/lib/strapi/api'
-import { useTranslation } from '@/i18n/useTranslation'
+
 
 // Fallback data in case CMS is unavailable
 const fallbackData = {
@@ -64,9 +64,7 @@ export default function Footer() {
   const quickLinksTitle = global?.footerQuickLinksTitle || 'Quick Links'
   const productsTitle = global?.footerProductsTitle || 'Products'
   const contactTitle = global?.footerContactTitle || 'Contact'
-  const rawCopyright = global?.footerCopyright || `© ${new Date().getFullYear()} Raysun Biopharma. All rights reserved`
-  // Fix brand name for Chinese
-  const copyright = rawCopyright.replace(/Raysun Biopharma/g, '雷神生物制药').replace(/All rights reserved/g, '版权所有')
+  const copyright = global?.footerCopyright || `© ${new Date().getFullYear()} Raysun Biopharma. All rights reserved`
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -75,7 +73,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="text-xl font-bold mb-4">
-              <span className="text-blue-400">{locale === 'zh' ? '雷神' : 'Raysun'}</span>{locale === 'zh' ? '生物制药' : 'Biopharma'}
+              <span className="text-blue-400">Raysun</span>Biopharma
             </h3>
             <p className="text-slate-400 text-sm leading-relaxed mb-6">
               {data.siteDescription || fallbackData.siteDescription}

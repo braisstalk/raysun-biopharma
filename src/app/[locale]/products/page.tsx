@@ -10,7 +10,6 @@ import { getContentTranslation } from '@/i18n/content'
 import StrapiHeroCarousel from '@/components/common/StrapiHeroCarousel'
 import ProductsSearchBar from '@/components/products/ProductsSearchBar'
 import { useRfqCart } from '@/contexts/RfqCartContext'
-import AutoText from '@/components/common/AutoText'
 
 function generateSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -164,7 +163,7 @@ export default function Products() {
     <>
       <StrapiHeroCarousel
         page="products"
-        badge={<AutoText text="200+ Products Available" as="span" />}
+        badge="200+ Products Available"
         badgeColor="text-emerald-400"
         heading={hero.title}
         description={hero.subtitle}
@@ -197,7 +196,7 @@ export default function Products() {
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
-                <AutoText text={tab.label} />
+                {tab.label}
               </button>
             ))}
           </div>
@@ -234,7 +233,7 @@ export default function Products() {
                           : 'text-slate-600 hover:bg-slate-100'
                       }`}
                     >
-                      <AutoText text={getCategoryName(cat.id, cat.name)} />
+                      {getCategoryName(cat.id, cat.name)}
                       <span className="float-right text-xs opacity-70">{count}</span>
                     </button>
                   )
@@ -251,11 +250,11 @@ export default function Products() {
                 {t.common.showing} <span className="font-semibold text-slate-700">{paged.length}</span> {t.common.of} <span className="font-semibold text-slate-700">{useCMS ? totalItems : filtered.length}</span> {t.common.results}
                 {isSearching && (
                   <span className="ml-2">
-                    for "<span className="text-[#1E6F5C]">{search}</span>"
+                    for &quot;<span className="text-[#1E6F5C]">{search}</span>&quot;
                   </span>
                 )}
                 {!useCMS && (
-                  <span className="ml-2 text-xs text-amber-600"><AutoText text="(Using local data)" as="span" /></span>
+                  <span className="ml-2 text-xs text-amber-600">(Using local data)</span>
                 )}
               </p>
             </div>
@@ -264,7 +263,7 @@ export default function Products() {
             {isLoading && (
               <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
                 <div className="animate-spin w-8 h-8 border-2 border-[#1E6F5C] border-t-transparent rounded-full mx-auto mb-4" />
-                <p className="text-slate-600"><AutoText text="Loading products..." as="span" /></p>
+                <p className="text-slate-600">Loading products...</p>
               </div>
             )}
 
@@ -273,12 +272,12 @@ export default function Products() {
               <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
                 <SearchX className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">{t.common.noResults}</h3>
-                <p className="text-slate-600 mb-4"><AutoText text="Try adjusting your search or filters" as="span" /></p>
+                <p className="text-slate-600 mb-4">Try adjusting your search or filters</p>
                 <button
                   onClick={() => { setSearch(''); setActiveTab('all'); setActiveCategory('all') }}
                   className="text-[#1E6F5C] font-medium hover:underline"
                 >
-                  <AutoText text="Clear all filters" as="span" />
+                  Clear all filters
                 </button>
               </div>
             ) : (
@@ -308,10 +307,10 @@ export default function Products() {
                         </div>
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <h3 className="font-semibold text-slate-900 group-hover:text-[#1E6F5C] line-clamp-2 text-sm">
-                            <AutoText text={product.name} />
+                            {product.name}
                           </h3>
                         </div>
-                        <p className="text-xs text-slate-500 mb-2"><AutoText text={product.dosageForm} /></p>
+                        <p className="text-xs text-slate-500 mb-2">{product.dosageForm}</p>
                         <div className="flex items-center justify-between">
                           <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
                             {product.type === 'brand' ? t.products.brands : t.products.generics}
@@ -324,7 +323,7 @@ export default function Products() {
                             }}
                             className="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-medium hover:bg-emerald-100 transition-colors"
                           >
-                            <AutoText text="+ RFQ" as="span" />
+                            + RFQ
                           </button>
                         </div>
                       </Link>

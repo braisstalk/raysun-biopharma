@@ -2,18 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Globe, ChevronDown, Search, Shield, ArrowRight } from 'lucide-react'
+import { Menu, X, Search, Shield, ArrowRight } from 'lucide-react'
 import { navigationConfig, getNavLabel } from '@/config/navigation'
 import { Locale } from '@/i18n/config'
 import { useTranslation } from '@/i18n/useTranslation'
 import { STRAPI_URL } from '@/lib/strapi/client'
-import AutoText from '@/components/common/AutoText'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isLangOpen, setIsLangOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const { t, locale, setLocale } = useTranslation()
+  const { t, locale } = useTranslation()
 
   // CMS navigation data
   const [cmsMenuItems, setCmsMenuItems] = useState<typeof navigationConfig.items | null>(null)
@@ -41,11 +39,6 @@ export default function Navbar() {
   // Get current locale
   const currentLocale = locale || 'en'
 
-  const handleLangClick = (code: string) => {
-    setLocale(code as Locale)
-    setIsLangOpen(false)
-  }
-
   // Get label for nav item using translations
   const getLabel = (key: string): string => {
     return getNavLabel(key, currentLocale)
@@ -68,12 +61,12 @@ export default function Navbar() {
           <Link href="/" className="flex items-center shrink-0">
             <img
               src="/images/raysun-logo.png"
-              alt={<AutoText text="Raysun Biopharma" as="span" />}
+              alt="Raysun Biopharma"
               className="hidden lg:block h-11 w-auto max-w-[240px] object-contain"
             />
             <img
               src="/images/raysun-logo.png"
-              alt={<AutoText text="Raysun Biopharma" as="span" />}
+              alt="Raysun Biopharma"
               className="block lg:hidden h-9 w-auto max-w-[160px] object-contain"
             />
           </Link>
@@ -94,7 +87,6 @@ export default function Navbar() {
                       }`}
                     >
                       {getLabel(item.label)}
-                      <ChevronDown className={`w-3 h-3 transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === item.label && (
                       <div className="absolute top-full left-0 pt-2 z-50">
@@ -139,42 +131,8 @@ export default function Navbar() {
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 text-xs font-medium rounded-md hover:border-blue-600 hover:text-blue-600 transition-colors"
             >
               <Shield className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline"><AutoText text={ctaButtons.verify.label} as="span" /></span>
+              <span className="hidden lg:inline">{ctaButtons.verify.label}</span>
             </Link>
-
-            {/* Language Switcher */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsLangOpen(!isLangOpen)
-                }}
-                className="flex items-center gap-1 px-2 py-1.5 text-[11px] font-medium text-slate-600 hover:text-blue-600"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span className="hidden lg:inline uppercase">{locale}</span>
-              </button>
-              {isLangOpen && (
-                <div className="absolute top-full right-0 mt-1 w-40 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
-                  {navigationConfig.language.options.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => handleLangClick(lang.code)}
-                      className={`w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center justify-between ${
-                        locale === lang.code 
-                          ? 'bg-blue-50 text-blue-600 font-medium' 
-                          : 'text-slate-600 hover:bg-blue-50'
-                      }`}
-                    >
-                      {lang.label}
-                      {locale === lang.code && (
-                        <span className="w-2 h-2 bg-blue-600 rounded-full" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
 
             {/* Mobile Menu Button */}
             <button
@@ -200,7 +158,6 @@ export default function Navbar() {
                       className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                     >
                       <span>{getNavLabel(item.label)}</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === item.label && item.items && (
                       <div className="ml-4 mt-1 space-y-1 border-l-2 border-slate-100 pl-4">
@@ -238,7 +195,7 @@ export default function Navbar() {
               className="flex items-center gap-2 px-3 py-3 text-sm font-medium text-slate-600 hover:bg-blue-50 rounded-lg"
             >
               <Shield className="w-4 h-4" />
-              <AutoText text={ctaButtons.verify.label} as="span" />
+              {ctaButtons.verify.label}
             </Link>
           </div>
         </div>
